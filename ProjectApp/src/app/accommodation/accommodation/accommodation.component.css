@@ -1,0 +1,36 @@
+
+.custom-card {
+  background-color: #f0f0f0; /* Customize the background color */
+  margin: 10px; /* Add margin for spacing */
+  padding: 16px; /* Add padding for spacing inside the card */
+}
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+b {
+  color: #333; /* Change the color of the bold text */
+  font-size: 1.2rem; /* Adjust the font size as needed */
+  margin-bottom: 10px; /* Add space below the bold text */
+}
+
+p {
+  color: #666; /* Change the color of regular text */
+  margin-bottom: 10px; /* Add space below paragraphs */
+}
+
+button {
+  background-color: #007bff; /* Blue color for the button */
+  color: #fff; /* White text on the button */
+  padding: 8px 16px; /* Adjust padding as needed */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+button:hover {
+  background-color: #0056b3; /* Darker blue color on hover */
+}
