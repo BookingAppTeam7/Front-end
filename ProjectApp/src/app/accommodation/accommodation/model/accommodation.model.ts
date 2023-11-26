@@ -6,4 +6,5 @@ export interface Accommodation{
     minGuests: number;
     maxGuests: number;
     status: string;
+    image:string;
 }

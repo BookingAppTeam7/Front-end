@@ -9,7 +9,11 @@ mat-card-content {
   flex-direction: column;
   align-items: center;
 }
+img{
+  border: 1px solid black;
+  
 
+}
 b {
   color: #333; /* Change the color of the bold text */
   font-size: 1.2rem; /* Adjust the font size as needed */

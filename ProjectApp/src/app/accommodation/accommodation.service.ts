@@ -15,7 +15,8 @@ export class AccommodationService {
     location: 'Rural Retreat, USA',
     minGuests: 2,
     maxGuests: 4,
-    status: 'Available'
+    status: 'Available',
+    image: '../assets/images/accommodation1.jpg'
   },
   {
     id: 2,
@@ -24,7 +25,8 @@ export class AccommodationService {
     location: 'Tropical Paradise, Maldives',
     minGuests: 6,
     maxGuests: 10,
-    status: 'Booked'
+    status: 'Booked',
+    image: '../assets/images/accommodation2.jpg'
   },
   {
     id: 3,
@@ -33,7 +35,8 @@ export class AccommodationService {
     location: 'Serenity Peaks, Canada',
     minGuests: 2,
     maxGuests: 6,
-    status: 'Available'
+    status: 'Available',
+    image: '../assets/images/accommodation3.jpg'
   },
   {
     id: 4,
@@ -42,7 +45,8 @@ export class AccommodationService {
     location: 'Metropolis City, USA',
     minGuests: 1,
     maxGuests: 3,
-    status: 'Available'
+    status: 'Available',
+    image: '../assets/images/accommodation4.jpg'
   },
   {
     id: 5,
@@ -51,7 +55,8 @@ export class AccommodationService {
     location: 'Old Town, United Kingdom',
     minGuests: 2,
     maxGuests: 8,
-    status: 'Available'
+    status: 'Available',
+    image: '../assets/images/accommodation5.jpg'
   }];
 
   constructor(private httpClient: HttpClient) {
