@@ -5,7 +5,7 @@
     <p>{{accommodation.location}}</p>
     <img src="{{accommodation.image}}">
     <br>
-    <button>Details</button>
+    <button [routerLink]="['/accommodations', accommodation.id]">Details</button>
   </mat-card-content>
 </mat-card>
   

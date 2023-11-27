@@ -4,13 +4,15 @@ import { AccommodationComponent } from './accommodation/accommodation.component'
 import { AccommodationCardsComponent } from './accommodation-cards/accommodation-cards.component';
 import { MaterialModule } from '../infrastructure/material/material.module';
 import { RouterModule } from '@angular/router';
+import { AccommodationDetailsComponent } from './accommodation-details/accommodation-details.component';
 
 
 
 @NgModule({
   declarations: [
     AccommodationComponent,
-    AccommodationCardsComponent
+    AccommodationCardsComponent,
+    AccommodationDetailsComponent
   ],
   imports: [
     CommonModule,

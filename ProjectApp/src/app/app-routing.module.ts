@@ -9,6 +9,7 @@ import { LoginFormComponent } from './login/login-form/login-form.component';
 import { RegisterFormComponent } from './register/register-form/register-form.component';
 import { AccommodationComponent } from './accommodation/accommodation/accommodation.component';
 import { AccommodationCardsComponent } from './accommodation/accommodation-cards/accommodation-cards.component';
+import { AccommodationDetailsComponent } from './accommodation/accommodation-details/accommodation-details.component';
 
 const routes: Routes = [
   {component: WineComponent, path:"wine"},
@@ -19,7 +20,8 @@ const routes: Routes = [
   {component:LoginFormComponent, path:"login"},
   {component:RegisterFormComponent,path:"register"},
   {component:AccommodationComponent,path:"accommodation"},
-  {component:AccommodationCardsComponent,path:"accommodation-cards"}
+  {component:AccommodationCardsComponent,path:"accommodation-cards"},
+  {component: AccommodationDetailsComponent ,path: 'accommodations/:id'}
 ];
 
 @NgModule({
