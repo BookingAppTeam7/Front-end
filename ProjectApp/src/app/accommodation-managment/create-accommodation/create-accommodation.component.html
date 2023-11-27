@@ -1,5 +1,5 @@
 <div style="text-align: center;">
-    <h2>Registration of new Accommodation</h2>
+    <h2 class="register-header">Registration of new Accommodation</h2>
     <p>
         <mat-form-field appearance="outline">
           <input matInput placeholder="Accommodation Name">
@@ -67,7 +67,10 @@
     <div class="button-container">
       <div class="buttons">
       </div>
-        <button mat-button style="background-color: #1e88e5; color: white; margin-bottom: 10%; margin-top: 1%;">Save changes</button>
+      <button mat-button style="background-color: rgb(163, 161, 161);margin-top: 1%;margin-right: 15px;">+ Add images</button>
+        <button mat-button style="background-color: grey;margin-top: 1%;margin-right: 15px;" (click)="openDatePickerDialog()">+ Add price card</button>
+        <button mat-button style="background-color: rgb(58, 57, 57);margin-top: 1%;margin-right: 15px;" (click)="openAvailabilityDialog()">+ Add availability</button>
       </div>
+      <button mat-button style="background-color: #1e88e5; color: white;margin-top: 2%;">Save changes</button>
     </div>
-    
+  

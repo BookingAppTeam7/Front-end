@@ -1,3 +1,12 @@
+*{
+  font-size: medium;
+}
+.register-header {
+  color: #007bff; 
+  font-size: 24px;
+  margin-bottom: 3%;
+  margin-top: 5%;
+}
 .options-container {
     display: flex;
     justify-content: center;

@@ -22,7 +22,7 @@ import {RouterModule} from "@angular/router";
   imports: [
     CommonModule,
     MaterialModule,
-    RouterModule
+    RouterModule,
   ]
 })
 export class LayoutModule { }
