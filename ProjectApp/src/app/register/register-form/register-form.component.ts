@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 
-
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
@@ -22,6 +21,13 @@ export class RegisterFormComponent {
   surname = new FormControl('', [Validators.required, Validators.requiredTrue]);
   hide = true;
   constructor(private router: Router) { }
+  getErrorMessage() {
+    if (this.email.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.email.hasError('email') ? 'Not a valid email' : '';
+  }
   navigateToHome() {
     // ...
     this.router.navigate(['home']);

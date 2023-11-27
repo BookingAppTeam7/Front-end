@@ -24,11 +24,12 @@
         <mat-icon matSuffix>import_contacts</mat-icon>
       </mat-form-field>
         
-      <mat-form-field class="other-fields">
-      <mat-label>Enter your email</mat-label>
-      <input matInput placeholder="pat@example.com" [formControl]="email" required>
-      <mat-error *ngIf="email.invalid">{{ getErrorMailMessage() }}</mat-error>
-    </mat-form-field>
+      <mat-form-field aclass="other-fields">
+        <input matInput placeholder="Username (Email)" [formControl]="email" required>
+        <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+        <mat-icon matSuffix>edit_note</mat-icon>
+      </mat-form-field>
+    
 
     <mat-form-field class="other-fields">
         <mat-label>Enter your password</mat-label>
