@@ -8,7 +8,8 @@ import {WineDetailsComponent} from "./wine/wine-details/wine-details.component";
 import { LoginFormComponent } from './login/login-form/login-form.component';
 import { RegisterFormComponent } from './register/register-form/register-form.component';
 import { EditAccountComponent } from './accountmanagement/edit-account/edit-account.component';
-
+import { CreateAccommodationComponent } from './accommodation-managment/create-accommodation/create-accommodation.component';
+import { FooterComponent } from './layout/footer/footer.component';
 const routes: Routes = [
   {component: WineComponent, path:"wine"},
   {component: HomeComponent, path:"home"},
@@ -17,7 +18,9 @@ const routes: Routes = [
   {component: CreateWineComponent, path:"create"},
   {component:LoginFormComponent, path:"login"},
   {component:RegisterFormComponent,path:"register"},
-  {component:EditAccountComponent,path:"editAccount"}
+  {component:EditAccountComponent,path:"editAccount"},
+  {component:CreateAccommodationComponent,path:"createAccommodation"}
+  
 ];
 
 @NgModule({

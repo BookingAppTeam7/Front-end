@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import {LayoutModule} from "./layout/layout.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {WineModule} from "./wine/wine.module";
-
 import { FlexLayoutModule } from '@angular/flex-layout';
 @NgModule({
   declarations: [
@@ -18,7 +17,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     LayoutModule,
     BrowserAnimationsModule,
     WineModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

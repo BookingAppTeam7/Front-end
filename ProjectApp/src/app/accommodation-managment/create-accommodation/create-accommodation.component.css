@@ -1,0 +1,25 @@
+.options-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1%;
+  }
+.guests-container {
+display: flex;
+justify-content: center;
+
+}
+.type-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1%;
+}
+
+.reservation-confirmation-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1%;
+  }
+
+.mat-mdc-radio-button ~ .mat-mdc-radio-button {
+margin-left: 16px;
+}

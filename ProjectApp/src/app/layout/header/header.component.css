@@ -1,19 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+}
 img {
+  position: absolute;
+  filter: blur(0.5px);
   width: 100%;
   height: 100%;
-  display: absolute; 
-  filter: blur(0.5px); 
-  margin: 0 auto; 
-
+  object-fit: cover; /* Maintain aspect ratio and cover container */
+  margin: 0 auto;
 }
 
-.image-container{
+
+.image-container {
   position: relative;
   width: 100%;
-  height: 50%;
+  height: 300px;
   overflow: hidden;
-  margin: 0 auto; /* Centrira image-container */
- 
+  margin: 0 auto;
 }
 
 
@@ -30,5 +37,5 @@ img {
   font-style: italic; 
   z-index: 1;
   margin-bottom: 10px;
-  
 }
+
