@@ -1,0 +1,11 @@
+<mat-card class="custom-card">
+  <mat-card-content>
+    <h2>{{accommodation.name}}</h2>
+    <p>{{accommodation.description}}</p>
+    <p>{{accommodation.location}}</p>
+    <img src="{{accommodation.image}}">
+    <br>
+    <button [routerLink]="['/accommodations', accommodation.id]">Details</button>
+  </mat-card-content>
+</mat-card>
+  

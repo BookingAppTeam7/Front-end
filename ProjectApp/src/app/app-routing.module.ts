@@ -10,6 +10,9 @@ import { RegisterFormComponent } from './register/register-form/register-form.co
 import { EditAccountComponent } from './accountmanagement/edit-account/edit-account.component';
 import { CreateAccommodationComponent } from './accommodation-managment/create-accommodation/create-accommodation.component';
 import { EditAccommodationComponent } from './accommodation-managment/edit-accommodation/edit-accommodation.component';
+import { AccommodationComponent } from './accommodation/accommodation/accommodation.component';
+import { AccommodationCardsComponent } from './accommodation/accommodation-cards/accommodation-cards.component';
+import { AccommodationDetailsComponent } from './accommodation/accommodation-details/accommodation-details.component';
 
 const routes: Routes = [
   {component: WineComponent, path:"wine"},
@@ -22,7 +25,9 @@ const routes: Routes = [
   {component:EditAccountComponent,path:"editAccount"},
   {component:CreateAccommodationComponent,path:"createAccommodation"},
   {component:EditAccommodationComponent,path:"editAccommodation"}
-  
+  {component:AccommodationComponent,path:"accommodation"},
+  {component:AccommodationCardsComponent,path:"accommodation-cards"},
+  {component: AccommodationDetailsComponent ,path: 'accommodations/:id'}
 ];
 
 @NgModule({
