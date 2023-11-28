@@ -1,9 +1,23 @@
 <div class="details-container">
+  <div class="heading">
     <h2>{{ accommodation.name }}</h2>
     <img src="{{ accommodation.image }}" alt="{{ accommodation.name }} Image">
-    <p><strong>Description:</strong> {{ accommodation.description }}</p>
+  </div>
+    
+    <div class="content">
+      <p><strong>Description:</strong> {{ accommodation.description }}</p>
     <p><strong>Location:</strong> {{ accommodation.location }}</p>
     <p><strong>Guests:</strong> {{ accommodation.minGuests }} - {{ accommodation.maxGuests }}</p>
     <p><strong>Status:</strong> {{ accommodation.status }}</p>
+    <p><strong>Price:</strong> {{accommodation.price}}$</p>
+    <p><strong>Rating:</strong> {{accommodation.rating}}</p>
+    <p><strong>Assets:</strong></p>
+    <div class="options-container">
+      <div class="custom-chip">Free Wi-Fi</div>
+      <div class="custom-chip">Free Parking</div>
+      <div class="custom-chip">Air conditioner</div>
+      <div class="custom-chip">Kitchen</div>
+  </div>
     <button (click)="goBack()">Go Back</button>
+    </div>
   </div>

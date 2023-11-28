@@ -1,23 +1,41 @@
 .details-container {
-    max-width: 600px;
+    max-width: 100%;
     margin: auto;
-    padding: 20px;
+    padding: 25px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
+    display: flex;
   }
-  
+  .heading{
+    flex:1;
+  }
+  .content {
+    margin-top: 50px;
+    flex: 2;
+  }
   img {
-    max-width: 100%;
+    width: 600px;
     height: auto;
     margin-bottom: 15px;
+  }
+  .custom-chip {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 4px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
   }
   
   h2 {
     color: #333;
+    font-size: 30px;
   }
   
   p {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 20px;
   }
   
   button {

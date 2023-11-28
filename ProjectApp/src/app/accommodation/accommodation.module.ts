@@ -12,12 +12,13 @@ import { AccommodationDetailsComponent } from './accommodation-details/accommoda
   declarations: [
     AccommodationComponent,
     AccommodationCardsComponent,
-    AccommodationDetailsComponent
+    //AccommodationDetailsComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
-    RouterModule
+    RouterModule,
+    AccommodationDetailsComponent
   ]
 })
 export class AccommodationModule { }
