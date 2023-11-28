@@ -1,8 +1,10 @@
 
 .custom-card {
-  background-color: #f0f0f0; /* Customize the background color */
-  margin: 10px; /* Add margin for spacing */
-  padding: 16px; /* Add padding for spacing inside the card */
+  background-color: #f0f0f0;
+  margin: 10px;
+  padding: 16px;
+  flex: 1 0 calc(25% - 20px); 
+  box-sizing: border-box;
 }
 mat-card-content {
   display: flex;
@@ -11,13 +13,13 @@ mat-card-content {
 }
 img{
   border: 1px solid black;
-  
+  max-width: 100%;
 
 }
 b {
-  color: #333; /* Change the color of the bold text */
-  font-size: 1.2rem; /* Adjust the font size as needed */
-  margin-bottom: 10px; /* Add space below the bold text */
+  color: #333;
+  font-size: 1.2rem; 
+  margin-bottom: 10px; 
 }
 
 p {
