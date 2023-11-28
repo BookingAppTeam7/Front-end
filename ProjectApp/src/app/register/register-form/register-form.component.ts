@@ -30,6 +30,8 @@ export class RegisterFormComponent {
   })
   hide = true;
   constructor(private router: Router) { }
+  email = new FormControl('', [Validators.required, Validators.email]);
+
   getErrorMessage() {
     if (this.email.hasError('required')) {
       return 'You must enter a value';
@@ -38,22 +40,9 @@ export class RegisterFormComponent {
     return this.email.hasError('email') ? 'Not a valid email' : '';
   }
   navigateToHome() {
- 
-   this.router.navigate(['home']);
+    this.router.navigate(['home']);
+    
   }
-  // getErrorMailMessage() {
-  //   if (this.email.hasError('required')) {
-  //     return 'You must enter a value';
-  //   }
 
-  //   return this.email.hasError('email') ? 'Not a valid email' : '';
-  // }
-  // getErrorEmptyMessage() {
-  //   if (this.name.hasError('required')|| this.password.hasError('required')|| this.surname.hasError('required')) {
-  //     return 'You must enter a value';
-  //   }
-
-  //   return '';
-  // }
 }
 

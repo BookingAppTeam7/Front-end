@@ -23,7 +23,7 @@ import { AccommodationModule } from './accommodation/accommodation.module';
     WineModule,
     FlexLayoutModule,
     MatDatepickerModule,
-    MatDialogModule
+    MatDialogModule,
     AccommodationModule
   ],
   providers: [],
