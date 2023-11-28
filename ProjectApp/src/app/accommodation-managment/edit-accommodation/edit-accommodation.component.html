@@ -1,0 +1,81 @@
+<div style="text-align: center;">
+    <h2 class="register-header">Edit Accommodations Data</h2>
+    <p>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Accommodation Name">
+          <mat-icon matSuffix>edit_note</mat-icon>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Location">
+          <mat-icon matSuffix>edit_note</mat-icon>
+        </mat-form-field>
+      </p>
+      <div class="type-container">
+        <mat-radio-group aria-label="Select an option">
+          <mat-radio-button value="1">Room</mat-radio-button>
+          <mat-radio-button value="2">Apartment</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="guests-container">
+        <p style="margin-right: 10px;">
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Min guests">
+            <mat-icon matSuffix>edit_note</mat-icon>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Max guests">
+            <mat-icon matSuffix>edit_note</mat-icon>
+          </mat-form-field>
+        </p>
+      </div>
+      
+      <p>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Cancellation Deadline">
+          <mat-icon matSuffix>edit_note</mat-icon>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Description">
+          <mat-icon matSuffix>edit_note</mat-icon>
+        </mat-form-field>
+      </p>
+      
+      <p>Accommodations amenities : </p>
+      <div class="options-container">
+        <mat-chip-listbox aria-label="Accommodations amenities" multiple>
+          <mat-chip-option>Free Wi-Fi</mat-chip-option>
+          <mat-chip-option>Free Parking</mat-chip-option>
+          <mat-chip-option>Air conditioner</mat-chip-option>
+          <mat-chip-option>Kitchen</mat-chip-option>
+        </mat-chip-listbox>
+    </div>
+    <p>Reservation confirmation : </p>
+    <div class="reservation-confirmation-container">
+      <mat-radio-group aria-label="Select an option">
+        <mat-radio-button value="1">Manual</mat-radio-button>
+        <mat-radio-button value="2">Auto</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    
+    <div class="button-container">
+      <div class="buttons">
+      </div>
+      <button mat-button style="background-color: rgb(163, 161, 161);margin-top: 1%;margin-right: 15px;">+ Edit gallery</button>
+        <button mat-button style="background-color: grey;margin-top: 1%;margin-right: 15px;" (click)="openDatePickerDialog()">+ Edit price cards</button>
+        <button mat-button style="background-color: rgb(58, 57, 57);margin-top: 1%;margin-right: 15px;" (click)="openAvailabilityDialog()">+ Edit availability</button>
+      </div>
+      <div style="align-items: center; text-align: center;margin-top: 3%;">
+        <button mat-button style="background-color: #1e88e5; color: white;font-size: 16px;">Save changes</button>
+        <button mat-fab background-color="red" style="margin-left: 2%;">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  

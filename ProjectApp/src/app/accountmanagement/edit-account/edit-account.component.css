@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+  font-size: medium;
+}
+.button-container {
+    margin: 10px; 
+}
+.register-header {
+  color: #007bff; 
+  font-size: 24px;
+  margin-bottom: 3%;
+  margin-top: 5%;
+}
+  

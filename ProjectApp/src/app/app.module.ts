@@ -7,6 +7,8 @@ import {LayoutModule} from "./layout/layout.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {WineModule} from "./wine/wine.module";
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import { AccommodationModule } from './accommodation/accommodation.module';
 
 @NgModule({
@@ -20,6 +22,8 @@ import { AccommodationModule } from './accommodation/accommodation.module';
     BrowserAnimationsModule,
     WineModule,
     FlexLayoutModule,
+    MatDatepickerModule,
+    MatDialogModule
     AccommodationModule
   ],
   providers: [],

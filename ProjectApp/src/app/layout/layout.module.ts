@@ -4,25 +4,25 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import {MaterialModule} from "../infrastructure/material/material.module";
+import { FooterComponent } from './footer/footer.component';
 import {RouterModule} from "@angular/router";
-
-
 
 @NgModule({
   declarations: [
     HomeComponent,
     HeaderComponent,
-    NavBarComponent
+    NavBarComponent,
+    FooterComponent
   ],
   exports: [
     NavBarComponent,
     HeaderComponent,
-    
+    FooterComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
-    RouterModule
+    RouterModule,
   ]
 })
 export class LayoutModule { }
