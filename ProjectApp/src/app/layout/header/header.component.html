@@ -7,8 +7,10 @@
 
 <div class="div-main">
 <div class="image-container">
-    <img src="../../../assets/images/plane_homee.jpg"  alt="Plane Image">
-    <div class="overlay">Time for Travel</div>
+    <!-- <img src="../../../assets/images/plane_homee.jpg"  alt="Plane Image"> -->
+    <!-- <img [src]="imagePaths[currentImageIndex]" alt="Image"> -->
+    <img [@fadeInOut]="currentState" [src]="imagePaths[currentImageIndex]" alt="Image">
+    <div class="overlay"  [@textColorInOut]="currentState">Time for Travel</div>
 </div>
 </div>
 
