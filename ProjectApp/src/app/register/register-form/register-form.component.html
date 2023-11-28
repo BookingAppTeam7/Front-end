@@ -4,23 +4,23 @@
     
     <mat-form-field class="other-fields">
         <mat-label>Enter your name</mat-label>
-        <input matInput placeholder="Name"   required>
-        <mat-error *ngIf="name.invalid">{{ getErrorEmptyMessage() }}</mat-error>
+        <input matInput name="name" placeholder="Name"   required>
+        <!-- <mat-error *ngIf="name.invalid">{{ getErrorEmptyMessage() }}</mat-error> -->
       </mat-form-field>
 
       <mat-form-field class="other-fields">
         <mat-label>Enter your surname</mat-label>
-        <input matInput placeholder="Surname"  required>
-        <mat-error *ngIf="surname.invalid">{{ getErrorEmptyMessage() }}</mat-error>
+        <input matInput name="surname" placeholder="Surname"  required>
+        <!-- <mat-error *ngIf="surname.invalid">{{ getErrorEmptyMessage() }}</mat-error> -->
       </mat-form-field>
 
       <mat-form-field  >
-        <input matInput placeholder="Phone number" required>
+        <input matInput name="phoneNumber" placeholder="Phone number" required>
         <mat-icon matSuffix>call</mat-icon>
       </mat-form-field>
 
       <mat-form-field  >
-        <input matInput placeholder="Address" required>
+        <input matInput name="address" placeholder="Address" required>
         <mat-icon matSuffix>import_contacts</mat-icon>
       </mat-form-field>
         
@@ -29,11 +29,10 @@
         <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
         <mat-icon matSuffix>edit_note</mat-icon>
       </mat-form-field>
-    
 
     <mat-form-field class="other-fields">
         <mat-label>Enter your password</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" required>
+        <input matInput name="password" [type]="hide ? 'password' : 'text'" required>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>

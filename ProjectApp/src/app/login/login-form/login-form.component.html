@@ -8,13 +8,13 @@
       <p fxFlex>
         <mat-form-field appearance="fill"  fxFlex="100%" class="usernameField" >
           <mat-label>Username</mat-label>
-          <input matInput placeholder="Username" required>
+          <input matInput placeholder="Username" required #usernameInput>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field fxFlex="100%">
             <mat-label>Enter your password</mat-label>
-            <input matInput [type]="hide ? 'password' : 'text'" required>
+            <input matInput [type]="hide ? 'password' : 'text'" required #passwordInput>
             <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
               <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
