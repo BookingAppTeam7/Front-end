@@ -6,8 +6,6 @@ import { MaterialModule } from '../infrastructure/material/material.module';
 import { RouterModule } from '@angular/router';
 import { AccommodationDetailsComponent } from './accommodation-details/accommodation-details.component';
 
-
-
 @NgModule({
   declarations: [
     AccommodationComponent,

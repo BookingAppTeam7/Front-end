@@ -1,7 +1,7 @@
 <div class="details-container">
   <div class="heading">
     <h2>{{ accommodation.name }}</h2>
-    <img src="{{ accommodation.image }}" alt="{{ accommodation.name }} Image">
+    <img src="{{ accommodation.image }}" alt="{{ accommodation.name }} Image" style="margin-right:200px ;">
   </div>
     
     <div class="content">
@@ -18,6 +18,6 @@
       <div class="custom-chip">Air conditioner</div>
       <div class="custom-chip">Kitchen</div>
   </div>
-    <button (click)="goBack()">Go Back</button>
+    <button (click)="goBack()" style="margin-top: 3%;margin-left: 80%;"><mat-icon>arrow_back</mat-icon></button>
     </div>
   </div>

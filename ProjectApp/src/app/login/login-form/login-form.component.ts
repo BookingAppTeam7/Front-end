@@ -33,4 +33,8 @@ export class LoginFormComponent {
 
     
   }
+
+  register(){
+    this.router.navigate(['register'])
+  }
 }
