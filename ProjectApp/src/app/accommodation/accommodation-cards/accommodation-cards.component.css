@@ -2,4 +2,5 @@
     display: flex;
     flex-wrap: wrap; 
     justify-content:first baseline;
+    margin-bottom: 100px;
   }

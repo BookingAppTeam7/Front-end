@@ -25,8 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
     FlexLayoutModule,
     MatDatepickerModule,
     MatDialogModule,
-    AccommodationModule,
-    MatIconModule
+    AccommodationModule
   ],
   providers: [],
   bootstrap: [AppComponent]
