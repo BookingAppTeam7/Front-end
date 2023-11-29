@@ -8,7 +8,7 @@ import { AccommodationDetailsComponent } from './accommodation-details/accommoda
 
 @NgModule({
   declarations: [
-    AccommodationComponent,
+    //AccommodationComponent,
     AccommodationCardsComponent,
     //AccommodationDetailsComponent
   ],

@@ -9,8 +9,6 @@ import {WineModule} from "./wine/wine.module";
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
-import { AccommodationModule } from './accommodation/accommodation.module';
-import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -24,8 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
     WineModule,
     FlexLayoutModule,
     MatDatepickerModule,
-    MatDialogModule,
-    AccommodationModule
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
