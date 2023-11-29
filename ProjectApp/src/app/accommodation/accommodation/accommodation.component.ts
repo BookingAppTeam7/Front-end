@@ -10,5 +10,11 @@ import { Accommodation } from './model/accommodation.model';
 export class AccommodationComponent {
   @Input() 
   accommodation:Accommodation;
-
+  truncateDescription(description: string, words: number): string {
+    const wordArray = description.split(' ');
+    if (wordArray.length > words) {
+      return wordArray.slice(0, words).join(' ') + '...';
+    }
+    return description;
+  }
 }
