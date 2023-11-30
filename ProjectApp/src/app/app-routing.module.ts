@@ -13,7 +13,7 @@ import { EditAccommodationComponent } from './accommodation-managment/edit-accom
 import { AccommodationComponent } from './accommodation/accommodation/accommodation.component';
 import { AccommodationCardsComponent } from './accommodation/accommodation-cards/accommodation-cards.component';
 import { AccommodationDetailsComponent } from './accommodation/accommodation-details/accommodation-details.component';
-
+import { UsersViewComponent } from './users/users-view/users-view.component';
 const routes: Routes = [
   {component: WineComponent, path:"wine"},
   {component: HomeComponent, path:"home"},
@@ -27,7 +27,8 @@ const routes: Routes = [
   {component:EditAccommodationComponent, path:"editAccommodation"},
   {component:AccommodationComponent,path:"accommodation"},
   {component:AccommodationCardsComponent,path:"accommodation-cards"},
-  {component: AccommodationDetailsComponent ,path: 'accommodations/:id'}
+  {component: AccommodationDetailsComponent ,path: 'accommodations/:id'},
+  {component:UsersViewComponent,path:'users-view'}
 ];
 
 @NgModule({

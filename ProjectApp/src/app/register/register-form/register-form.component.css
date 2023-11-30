@@ -8,7 +8,7 @@
     flex-direction: column;
     align-items: center;
   }
-  
+ 
   .mat-form-field {
     width: 300px; /* Postavite širinu prema želji */
     margin-bottom: 16px; /* Dodajte odgovarajući razmak između polja */
