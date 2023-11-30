@@ -37,7 +37,7 @@ export class AccommodationDetailsComponent implements OnInit{
     });
   }
   goBack() {
-    this.router.navigate(['/accommodation-cards']);
+    this.router.navigate(['/home']);
   }
 }
 

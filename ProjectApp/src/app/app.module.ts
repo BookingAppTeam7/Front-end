@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccommodationModule } from './accommodation/accommodation.module';
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -24,8 +25,7 @@ import { AccommodationModule } from './accommodation/accommodation.module';
     WineModule,
     FlexLayoutModule,
     MatDatepickerModule,
-    MatDialogModule,
-    AccommodationModule
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
