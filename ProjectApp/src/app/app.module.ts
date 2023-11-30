@@ -9,6 +9,9 @@ import {WineModule} from "./wine/wine.module";
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AccommodationModule } from './accommodation/accommodation.module';
+
 
 @NgModule({
   declarations: [

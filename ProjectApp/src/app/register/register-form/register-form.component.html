@@ -1,38 +1,39 @@
+
 <div class="example-container">
     <h2 class="register-header">Register</h2>
     
-    
+    <form [formGroup]="createRegisterForm" class="example-container">
     <mat-form-field class="other-fields">
         <mat-label>Enter your name</mat-label>
-        <input matInput name="name" placeholder="Name"   required>
+        <input matInput name="name" placeholder="First Name" formControlName="name"   required>
         <!-- <mat-error *ngIf="name.invalid">{{ getErrorEmptyMessage() }}</mat-error> -->
       </mat-form-field>
 
       <mat-form-field class="other-fields">
         <mat-label>Enter your surname</mat-label>
-        <input matInput name="surname" placeholder="Surname"  required>
+        <input matInput name="surname" placeholder="Last Name"  formControlName="surname" required>
         <!-- <mat-error *ngIf="surname.invalid">{{ getErrorEmptyMessage() }}</mat-error> -->
       </mat-form-field>
 
       <mat-form-field  >
-        <input matInput name="phoneNumber" placeholder="Phone number" required>
+        <input matInput name="phoneNumber" placeholder="Phone number"  formControlName="phoneNumber" required>
         <mat-icon matSuffix>call</mat-icon>
       </mat-form-field>
 
       <mat-form-field  >
-        <input matInput name="address" placeholder="Address" required>
+        <input matInput name="address" placeholder="Address" formControlName="address" required>
         <mat-icon matSuffix>import_contacts</mat-icon>
       </mat-form-field>
         
       <mat-form-field aclass="other-fields">
-        <input matInput placeholder="Username (Email)" [formControl]="email" required>
-        <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+        <input matInput placeholder="Username (Email)" [formControl]="email" name="email" formControlName="email" required>
+        <!-- <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error> -->
         <mat-icon matSuffix>edit_note</mat-icon>
       </mat-form-field>
 
     <mat-form-field class="other-fields">
         <mat-label>Enter your password</mat-label>
-        <input matInput name="password" [type]="hide ? 'password' : 'text'" required>
+        <input matInput name="password" [type]="hide ? 'password' : 'text'" formControlName="password" required>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
@@ -40,7 +41,7 @@
 
       <mat-form-field class="other-fields">
         <mat-label>Confirm your password</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" required>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
@@ -48,15 +49,16 @@
 
       <mat-form-field class="other-fields">
         <mat-label>Role</mat-label>
-        <mat-select>
-          <mat-option value="admin">Admin</mat-option>
-          <mat-option value="owner">Owner</mat-option>
-          <mat-option value="guest">Guest</mat-option>
+        <mat-select name="role" formControlName="role">
+          <mat-option value="ADMIN">Admin</mat-option>
+          <mat-option value="OWNER">Owner</mat-option>
+          <mat-option value="GUEST">Guest</mat-option>
         </mat-select>
       </mat-form-field>
+    </form>
 
       <div class="example-button-row">
-        <button (click)="navigateToHome()" mat-raised-button color="primary">
+        <button (click)="register()" mat-raised-button color="primary">
           Register
           <mat-icon class="icon">how_to_reg</mat-icon> <!-- Dodajte ikonicu (u ovom primeru, ikonica "lock") -->
         </button>

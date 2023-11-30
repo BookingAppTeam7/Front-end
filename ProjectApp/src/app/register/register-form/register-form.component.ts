@@ -6,6 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
+import { User } from 'src/app/models/user.model';
+import { UserService } from 'src/app/user.service';
+import { UserPostDTO } from 'src/app/models/userPostDTO.model';
+import { RoleEnum } from 'src/app/models/userEnums.model';
 
 @Component({
   selector: 'app-register-form',
@@ -26,10 +30,11 @@ export class RegisterFormComponent {
     phoneNumber: new FormControl(),
     address: new FormControl(),
     email: new FormControl(),
-    password:new FormControl()
+    password:new FormControl(),
+    role:new FormControl()
   })
   hide = true;
-  constructor(private router: Router) { }
+  constructor(private userService:UserService,private router: Router) { }
   email = new FormControl('', [Validators.required, Validators.email]);
 
   getErrorMessage() {
@@ -43,6 +48,46 @@ export class RegisterFormComponent {
     this.router.navigate(['home']);
     
   }
+  register(){
+    
+    console.log("KLIK NA DUGME")
+    const userRoleValue: string | undefined= this.createRegisterForm.get('role')?.value;
+    console.log(userRoleValue);
+    if(userRoleValue!==undefined){
+      console.log("USAO U IF")
+      const userRoleEnum: RoleEnum = RoleEnum[userRoleValue as keyof typeof RoleEnum];
+      const user: UserPostDTO = {
+        firstName: this.createRegisterForm.value.name,
+        lastName:this.createRegisterForm.value.surname,
+        phoneNumber: this.createRegisterForm.value.phoneNumber,
+        address: this.createRegisterForm.value.address,
+        username:this.createRegisterForm.value.email,
+        password:this.createRegisterForm.value.password,
+        role: userRoleEnum,
+       
+      }
+      
+      this.userService.create(user).subscribe(
+        {
+        
+      
+          next: (data: UserPostDTO) => {
+            console.log("isap u subscribeeeeee");
+            this.router.navigate(['users-view'])
+          },
+        
+         
+        }
+        
+      );
+      
+    }
+    
+   
+      
+    }
 
-}
+   
+  }
 
+  
