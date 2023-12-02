@@ -24,7 +24,9 @@ export class CreateAccommodationComponent {
 
   createAccommodationForm=new FormGroup({
     name: new FormControl(),
-    location:new FormControl(),
+    address:new FormControl(),
+    city: new FormControl(),
+    country: new FormControl(),
     xCoordinate: new FormControl(),
     yCoordinate: new FormControl(),
     type: new FormControl(),
@@ -36,35 +38,6 @@ export class CreateAccommodationComponent {
     reservationConfirmation: new FormControl()
   })
 
-  // register(){
-    
-  //   console.log("KLIK NA DUGME")
-  //   const accommodationTypeValue: string | undefined= this.createAccommodationForm.get('type')?.value;
-  //   console.log(accommodationTypeValue);
-  //   if(accommodationTypeValue!==undefined){
-  //     console.log("USAO U IF")
-  //     const accommodationTypeEnum: AccommodationTypeEnum = RoleEnum[accommodationTypeValue as keyof typeof AccommodationTypeEnum];
-  //     const user: AccommodationPostDTO = {
-  //       name: this.createAccommodationForm.value.name,
-
-        
-       
-  //     }
-      
-  //     this.userService.create(user).subscribe(
-  //       {
-        
-      
-  //         next: (data: UserPostDTO) => {
-  //           console.log("isap u subscribeeeeee");
-  //           this.router.navigate(['users-view'])
-  //         },
-        
-         
-  //       }
-        
-     // );
-
   openDatePickerDialog(): void {
     const dialogRef = this.dialog.open(PriceCardComponent, {
       width: '400px',
@@ -75,10 +48,6 @@ export class CreateAccommodationComponent {
       console.log(result);
     });
 
-
-
-    
-    
 }
 
 openAvailabilityDialog(): void {
