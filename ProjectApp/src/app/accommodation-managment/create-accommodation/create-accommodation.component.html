@@ -2,18 +2,33 @@
     <h2 class="register-header">Registration of new Accommodation</h2>
     <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Accommodation Name">
-      
+          <input matInput placeholder="Accommodation Name" formControlName="name">
         </mat-form-field>
       </p>
       <p>
+        <label style="margin-right: 2%;">Location Data : </label>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Location">
+          <input matInput placeholder="Address" formControlName="address">
        
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="City" formControlName="city">
+       
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Country" formControlName="country">
+        </mat-form-field>
+        </p>
+<p>     
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="X coordinate" formControlName="xCoordinate">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Y coordinate" formControlName="yCoordinate">
         </mat-form-field>
       </p>
       <div class="type-container">
-        <mat-radio-group aria-label="Select an option">
+        <mat-radio-group aria-label="Select an option" formControlName="type">
           <mat-radio-button value="1">Room</mat-radio-button>
           <mat-radio-button value="2">Apartment</mat-radio-button>
         </mat-radio-group>
@@ -21,34 +36,31 @@
       <div class="guests-container">
         <p style="margin-right: 10px;">
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Min guests">
+            <input matInput placeholder="Min guests"  formControlName="minGuests">
            
           </mat-form-field>
         </p>
         <p>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Max guests">
-         
+            <input matInput placeholder="Max guests" formControlName="maxGuests">
           </mat-form-field>
         </p>
       </div>
       
       <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Cancellation Deadline">
-          
+          <input matInput placeholder="Cancellation Deadline" formControlName="cancellationDeadline">
         </mat-form-field>
       </p>
       <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Description">
-      
+          <input matInput placeholder="Description"  formControlName="description">
         </mat-form-field>
       </p>
       
       <p>Accommodations amenities : </p>
       <div class="options-container">
-        <mat-chip-listbox aria-label="Accommodations amenities" multiple>
+        <mat-chip-listbox aria-label="Accommodations amenities" formControlName="amenities"  multiple>
           <mat-chip-option>Free Wi-Fi</mat-chip-option>
           <mat-chip-option>Free Parking</mat-chip-option>
           <mat-chip-option>Air conditioner</mat-chip-option>
@@ -57,7 +69,7 @@
     </div>
     <p>Reservation confirmation : </p>
     <div class="reservation-confirmation-container">
-      <mat-radio-group aria-label="Select an option">
+      <mat-radio-group aria-label="Select an option" formControlName="reservationConfirmation" >
         <mat-radio-button value="1">Manual</mat-radio-button>
         <mat-radio-button value="2">Auto</mat-radio-button>
       </mat-radio-group>
