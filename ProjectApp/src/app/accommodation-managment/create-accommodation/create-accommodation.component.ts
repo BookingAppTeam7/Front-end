@@ -11,7 +11,8 @@ import { PriceCardComponent } from '../price-card/price-card.component';
 import { AvailabilityCardComponent } from '../availability-card/availability-card.component';
 import {FormControl, Validators, FormsModule, ReactiveFormsModule, FormGroup} from '@angular/forms';
 import { AccommodationService } from 'src/app/accommodation/accommodation.service';
-
+import { AccommodationTypeEnum } from 'src/app/models/enums/accommodationTypeEnum';
+import { AccommodationPostDTO } from 'src/app/models/dtos/accommodationPostDTO.model';
 @Component({
   selector: 'app-create-accommodation',
   templateUrl: './create-accommodation.component.html',
@@ -47,6 +48,7 @@ export class CreateAccommodationComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
     });
+    
 
 }
 
@@ -61,4 +63,45 @@ openAvailabilityDialog(): void {
  });
 
 }
+
+register(){
+    
+  const accommodationTypeValue: string | undefined= this.createRegisterForm.get('type')?.value;
+  if(accommodationTypeValue!==undefined){
+    const accommodationTypeEnum: AccommodationTypeEnum = AccommodationTypeEnum[accommodationTypeValue as keyof typeof AccommodationTypeEnum];
+    const accommodation: AccommodationPostDTO = {
+      firstName: this.createRegisterForm.value.name,
+      lastName:this.createRegisterForm.value.surname,
+      phoneNumber: this.createRegisterForm.value.phoneNumber,
+      address: this.createRegisterForm.value.address,
+      username:this.createRegisterForm.value.email,
+      password:this.createRegisterForm.value.password,
+      type: accommodationTypeEnum
+     
+    }
+    
+    this.userService.create(user).subscribe(
+      {
+      
+    
+        next: (data: UserPostDTO) => {
+          console.log("isap u subscribeeeeee");
+          this.router.navigate(['users-view'])
+        },
+      
+       
+      }
+      
+    );
+    
+  }
+  
+ 
+    
+  }
+
+
+
+
+
 }
