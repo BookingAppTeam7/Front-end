@@ -1,3 +1,4 @@
 export enum PriceTypeEnum{
-    PERUNIT,PERGUEST
+    PERGUEST=0,PERUNIT=1
 }
+

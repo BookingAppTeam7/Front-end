@@ -1,5 +1,7 @@
+import { TimeSlotEnum } from "src/app/models/enums/timeSlotEnum";
+
 export interface TimeSlot{
-    id:number,
     startDate:Date,
-    endDate:Date
+    endDate:Date,
+    type:TimeSlotEnum
 }

@@ -1,3 +1,3 @@
 export enum AccommodationTypeEnum{
-    APARTMENT,ROOM
+    ROOM=1,APARTMENT=2,VIP_ROOM
 }

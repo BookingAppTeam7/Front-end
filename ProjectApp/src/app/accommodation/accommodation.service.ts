@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import { environment } from 'src/env/env';
 import {Observable} from "rxjs";
 import { AccommodationPostDTO } from '../models/dtos/accommodationPostDTO.model';
+import { Accommodation } from './accommodation/model/accommodation.model';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +13,23 @@ export class AccommodationService {
   constructor(private httpClient: HttpClient) {
   }
 
+  // create(accommodation: AccommodationPostDTO): Observable<AccommodationPostDTO> {
+  //   return this.httpClient.post<AccommodationPostDTO>(environment.apiHost + 'accommodations', accommodation)
+  // }
+
   create(accommodation: AccommodationPostDTO): Observable<AccommodationPostDTO> {
-    return this.httpClient.post<AccommodationPostDTO>(environment.apiHost + 'accommodations', accommodation)
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.httpClient.post<AccommodationPostDTO>(
+      environment.apiHost + 'accommodations',
+      JSON.stringify(accommodation),
+      { headers: headers }
+    );
   }
+
+  getAccommodationById(id: number): Observable<Accommodation | undefined> {
+    return this.httpClient.get<Accommodation>(environment.apiHost + 'accommodations/' + id);
+  }
+
 
 }
 

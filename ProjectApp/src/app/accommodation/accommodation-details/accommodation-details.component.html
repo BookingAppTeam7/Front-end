@@ -1,7 +1,7 @@
 <div class="details-container">
   <div class="heading">
     <h2>{{ accommodation.name }}</h2>
-    <img src="{{ accommodation.image }}" alt="{{ accommodation.name }} Image" style="margin-right:200px ;">
+    <img src="{{ accommodation.images }}" alt="{{ accommodation.name }} Image" style="margin-right:200px ;">
   </div>
     
     <div class="content">
@@ -9,8 +9,8 @@
     <p><strong>Location:</strong> {{ accommodation.location }}</p>
     <p><strong>Guests:</strong> {{ accommodation.minGuests }} - {{ accommodation.maxGuests }}</p>
     <p><strong>Status:</strong> {{ accommodation.status }}</p>
-    <p><strong>Price:</strong> {{accommodation.price}}$</p>
-    <p><strong>Rating:</strong> {{accommodation.rating}}</p>
+    <p><strong>Price:</strong> {{accommodation.prices}}$</p>
+    <!--<p><strong>Rating:</strong> {{accommodation.rating}}</p>-->
     <p><strong>Assets:</strong></p>
     <div class="options-container">
       <div class="custom-chip">Free Wi-Fi</div>

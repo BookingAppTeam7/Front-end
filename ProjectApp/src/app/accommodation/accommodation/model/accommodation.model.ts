@@ -1,7 +1,7 @@
 import { PriceCard } from "./priceCard.model";
 import { TimeSlot } from "./timeSlot.model";
 import { AccommodationTypeEnum } from "src/app/models/enums/accommodationTypeEnum";
-import { Location } from "./location.model";
+import { Location } from "src/app/accommodation/accommodation/model/location.model";;
 export interface Accommodation{
     id?: number;
     name: string;
@@ -13,5 +13,4 @@ export interface Accommodation{
     status: string;
     images:String[];
     prices:PriceCard[];
-    availability:TimeSlot[];
 }

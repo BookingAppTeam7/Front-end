@@ -1,3 +1,4 @@
+<form [formGroup]="createAccommodationForm">
 <div style="text-align: center;">
     <h2 class="register-header">Registration of new Accommodation</h2>
     <p>
@@ -5,8 +6,9 @@
           <input matInput placeholder="Accommodation Name" formControlName="name">
         </mat-form-field>
       </p>
-      <p>
-        <label style="margin-right: 2%;">Location Data : </label>
+
+      <h2 style="margin-bottom: 2%;">Location Data : </h2>
+      <div class="location-data-container">
         <mat-form-field appearance="outline">
           <input matInput placeholder="Address" formControlName="address">
        
@@ -18,15 +20,15 @@
         <mat-form-field appearance="outline">
           <input matInput placeholder="Country" formControlName="country">
         </mat-form-field>
-        </p>
-<p>     
+      </div>
+<div class="location-data-container">
         <mat-form-field appearance="outline">
           <input matInput placeholder="X coordinate" formControlName="xCoordinate">
         </mat-form-field>
         <mat-form-field appearance="outline">
           <input matInput placeholder="Y coordinate" formControlName="yCoordinate">
         </mat-form-field>
-      </p>
+      </div>
       <div class="type-container">
         <mat-radio-group aria-label="Select an option" formControlName="type">
           <mat-radio-button value="1">Room</mat-radio-button>
@@ -57,6 +59,12 @@
           <input matInput placeholder="Description"  formControlName="description">
         </mat-form-field>
       </p>
+
+      <p>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Owner id"  formControlName="ownerId">
+        </mat-form-field>
+      </p>
       
       <p>Accommodations amenities : </p>
       <div class="options-container">
@@ -75,14 +83,45 @@
       </mat-radio-group>
     </div>
 
+    <h2>Select Dates and Price</h2>
+    <div class="date-picker-container">
+      <mat-form-field>
+        <mat-label>Choose a start date</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
     
+      <mat-form-field>
+        <mat-label>Choose an end date</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Price for chosen period" formControlName="price">
+      </mat-form-field>
+
+    </div>
+
+    <div class="type-container">
+      <mat-radio-group aria-label="Select an option" formControlName="priceType">
+        <mat-radio-button value="0">PERGUEST</mat-radio-button>
+        <mat-radio-button value="1">PERUNIT</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <button mat-button style="background-color: rgb(152, 198, 244);margin-bottom: 2%;" (click)="savePrice()">+ Save Price</button>
+      
     <div class="button-container">
       <div class="buttons">
       </div>
       <button mat-button style="background-color: rgb(163, 161, 161);margin-top: 1%;margin-right: 15px;">+ Add images</button>
-        <button mat-button style="background-color: grey;margin-top: 1%;margin-right: 15px;" (click)="openDatePickerDialog()">+ Add price card</button>
-        <button mat-button style="background-color: rgb(58, 57, 57);margin-top: 1%;margin-right: 15px;" (click)="openAvailabilityDialog()">+ Add availability</button>
       </div>
-      <button mat-button style="background-color: #1e88e5; color: white;margin-top: 4%;">Register accommodation</button>
+      <button (click)="register()" mat-button style="background-color: #1e88e5; color: white;margin-top: 4%;">Register accommodation</button>
     </div>
+</form>
   
