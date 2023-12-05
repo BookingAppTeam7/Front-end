@@ -1,20 +1,22 @@
 <div style="text-align: center;">
 <h2 class="register-header">Edit User Account</h2>
+<form [formGroup]="editAccountDataForm" >
 <p>
+  
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Name">
+      <input matInput placeholder="Name" formControlName="name" name="name" >
       <mat-icon matSuffix>edit_note</mat-icon>
     </mat-form-field>
   </p>
   <p>
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Lastname">
+      <input matInput placeholder="Lastname"  formControlName="surname" name="surname">
       <mat-icon matSuffix>edit_note</mat-icon>
     </mat-form-field>
   </p>
   <p>
     <mat-form-field appearance="outline">
-      <input matInput placeholder="pat@example.com" [formControl]="email" required>
+      <input matInput placeholder="pat@example.com" formControlName="username" name="username" required>
       <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
       <mat-icon matSuffix>edit_note</mat-icon>
     </mat-form-field>
@@ -22,7 +24,7 @@
   <p>
     <mat-form-field fxFlex="100%">
         <mat-label>Password</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" required>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" name="password" required>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
@@ -31,7 +33,7 @@
   <p>
     <mat-form-field fxFlex="100%">
         <mat-label>Password confirmation</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" required>
+        <input matInput [type]="hide ? 'password' : 'text'"  formControlName="confirmPassword" name="confirmPassword" required>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
@@ -39,20 +41,93 @@
   </p>
   <p>
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Address">
+      <input matInput placeholder="Address" formControlName="address" name="address">
       <mat-icon matSuffix>edit_note</mat-icon>
     </mat-form-field>
   </p>
   <p>
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Phone number">
+      <input matInput placeholder="Phone number" formControlName="phoneNumber" name="phoneNumber">
       <mat-icon matSuffix>edit_note</mat-icon>
     </mat-form-field>
   </p>
+<p>
+  <mat-form-field  appearance="outline" class="selection-class" >
+    <mat-label>Role</mat-label>
+    <mat-select name="role" formControlName="role"  (selectionChange)="onRoleSelectionChange($event)" >
+      <mat-option value="ADMIN">Admin</mat-option>
+      <mat-option value="OWNER">Owner</mat-option>
+      <mat-option value="GUEST">Guest</mat-option>
+    </mat-select>
+  </mat-form-field>
+</p>
+<p>
+  <mat-form-field  appearance="outline" class="selection-class" >
+    <mat-label>Status</mat-label>
+    <mat-select name="status" formControlName="status" >
+      <mat-option value="DEACTIVE">DEACTIVE</mat-option>
+      <mat-option value="ACTIVE">ACTIVE</mat-option>
+    </mat-select>
+  </mat-form-field>
+  </p>
+
+
+<div class="slide-toggle-container">
+
+  <mat-slide-toggle formControlName="requestNotification"
+  class="example-margin"
+  [color]="color"
+  [checked]="checked"
+  [disabled]="disabled"
+  (change)="onSlideToggleChangeRequestNotification($event)">
+  
+Reservation Request Notification On!
+
+</mat-slide-toggle>
+
+  <mat-slide-toggle formControlName="cancellationNotification"
+      class="example-margin"
+      [color]="color"
+      [checked]="checked"
+      [disabled]="disabled"
+      (change)="onSlideToggleChangeCancellationNotification($event)">   
+    Reservation Cancellation Notification On!
+  </mat-slide-toggle>
+  
+  <mat-slide-toggle formControlName="ownerRatingNotification"
+  class="example-margin"
+  [color]="color"
+  [checked]="checked"
+  [disabled]="disabled"
+  (change)="onSlideToggleChangeOwnerRatingNotification($event)">   
+Owner Rating  Notification On!
+</mat-slide-toggle>
+
+  <mat-slide-toggle formControlName="accommodationRatingNotification"
+  class="example-margin"
+  [color]="color"
+  [checked]="checked"
+  [disabled]="disabled"
+  (change)="onSlideToggleChangeAccommodationRatingNotification($event)">   
+Accommodation Rating Notification On!
+</mat-slide-toggle>
+
+<mat-slide-toggle
+class="example-margin" formControlName="ownerRepliedNotification"
+[color]="color"
+[checked]="checked"
+[disabled]="disabled"
+(change)="onSlideToggleChangeOwnerRepliedRequestNotification($event)">   
+Owner Replied To Reservation Request Notification On!
+</mat-slide-toggle>
+</div>
+
+</form>
+
 
 <div class="button-container">
-    <button mat-button style="background-color: #1e88e5; color: white; margin-right: 50px;">Save changes</button>
-    <button mat-fab background-color="red" aria-label="Example icon button with a delete icon">
+    <button mat-button  (click)="saveChanges()" style="background-color: #1e88e5; color: white; margin-right: 50px;">Save changes</button>
+    <button mat-fab background-color="red" (click)="delete()" aria-label="Example icon button with a delete icon">
       <mat-icon>delete</mat-icon>
     </button>
   </div>

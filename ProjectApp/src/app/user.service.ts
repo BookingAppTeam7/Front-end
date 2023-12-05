@@ -5,6 +5,7 @@ import { environment } from 'src/env/env';
 import {Observable} from "rxjs";
 import { UserPostDTO } from './models/userPostDTO.model';
 import { UserGetDTO } from './models/userGetDTO.model';
+import { UserPutDTO } from './models/userPutDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,21 +16,23 @@ export class UserService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getAll(): Observable<User[]> {
-    console.log("USAO U SERVICE PA U GETALL");
-    console.log("PUTANJA: " + environment.apiHost + 'users')
-   
-   
-    // console.log(this.httpClient.get<UserGetDTO[]>(environment.apiHost + 'users'))
+  getAll(): Observable<UserGetDTO[]> {
     return this.httpClient.get<UserGetDTO[]>(environment.apiHost + 'users')
   }
 
   create(user: UserPostDTO): Observable<UserPostDTO> {
-    console.log("USAO U SERVICE PA U ADD");
+
     return this.httpClient.post<UserPostDTO>(environment.apiHost + 'users', user)
   }
+  update(user: UserPutDTO,username:string): Observable<User> {
+    return this.httpClient.put<User>(environment.apiHost + 'users/' + username,user)
+  }
 
-  getWine(id: number): Observable<User> {
-    return this.httpClient.get<User>(environment.apiHost + 'users/' + id)
+  deleteUser(username:string) {
+    return this.httpClient.delete(environment.apiHost + 'users/' + username)
+  }
+
+  getById(username: string): Observable<UserGetDTO> {
+    return this.httpClient.get<UserGetDTO>(environment.apiHost + 'users/' + username)
   }
 }
