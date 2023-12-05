@@ -1,11 +1,12 @@
-import { RoleEnum } from "./userEnums.model";
+import { RoleEnum, StatusEnum } from "./userEnums.model";
 
-export interface UserPostDTO {
+export interface UserPutDTO {
     firstName: string;
     lastName: string;
     username: string;
     password:string;
     passwordConfirmation:string;
+    status:StatusEnum;
     role: RoleEnum;
     address: string;
     phoneNumber: string;
@@ -14,4 +15,5 @@ export interface UserPostDTO {
     ownerRatingNotification:boolean,
     accommodationRatingNotification:boolean,
     ownerRepliedToRequestNotification:boolean
+
   }

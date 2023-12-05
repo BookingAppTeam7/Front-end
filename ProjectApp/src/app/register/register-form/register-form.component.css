@@ -10,15 +10,15 @@
   }
  
   .mat-form-field {
-    width: 300px; /* Postavite širinu prema želji */
-    margin-bottom: 16px; /* Dodajte odgovarajući razmak između polja */
+    width: 300px;
+    margin-bottom: 16px; 
   }
   .other-fields{
     width: 250px;
   }
 
   .register-header {
-    color: #007bff; /* Blue color, you can change it */
+    color: #007bff; 
     font-size: 24px;
     margin-bottom: 20px;
   }
@@ -27,6 +27,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 10px; /* Adjust the margin as needed */
+    margin-top: 10px; 
+  }
+
+  .slide-toggle-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    gap: 10px; 
+    margin-left: 100px;
+    margin-bottom: 20px;
   }
   

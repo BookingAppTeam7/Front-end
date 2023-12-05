@@ -11,4 +11,19 @@
   margin-bottom: 3%;
   margin-top: 5%;
 }
+
+.selection-class{
+  width:250px;
+}
+
+.slide-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left:600px;
+  margin-top: 10px;
+  gap: 10px; 
+  margin-bottom: 20px;
+}
+
   
