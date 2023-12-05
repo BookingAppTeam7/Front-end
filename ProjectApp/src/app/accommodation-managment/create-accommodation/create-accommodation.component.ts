@@ -46,7 +46,6 @@ export class CreateAccommodationComponent {
     cancellationDeadline: new FormControl(),
     description:new FormControl(),
     amenities: new FormControl(),
-    reservationConfirmation: new FormControl(),
     ownerId:new FormControl(),
     startDate:new FormControl(),
     endDate:new FormControl(),

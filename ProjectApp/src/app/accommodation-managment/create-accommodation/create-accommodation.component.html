@@ -5,8 +5,15 @@
         <mat-form-field appearance="outline">
           <input matInput placeholder="Accommodation Name" formControlName="name">
         </mat-form-field>
-      </p>
-
+        <h3>Accommodation type : </h3>
+        <div class="type-container">
+          <mat-radio-group aria-label="Select an option" formControlName="type">
+            <mat-radio-button value="1">Room</mat-radio-button>
+            <mat-radio-button value="2">Apartment</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      
+      <div class="data-container">
       <h2 style="margin-bottom: 2%;">Location Data : </h2>
       <div class="location-data-container">
         <mat-form-field appearance="outline">
@@ -21,6 +28,7 @@
           <input matInput placeholder="Country" formControlName="country">
         </mat-form-field>
       </div>
+    
 <div class="location-data-container">
         <mat-form-field appearance="outline">
           <input matInput placeholder="X coordinate" formControlName="xCoordinate">
@@ -29,12 +37,8 @@
           <input matInput placeholder="Y coordinate" formControlName="yCoordinate">
         </mat-form-field>
       </div>
-      <div class="type-container">
-        <mat-radio-group aria-label="Select an option" formControlName="type">
-          <mat-radio-button value="1">Room</mat-radio-button>
-          <mat-radio-button value="2">Apartment</mat-radio-button>
-        </mat-radio-group>
-      </div>
+    </div>
+      
       <div class="guests-container">
         <p style="margin-right: 10px;">
           <mat-form-field appearance="outline">
@@ -65,8 +69,8 @@
           <input matInput placeholder="Owner id"  formControlName="ownerId">
         </mat-form-field>
       </p>
-      
-      <p>Accommodations amenities : </p>
+      <div class="data-container">
+      <h2>Accommodations amenities : </h2>
       <div class="options-container">
         <mat-chip-listbox aria-label="Accommodations amenities" formControlName="amenities"  multiple>
           <mat-chip-option>Free Wi-Fi</mat-chip-option>
@@ -75,14 +79,8 @@
           <mat-chip-option>Kitchen</mat-chip-option>
         </mat-chip-listbox>
     </div>
-    <p>Reservation confirmation : </p>
-    <div class="reservation-confirmation-container">
-      <mat-radio-group aria-label="Select an option" formControlName="reservationConfirmation" >
-        <mat-radio-button value="1">Manual</mat-radio-button>
-        <mat-radio-button value="2">Auto</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
+  </div>
+    <div class="data-container">
     <h2>Select Dates and Price</h2>
     <div class="date-picker-container">
       <mat-form-field>
@@ -115,7 +113,7 @@
     </div>
 
     <button mat-button style="background-color: rgb(152, 198, 244);margin-bottom: 2%;" (click)="savePrice()">+ Save Price</button>
-      
+    </div>
     <div class="button-container">
       <div class="buttons">
       </div>
