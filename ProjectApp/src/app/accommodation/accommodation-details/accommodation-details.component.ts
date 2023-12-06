@@ -28,12 +28,12 @@ export class AccommodationDetailsComponent implements OnInit{
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       const accommodationId = +params.get('id')!;
-      const foundAccommodation = this.accommodationService.getAccommodationById(accommodationId);
-      if(foundAccommodation){
-        this.accommodation=foundAccommodation;
-      }else{
-        console.error(`Accommodation with ID ${accommodationId} not found`);
-      }
+      const foundAccommodation = this.accommodationService.getById(accommodationId);
+      // if(foundAccommodation){
+      //   this.accommodation=foundAccommodation;
+      // }else{
+      //   console.error(`Accommodation with ID ${accommodationId} not found`);
+      // }
     });
   }
   goBack() {

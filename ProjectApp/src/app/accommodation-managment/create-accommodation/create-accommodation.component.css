@@ -21,6 +21,7 @@ justify-content: center;
     display: flex;
     justify-content: center;
     margin-bottom: 1%;
+    align-items: center;
 }
 
 .reservation-confirmation-container {
@@ -31,4 +32,37 @@ justify-content: center;
 
 .mat-mdc-radio-button ~ .mat-mdc-radio-button {
 margin-left: 16px;
+}
+
+.date-picker-container {
+  text-align: center;
+  width: 70%;
+  margin: 0 auto;  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1%; 
+  margin-bottom: 2%;
+}
+
+mat-form-field {
+  flex: 1; 
+}
+
+.location-data-container {
+  width: 40%;
+  margin: 0 auto;  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1%; 
+  margin-bottom: 2%;
+}
+
+.data-container {
+  max-width: 70%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }

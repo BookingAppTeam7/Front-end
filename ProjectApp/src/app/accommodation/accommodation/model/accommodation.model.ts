@@ -1,12 +1,21 @@
+import { PriceCard } from "./priceCard.model";
+import { TimeSlot } from "./timeSlot.model";
+import { AccommodationTypeEnum } from "src/app/models/enums/accommodationTypeEnum";
+import { Location } from "src/app/accommodation/accommodation/model/location.model";import { ReservationConfirmationEnum } from "src/app/models/enums/reservationConfirmationEnum";
+;
 export interface Accommodation{
     id?: number;
     name: string;
     description: string;
-    location: string;
+    type:AccommodationTypeEnum;
+    location:Location
     minGuests: number;
     maxGuests: number;
     status: string;
-    image:string;
-    price:number;
-    rating:number;
+    images:String[];
+    prices:PriceCard[];
+    cancellationDeadline:number;
+    reservationConfirmation:ReservationConfirmationEnum;
+    assets:String[];
+    ownerId:String;
 }
