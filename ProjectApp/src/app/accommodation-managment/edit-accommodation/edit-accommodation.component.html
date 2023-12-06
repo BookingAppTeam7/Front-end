@@ -1,50 +1,57 @@
-<div style="text-align: center;">
+<form [formGroup]="editAccommodationFormGroup">
+<div  style="text-align: center;">
     <h2 class="register-header">Edit Accommodations Data</h2>
     <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Accommodation Name">
+          <input matInput formControlName="name"  [value]="accommodation?.name" (input)="onNameInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
         </mat-form-field>
       </p>
+      <div class="type-container">
+        <mat-radio-group aria-label="Select an option" formControlName="type"  (input)="onTypeInput($event)">
+          <mat-radio-button  value="1" [checked]="accommodation?.type === AccommodationTypeEnum.ROOM">ROOM</mat-radio-button>
+          <mat-radio-button  value="2" [checked]="accommodation?.type === AccommodationTypeEnum.APARTMENT">APARTMENT</mat-radio-button>
+          <mat-radio-button  value="3" [checked]="accommodation?.type === AccommodationTypeEnum.VIP_ROOM">VIP ROOM</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <p>
+        <div class="data-container">
+        <h2>Location Data</h2>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Address" [value]="accommodation?.location?.address" formControlName="address"  (input)="onAddressInput($event)" >
+          <mat-icon matSuffix>edit_note</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="City" formControlName="city" [value]="accommodation?.location?.city || ''" (input)="onCityInput($event)" >
+          <mat-icon matSuffix>edit_note</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Country" formControlName="country"  [value]="accommodation?.location?.country || ''" (input)="onCountryInput($event)"  >
+          <mat-icon matSuffix>edit_note</mat-icon>
+        </mat-form-field>
+      
       <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Location">
-          <mat-icon matSuffix>edit_note</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="City">
-          <mat-icon matSuffix>edit_note</mat-icon>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="Country">
-          <mat-icon matSuffix>edit_note</mat-icon>
-        </mat-form-field>
-      </p>
-      <p>
-        <mat-form-field appearance="outline">
-          <input matInput placeholder="X coordinate">
+          <input matInput placeholder="X coordinate" formControlName="xCoordinate"  [value]="accommodation?.location?.x || ''"  (input)="onXInput($event)" >
         <mat-icon matSuffix>edit_note</mat-icon>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput placeholder="Y coordinate">
+        <input matInput placeholder="Y coordinate" formControlName="yCoordinate"  [value]="accommodation?.location?.y || ''" (input)="onYInput($event)" >
         <mat-icon matSuffix>edit_note</mat-icon>
       </mat-form-field></p>
-      <div class="type-container">
-        <mat-radio-group aria-label="Select an option">
-          <mat-radio-button value="1">Room</mat-radio-button>
-          <mat-radio-button value="2">Apartment</mat-radio-button>
-        </mat-radio-group>
-      </div>
+
+    </div>
+      
       <div class="guests-container">
         <p style="margin-right: 10px;">
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Min guests">
+            <input matInput placeholder="Min guests" formControlName="minGuests"  [value]="accommodation?.minGuests || ''" (input)="onMinGuestsInput($event)" >
             <mat-icon matSuffix>edit_note</mat-icon>
           </mat-form-field>
         </p>
         <p>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Max guests">
+            <input matInput placeholder="Max guests" formControlName="maxGuests"  [value]="accommodation?.maxGuests || ''" (input)="onMaxGuestsInput($event)" >
             <mat-icon matSuffix>edit_note</mat-icon>
           </mat-form-field>
         </p>
@@ -52,21 +59,21 @@
       
       <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Cancellation Deadline">
+          <input matInput placeholder="Cancellation Deadline" formControlName="cancellationDeadline"  [value]="accommodation?.cancellationDeadline || ''" (input)="onCancellationDeadlineInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Description">
+          <input matInput placeholder="Description" formControlName="description" [value]="accommodation?.description || ''" (input)="onDescriptionInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
         </mat-form-field>
       </p>
       
       <p>Accommodations amenities : </p>
       <div class="options-container">
-        <mat-chip-listbox aria-label="Accommodations amenities" multiple>
-          <mat-chip-option>Free Wi-Fi</mat-chip-option>
+        <mat-chip-listbox aria-label="Accommodations amenities" multiple formControlName="amenities" (input)="onAmenitiesInput($event)">
+          <mat-chip-option >Free Wi-Fi</mat-chip-option>
           <mat-chip-option>Free Parking</mat-chip-option>
           <mat-chip-option>Air conditioner</mat-chip-option>
           <mat-chip-option>Kitchen</mat-chip-option>
@@ -74,25 +81,94 @@
     </div>
     <p>Reservation confirmation : </p>
     <div class="reservation-confirmation-container">
-      <mat-radio-group aria-label="Select an option">
-        <mat-radio-button value="1">Manual</mat-radio-button>
-        <mat-radio-button value="2">Auto</mat-radio-button>
+      <mat-radio-group aria-label="Select an option" formControlName="reservationConfirmation" (input)="onReservationConfirmationInput($event)">
+        <mat-radio-button value="1" [checked]="accommodation?.reservationConfirmation === 'MANUAL'">MANUAL</mat-radio-button>
+        <mat-radio-button value="2" [checked]="accommodation?.reservationConfirmation === 'AUTOMATIC'">AUTOMATIC</mat-radio-button>
       </mat-radio-group>
     </div>
-
+    <div class="mat-elevation-z8">
+      <h2>Prices and availability intervals</h2>
+      <table mat-table [dataSource]="dataSource" matSort>
+      
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
     
+        <ng-container matColumnDef="Start Date">
+          <th mat-header-cell *matHeaderCellDef> Start Date</th>
+          <td mat-cell *matCellDef="let element"> {{element.timeSlot.startDate | date: 'short' }} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="End Date">
+          <th mat-header-cell *matHeaderCellDef> End Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.timeSlot.endDate | date: 'short' }} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="Price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+        </ng-container>
+
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+      <div class="data-container">
+        <h2>Select Dates and Price</h2>
+        <div class="date-picker-container">
+          <mat-form-field>
+            <mat-label>Choose a start date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+        
+          <mat-form-field>
+            <mat-label>Choose an end date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Price" formControlName="price">
+          </mat-form-field>
+    
+        </div>
+
+        <div class="type-container">
+          <mat-radio-group aria-label="Select an option" formControlName="priceType">
+            <mat-radio-button value="0">PERGUEST</mat-radio-button>
+            <mat-radio-button value="1">PERUNIT</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <button mat-button style="background-color: rgb(152, 198, 244);margin-bottom: 2%;" (click)="savePrice()">+ Save Price</button>
+    </div>
+  </div>
+
     <div class="button-container">
       <div class="buttons">
       </div>
       <button mat-button style="background-color: rgb(163, 161, 161);margin-top: 1%;margin-right: 15px;">+ Edit gallery</button>
-        <!--<button mat-button style="background-color: grey;margin-top: 1%;margin-right: 15px;" (click)="openDatePickerDialog()">+ Edit price cards</button>
-        <button mat-button style="background-color: rgb(58, 57, 57);margin-top: 1%;margin-right: 15px;" (click)="openAvailabilityDialog()">+ Edit availability</button>-->
       </div>
       <div style="align-items: center; text-align: center;margin-top: 3%;">
-        <button mat-button style="background-color: #1e88e5; color: white;font-size: 16px;">Save changes</button>
+        <button (click)="saveChanges()" mat-button  style="background-color: #1e88e5; color: white;font-size: 16px;">Save changes</button>
         <button mat-fab background-color="red" style="margin-left: 2%;">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
-    </div>
+   
   

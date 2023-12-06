@@ -2,8 +2,9 @@ import { PriceCard } from "src/app/accommodation/accommodation/model/priceCard.m
 import { TimeSlot } from "src/app/accommodation/accommodation/model/timeSlot.model";
 import { AccommodationTypeEnum } from "../enums/accommodationTypeEnum";
 import { Location } from "src/app/accommodation/accommodation/model/location.model";
+import { ReservationConfirmationEnum } from "../enums/reservationConfirmationEnum";
 
-export interface AccommodationPostDTO {
+export interface AccommodationPutDTO {
     name: string;
     description: string;
     location:Location;
@@ -13,6 +14,7 @@ export interface AccommodationPostDTO {
     assets:String[];
     prices:PriceCard[];
     ownerId:String;
+    reservationConfirmation:ReservationConfirmationEnum;
     cancellationDeadline:number;
     images:String[];
   }

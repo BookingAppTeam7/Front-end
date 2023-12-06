@@ -5,6 +5,7 @@ import { AvailabilityCardComponent } from './availability-card/availability-card
 import { EditAccommodationComponent } from './edit-accommodation/edit-accommodation.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { MatDatepicker } from '@angular/material/datepicker';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatDatepicker
+    MatDatepicker,
+    FormsModule
   ]
 })
 export class AccommodationManagmentModule { }

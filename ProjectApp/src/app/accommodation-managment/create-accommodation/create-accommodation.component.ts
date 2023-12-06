@@ -10,7 +10,6 @@ import {FormControl, Validators, FormsModule, ReactiveFormsModule, FormGroup} fr
 import { AccommodationService } from 'src/app/accommodation/accommodation.service';
 import { AccommodationTypeEnum } from 'src/app/models/enums/accommodationTypeEnum';
 import { AccommodationPostDTO } from 'src/app/models/dtos/accommodationPostDTO.model';
-import { FormArray } from '@angular/forms';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { PriceCard } from 'src/app/accommodation/accommodation/model/priceCard.model';
@@ -62,7 +61,7 @@ export class CreateAccommodationComponent {
     if (priceTypeValue !== undefined) {
         const newTimeSlot={
           startDate:this.createAccommodationForm.value.startDate,
-          endDate:this.createAccommodationForm.value.startDate,
+          endDate:this.createAccommodationForm.value.endDate,
           type:TimeSlotEnum.PRICECARD
         }
         const newPriceCard = {
@@ -72,14 +71,13 @@ export class CreateAccommodationComponent {
         };
         this.prices.push(newPriceCard);
     } 
-  
   }
-
 
 register(){
     
   const accommodationTypeValue: string | undefined= this.createAccommodationForm.get('type')?.value;
   if(accommodationTypeValue!==undefined){
+    
     const accommodationTypeEnum: AccommodationTypeEnum = AccommodationTypeEnum[accommodationTypeValue as keyof typeof AccommodationTypeEnum];
     const accommodation: AccommodationPostDTO = {
       name: this.createAccommodationForm.value.name,
@@ -93,7 +91,7 @@ register(){
       },
       minGuests: this.createAccommodationForm.value.minGuests,
       maxGuests: this.createAccommodationForm.value.maxGuests,
-      type: accommodationTypeEnum,
+      type: accommodationTypeEnum as AccommodationTypeEnum,
       assets: this.createAccommodationForm.get('amenities')?.value,
       prices: this.prices,
       ownerId: this.createAccommodationForm.value.ownerId,
