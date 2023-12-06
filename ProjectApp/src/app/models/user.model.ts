@@ -10,4 +10,5 @@ export interface User {
     address: string;
     phoneNumber: string;
     status: StatusEnum;
+    deleted:Boolean;
   }

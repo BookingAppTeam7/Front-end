@@ -14,6 +14,7 @@ export interface UserPutDTO {
     reservationCancellationNotification:boolean,
     ownerRatingNotification:boolean,
     accommodationRatingNotification:boolean,
-    ownerRepliedToRequestNotification:boolean
+    ownerRepliedToRequestNotification:boolean,
+    deleted:boolean
 
   }

@@ -91,7 +91,8 @@ export class RegisterFormComponent {
         reservationCancellationNotification:this.reservationCancellationNotification,
         ownerRatingNotification:this.ownerRatingNotification,
         accommodationRatingNotification:this.accommodationRatingNotification,
-        ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification
+        ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
+        deleted:false
 
       }
       

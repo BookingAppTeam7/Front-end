@@ -105,7 +105,8 @@ export class EditAccountComponent implements OnInit {
         reservationCancellationNotification:this.reservationCancellationNotification,
         ownerRatingNotification:this.ownerRatingNotification,
         accommodationRatingNotification:this.accommodationRatingNotification,
-        ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification       
+        ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
+        deleted:false      
       }
 
       this.userService.update(user,user.username).subscribe(
