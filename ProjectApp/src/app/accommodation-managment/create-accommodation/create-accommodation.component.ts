@@ -62,7 +62,7 @@ export class CreateAccommodationComponent {
         const newTimeSlot={
           startDate:this.createAccommodationForm.value.startDate,
           endDate:this.createAccommodationForm.value.endDate,
-          type:TimeSlotEnum.PRICECARD
+          //type:TimeSlotEnum.PRICECARD
         }
         const newPriceCard = {
             timeSlot:newTimeSlot,

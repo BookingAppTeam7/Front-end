@@ -39,7 +39,7 @@ export class EditAccommodationComponent  implements OnInit{
 
 
   priceCards: PriceCard[];
-  accommodationId:number=35;    //accommodation id 
+  accommodationId:number=42;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
   ownerId :String= "username"                   //ownerId
   dataSource:MatTableDataSource<PriceCard>;
@@ -87,6 +87,11 @@ export class EditAccommodationComponent  implements OnInit{
 
         this.setAmenitiesSelection();
 
+        this.dataSource = new MatTableDataSource<PriceCard>(this.accommodation.prices);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+
+
         this.cdr.detectChanges();
       },
       (error) => {
@@ -94,22 +99,6 @@ export class EditAccommodationComponent  implements OnInit{
       }  
     );
 
-
-    this.priceCardService.getByAccommodationId(this.accommodationId).subscribe({
-      next: (data: PriceCard[] | undefined) => {
-        if (data) {
-          this.priceCards = data;
-          this.dataSource = new MatTableDataSource<PriceCard>(this.priceCards);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        } else { console.error("Data is undefined");}
-      },
-      error: (err) => {
-        console.error(err);
-      },
-      complete: () => {
-      }
-    });
   }
 
   setAmenitiesSelection() {
@@ -130,7 +119,7 @@ export class EditAccommodationComponent  implements OnInit{
         const newTimeSlot={
           startDate:this.editAccommodationFormGroup.value.startDate,
           endDate:this.editAccommodationFormGroup.value.endDate,
-          type:TimeSlotEnum.PRICECARD
+          //type:TimeSlotEnum.PRICECARD
         }
         const newPriceCard = {
             timeSlot:newTimeSlot,
