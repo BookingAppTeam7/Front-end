@@ -3,5 +3,5 @@ import { TimeSlot } from "./timeSlot.model"
 export interface PriceCard{
     timeSlot:TimeSlot
     price:number,
-    type:PriceTypeEnum
+    type:PriceTypeEnum,
 }

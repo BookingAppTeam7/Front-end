@@ -1,8 +1,9 @@
 import { PriceCard } from "./priceCard.model";
 import { TimeSlot } from "./timeSlot.model";
 import { AccommodationTypeEnum } from "src/app/models/enums/accommodationTypeEnum";
-import { Location } from "src/app/accommodation/accommodation/model/location.model";import { ReservationConfirmationEnum } from "src/app/models/enums/reservationConfirmationEnum";
-;
+import { Location } from "src/app/accommodation/accommodation/model/location.model";
+import { ReservationConfirmationEnum } from "src/app/models/enums/reservationConfirmationEnum";
+import { Review } from "./review.model";
 export interface Accommodation{
     id?: number;
     name: string;
@@ -18,4 +19,5 @@ export interface Accommodation{
     reservationConfirmation:ReservationConfirmationEnum;
     assets:String[];
     ownerId:String;
+    reviews :Review[];
 }
