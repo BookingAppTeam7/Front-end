@@ -27,7 +27,8 @@ import { Reservation } from 'src/app/models/reservation/reservation.model';
 })
 export class EditReservationComponent {
   constructor(private reservationService:ReservationService){}
-  reservationId:number=2//test
+  reservationId:number=1//test
+  userId:string='LUKA'//userId will also be taken from URL
   accommodationId:number=4//accommodationId will be taken from URL to simplify
   reservation:Reservation
   editReservationForm=new FormGroup({
@@ -46,7 +47,7 @@ export class EditReservationComponent {
         console.log(this.reservation);
 
         this.editReservationForm.get('accommodationId')?.setValue(this.accommodationId || '');
-        this.editReservationForm.get('userId')?.setValue(this.reservation?.userId || '');
+        this.editReservationForm.get('userId')?.setValue(this.userId || '');
         this.editReservationForm.get('numberOfGuests')?.setValue(this.reservation?.numberOfGuests);
         this.editReservationForm.get('startDate')?.setValue(this.reservation?.timeSlot.startDate || '');
         this.editReservationForm.get('endDate')?.setValue(this.reservation?.timeSlot.endDate || '');
@@ -67,7 +68,7 @@ export class EditReservationComponent {
         endDate:this.editReservationForm.value.endDate,
       },
       status:statusEnum,
-      numberOfGuests:this.editReservationForm.value.numberOfGuests
+      numberOfGuests:Number(this.editReservationForm.value.numberOfGuests)
     };
     console.log(updatedReservation);
     this.reservationService.update(updatedReservation,this.reservationId).subscribe({});
