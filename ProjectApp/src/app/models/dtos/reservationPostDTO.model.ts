@@ -4,4 +4,5 @@ export interface ReservationPostDTO{
     accommodationId: number;
     userId: number;
     timeSlot: TimeSlot;
+    numberOfGuests: number;
 }

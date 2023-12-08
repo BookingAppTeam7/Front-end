@@ -28,7 +28,8 @@ export class CreateReservationComponent {
     accommodationId:new FormControl(),
     userId: new FormControl(),
     startDate:new FormControl(),
-    endDate:new FormControl()
+    endDate:new FormControl(),
+    numberOfGuests:new FormControl()
   })
 
   register(){
@@ -38,8 +39,10 @@ export class CreateReservationComponent {
       timeSlot:{
         startDate:this.createReservationForm.value.startDate,
         endDate:this.createReservationForm.value.endDate,
-      }
+      },
+      numberOfGuests:this.createReservationForm.value.numberOfGuests
     };
+    console.log(reservation);
     this.reservationService.create(reservation).subscribe({});
   }
 }

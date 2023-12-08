@@ -6,4 +6,5 @@ export interface ReservationPutDTO{
     userId: number;
     timeSlot: TimeSlot;
     status: ReservationStatusEnum;
+    numberOfGuests: number;
 }

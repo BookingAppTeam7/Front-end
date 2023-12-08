@@ -7,4 +7,5 @@ export interface Reservation{
     userId: number;
     timeSlot:TimeSlot;
     status:ReservationStatusEnum;
+    numberOfGuests:number;
 }

@@ -7,7 +7,9 @@
             <mat-form-field appearance="outline">
                 <input matInput placeholder="User Id:" formControlName="userId">
               </mat-form-field>
-
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Number of guests:" formControlName="numberOfGuests">
+              </mat-form-field>
               <div class="data-container">
                 <h2>Select Dates</h2>
                 <div class="date-picker-container">
@@ -39,6 +41,6 @@
                 </mat-radio-group>
               </div>
         
-        <button (click)="saveChanges()" mat-button style="background-color: #1e88e5; color: white;margin-top: 4%;">Create reservation</button>
+        <button (click)="saveChanges()" mat-button style="background-color: #1e88e5; color: white;margin-top: 4%;">Edit reservation</button>
     </div>
 </form>

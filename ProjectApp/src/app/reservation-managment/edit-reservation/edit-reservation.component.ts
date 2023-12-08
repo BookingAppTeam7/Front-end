@@ -26,13 +26,14 @@ import { MatRadioModule } from '@angular/material/radio';
 })
 export class EditReservationComponent {
   constructor(private reservationService:ReservationService){}
-  reservationId:number=4//test
+  reservationId:number=2//test
   editReservationForm=new FormGroup({
     accommodationId:new FormControl(),
     userId: new FormControl(),
     startDate:new FormControl(),
     endDate:new FormControl(),
-    reservationStatus:new FormControl()
+    reservationStatus:new FormControl(),
+    numberOfGuests:new FormControl()
   })
 
   saveChanges(){
@@ -45,8 +46,10 @@ export class EditReservationComponent {
         startDate:this.editReservationForm.value.startDate,
         endDate:this.editReservationForm.value.endDate,
       },
-      status:statusEnum
+      status:statusEnum,
+      numberOfGuests:this.editReservationForm.value.numberOfGuests
     };
+    console.log(updatedReservation);
     this.reservationService.update(updatedReservation,this.reservationId).subscribe({});
   }
 }
