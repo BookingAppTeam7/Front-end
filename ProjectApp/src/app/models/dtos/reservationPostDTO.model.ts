@@ -2,7 +2,7 @@ import { TimeSlot } from "src/app/accommodation/accommodation/model/timeSlot.mod
 
 export interface ReservationPostDTO{
     accommodationId: number;
-    userId: number;
+    userId: string;
     timeSlot: TimeSlot;
     numberOfGuests: number;
 }

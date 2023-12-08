@@ -4,7 +4,7 @@ import { ReservationStatusEnum } from "../enums/reservationStatusEnum";
 export interface Reservation{
     id?: number;
     accommodationId: number;
-    userId: number;
+    userId: string;
     timeSlot:TimeSlot;
     status:ReservationStatusEnum;
     numberOfGuests:number;
