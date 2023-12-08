@@ -10,6 +10,8 @@ import { AccommodationComponent } from './accommodation/accommodation/accommodat
 import { AccommodationCardsComponent } from './accommodation/accommodation-cards/accommodation-cards.component';
 import { AccommodationDetailsComponent } from './accommodation/accommodation-details/accommodation-details.component';
 import { UsersViewComponent } from './users/users-view/users-view.component';
+import { CreateReservationComponent } from './reservation-managment/create-reservation/create-reservation.component';
+import { EditReservationComponent } from './reservation-managment/edit-reservation/edit-reservation.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -17,6 +19,8 @@ const routes: Routes = [
   {component:EditAccountComponent,path:"editAccount"},
   {component:CreateAccommodationComponent,path:"createAccommodation"},
   {component:EditAccommodationComponent, path:"editAccommodation"},
+  {component:CreateReservationComponent, path:"createReservation"},
+  {component:EditReservationComponent, path:"editReservation"},
   {component:AccommodationComponent,path:"accommodation"},
   {component:AccommodationCardsComponent,path:"accommodation-cards"},
   {component: AccommodationDetailsComponent ,path: 'accommodations/:id'},
