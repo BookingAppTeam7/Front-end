@@ -15,6 +15,7 @@ import { ReservationService } from 'src/app/models/reservation/reservation.servi
 import { ReservationPutDTO } from 'src/app/models/dtos/reservationPutDTO.model';
 import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnum';
 import { MatRadioModule } from '@angular/material/radio';
+import { Reservation } from 'src/app/models/reservation/reservation.model';
 
 @Component({
   selector: 'app-edit-reservation',
@@ -27,6 +28,8 @@ import { MatRadioModule } from '@angular/material/radio';
 export class EditReservationComponent {
   constructor(private reservationService:ReservationService){}
   reservationId:number=2//test
+  accommodationId:number=4//accommodationId will be taken from URL to simplify
+  reservation:Reservation
   editReservationForm=new FormGroup({
     accommodationId:new FormControl(),
     userId: new FormControl(),
@@ -36,6 +39,23 @@ export class EditReservationComponent {
     numberOfGuests:new FormControl()
   })
 
+  ngOnInit(): void{
+    this.reservationService.getById(this.reservationId).subscribe(
+      (response) => {
+        this.reservation=response as Reservation;
+        console.log(this.reservation);
+
+        this.editReservationForm.get('accommodationId')?.setValue(this.accommodationId || '');
+        this.editReservationForm.get('userId')?.setValue(this.reservation?.userId || '');
+        this.editReservationForm.get('numberOfGuests')?.setValue(this.reservation?.numberOfGuests);
+        this.editReservationForm.get('startDate')?.setValue(this.reservation?.timeSlot.startDate || '');
+        this.editReservationForm.get('endDate')?.setValue(this.reservation?.timeSlot.endDate || '');
+        this.editReservationForm.get('reservationStatus')?.setValue(this.reservation?.status || '');
+      },(error) =>{
+        console.error(error);
+      }
+    );
+  }
   saveChanges(){
     const statusValue: string | undefined=this.editReservationForm.get('reservationStatus')?.value;
     const statusEnum:ReservationStatusEnum=ReservationStatusEnum[statusValue as keyof typeof ReservationStatusEnum];
