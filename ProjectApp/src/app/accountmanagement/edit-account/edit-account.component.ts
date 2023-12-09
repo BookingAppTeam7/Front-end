@@ -116,7 +116,7 @@ export class EditAccountComponent implements OnInit {
         accommodationRatingNotification:this.accommodationRatingNotification,
         ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
         deleted:false,
-        token:this.user.token   
+        token:''
       }
 
       this.userService.update(changedUser,changedUser.username).subscribe(
