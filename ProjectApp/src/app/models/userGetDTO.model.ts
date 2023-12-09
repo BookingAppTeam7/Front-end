@@ -9,4 +9,5 @@ export interface UserGetDTO {
     address: string;
     phoneNumber: string;
     status: StatusEnum;
+    token:string;
   }
