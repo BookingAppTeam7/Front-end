@@ -16,8 +16,8 @@ export class UserService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getAll(): Observable<User[]> {
-    return this.httpClient.get<User[]>(environment.apiHost + 'users')
+  getAll(): Observable<UserGetDTO[]> {
+    return this.httpClient.get<UserGetDTO[]>(environment.apiHost + 'users')
   }
 
   create(user: UserPostDTO): Observable<UserPostDTO> {
@@ -32,7 +32,10 @@ export class UserService {
     return this.httpClient.delete(environment.apiHost + 'users/' + username)
   }
 
-  getById(username: string): Observable<User> {
-    return this.httpClient.get<User>(environment.apiHost + 'users/' + username)
+  getById(username: string): Observable<UserGetDTO> {
+    return this.httpClient.get<UserGetDTO>(environment.apiHost + 'users/username/' + username)
+  }
+  getByToken(token: string): Observable<User>{
+    return this.httpClient.get<User>(environment.apiHost+'users/token/'+token)
   }
 }

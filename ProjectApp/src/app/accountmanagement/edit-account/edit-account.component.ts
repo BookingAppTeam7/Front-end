@@ -24,7 +24,7 @@ import { ThemePalette } from '@angular/material/core';
     MatSlideToggleModule,LayoutModule,FormsModule, ReactiveFormsModule],
 })
 export class EditAccountComponent implements OnInit { 
-  user:User;
+  user:UserGetDTO;
   color: ThemePalette = 'primary';
   disabled=true;
   checked=false;
@@ -66,7 +66,7 @@ export class EditAccountComponent implements OnInit {
       const username = params['username'];
 
       this.userService.getById(username).subscribe(
-        (user: User) => {
+        (user: UserGetDTO) => {
           this.user = user;
           this.editAccountDataForm.get('name')?.setValue(user.firstName);
           this.editAccountDataForm.get('surname')?.setValue(user.lastName);
@@ -116,7 +116,7 @@ export class EditAccountComponent implements OnInit {
         accommodationRatingNotification:this.accommodationRatingNotification,
         ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
         deleted:false,
-        token:''
+        token:this.user.token
       }
 
       this.userService.update(changedUser,changedUser.username).subscribe(

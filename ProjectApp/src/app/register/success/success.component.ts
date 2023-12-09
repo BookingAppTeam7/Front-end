@@ -26,44 +26,47 @@ export class SuccessComponent{
       console.log(token);
 
       // Fetch all users from the service
-      this.userService.getAll().subscribe((users: User[]) => {
+      this.userService.getByToken(token).subscribe((user: User) => {
         // Find the user that matches by token
-        const matchedUser = users.find((user: User) => user.token === token);
-
-        if (matchedUser) {
-          // Change the status of the matched user
-          matchedUser.status = StatusEnum.ACTIVE;
-          this.user=matchedUser;
+        //const matchedUser = users.find((user: UserGetDTO) => user.token === token);
+          console.log(user);
+          if(user){
+            this.user=user;
+              // Change the status of the matched user
+          user.status = StatusEnum.ACTIVE;
           const updateUser: UserPutDTO = {
-            firstName: matchedUser.firstName,
-            lastName: matchedUser.lastName,
-            username: matchedUser.username,
-            password: matchedUser.password,
-            passwordConfirmation: matchedUser.password, 
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            password: user.password,
+            passwordConfirmation: user.password, 
             status: StatusEnum.ACTIVE,
-            role: matchedUser.role,
-            address: matchedUser.address,
-            phoneNumber: matchedUser.phoneNumber,
-            reservationRequestNotification: matchedUser.reservationRequestNotification, 
-            reservationCancellationNotification: matchedUser.reservationCancellationNotification, 
-            ownerRatingNotification: matchedUser.ownerRatingNotification, 
-            accommodationRatingNotification: matchedUser.accommodationRatingNotification, 
-            ownerRepliedToRequestNotification: matchedUser.ownerRepliedToRequestNotification, 
-            deleted: matchedUser.deleted,
-            token:matchedUser.token
+            role: user.role,
+            address: user.address,
+            phoneNumber: user.phoneNumber,
+            reservationRequestNotification: user.reservationRequestNotification, 
+            reservationCancellationNotification: user.reservationCancellationNotification, 
+            ownerRatingNotification: user.ownerRatingNotification, 
+            accommodationRatingNotification: user.accommodationRatingNotification, 
+            ownerRepliedToRequestNotification: user.ownerRepliedToRequestNotification, 
+            deleted: user.deleted,
+            token: user.token
           };
 
           // Update the user using the UserService
-          this.userService.update(updateUser, matchedUser.username).subscribe(updatedUser => {
+          this.userService.update(updateUser, user.username).subscribe(updatedUser => {
             console.log('Updated User:', updatedUser);
-            this.user = updatedUser; // Optionally assign the updated user to a component property
+            //this.user = updatedUser; // Optionally assign the updated user to a component property
           }, error => {
             console.error('Error updating user:', error);
           });
-        } else {
+          }
+          
+         else {
           console.error('User not found for token:', token);
         }
       });
-    });
+    
+  });
   }
 }
