@@ -10,5 +10,11 @@ export interface User {
     address: string;
     phoneNumber: string;
     status: StatusEnum;
-    deleted:Boolean;
+    reservationRequestNotification:boolean,
+    reservationCancellationNotification:boolean,
+    ownerRatingNotification:boolean,
+    accommodationRatingNotification:boolean,
+    ownerRepliedToRequestNotification:boolean,
+    deleted:boolean;
+    token:string;
   }

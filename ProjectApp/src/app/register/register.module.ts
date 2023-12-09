@@ -7,6 +7,7 @@ import {RouterModule} from "@angular/router";
 import { RegisterFormComponent} from './register-form/register-form.component';
 import { HomeComponent } from '../layout/home/home.component';
 import { Router } from '@angular/router';
+import { SuccessComponent } from './success/success.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { Router } from '@angular/router';
     RegisterFormComponent,
     RegisterModule,
     Router,
-    RegisterFormComponent
+    RegisterFormComponent,
+    SuccessComponent
 
   ],
   imports: [

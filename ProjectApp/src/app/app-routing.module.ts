@@ -12,10 +12,12 @@ import { AccommodationDetailsComponent } from './accommodation/accommodation-det
 import { UsersViewComponent } from './users/users-view/users-view.component';
 import { CreateReservationComponent } from './reservation-managment/create-reservation/create-reservation.component';
 import { EditReservationComponent } from './reservation-managment/edit-reservation/edit-reservation.component';
+import { SuccessComponent } from './register/success/success.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
   {component:RegisterFormComponent,path:"register"},
+  {component:SuccessComponent, path:"activate/:token"},
   {component:EditAccountComponent,path:"editAccount"},
   {component:CreateAccommodationComponent,path:"createAccommodation"},
   {component:EditAccommodationComponent, path:"editAccommodation"},

@@ -24,7 +24,7 @@ import { ThemePalette } from '@angular/material/core';
     MatSlideToggleModule,LayoutModule,FormsModule, ReactiveFormsModule],
 })
 export class EditAccountComponent implements OnInit { 
-  user:UserGetDTO;
+  user:User;
   color: ThemePalette = 'primary';
   disabled=true;
   checked=false;
@@ -61,16 +61,25 @@ export class EditAccountComponent implements OnInit {
      }
   email = new FormControl('', [Validators.required, Validators.email]);
   
-  ngOnInit(){
+  ngOnInit() {
     this.route.params.subscribe(params => {
       const username = params['username'];
-      const foundUser=this.userService.getById(username);
-     
-  
-      //console.log('Username from route parameters:', username);
+
+      this.userService.getById(username).subscribe(
+        (user: User) => {
+          this.user = user;
+          this.editAccountDataForm.get('name')?.setValue(user.firstName);
+          this.editAccountDataForm.get('surname')?.setValue(user.lastName);
+          this.editAccountDataForm.get('username')?.setValue(user.username);
+          // ... dodati za sve ostale labele
+        },
+        error => {
+          console.error('Error fetching user:', error);
+        }
+      );
     });
-    
   }
+
   getErrorMessage() {
     if (this.email.hasError('required')) {
       return 'You must enter a value';
@@ -91,7 +100,7 @@ export class EditAccountComponent implements OnInit {
 
       const userRoleEnum: RoleEnum = RoleEnum[userRoleValue as keyof typeof RoleEnum];
       const userStatusEnum: StatusEnum = StatusEnum[userStatusValue as keyof typeof StatusEnum];
-      const user: UserPutDTO = {
+      const changedUser: UserPutDTO = {
         firstName: this.editAccountDataForm.value.name,
         lastName:this.editAccountDataForm.value.surname,
         phoneNumber: this.editAccountDataForm.value.phoneNumber,
@@ -106,10 +115,11 @@ export class EditAccountComponent implements OnInit {
         ownerRatingNotification:this.ownerRatingNotification,
         accommodationRatingNotification:this.accommodationRatingNotification,
         ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
-        deleted:false      
+        deleted:false,
+        token:this.user.token   
       }
 
-      this.userService.update(user,user.username).subscribe(
+      this.userService.update(changedUser,changedUser.username).subscribe(
         {
           next: (data: User) => {
             this.router.navigate(['users-view'])
