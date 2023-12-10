@@ -26,6 +26,7 @@ import { TimeSlotEnum } from 'src/app/models/enums/timeSlotEnum';
 export class CreateAccommodationComponent {
 
   prices:PriceCard[]
+  accommodationTypeEnum = AccommodationTypeEnum;
   constructor(private accommodationService:AccommodationService) {}
 
   ngOnInit() {
@@ -39,7 +40,7 @@ export class CreateAccommodationComponent {
     country: new FormControl(),
     xCoordinate: new FormControl(),
     yCoordinate: new FormControl(),
-    type: new FormControl(),
+    type: new FormControl(null, Validators.required),
     minGuests:new FormControl(),
     maxGuests:new FormControl(),
     cancellationDeadline: new FormControl(),
@@ -62,7 +63,6 @@ export class CreateAccommodationComponent {
         const newTimeSlot={
           startDate:this.createAccommodationForm.value.startDate,
           endDate:this.createAccommodationForm.value.endDate,
-          //type:TimeSlotEnum.PRICECARD
         }
         const newPriceCard = {
             timeSlot:newTimeSlot,
@@ -74,11 +74,7 @@ export class CreateAccommodationComponent {
   }
 
 register(){
-    
-  const accommodationTypeValue: string | undefined= this.createAccommodationForm.get('type')?.value;
-  if(accommodationTypeValue!==undefined){
-    
-    const accommodationTypeEnum: AccommodationTypeEnum = AccommodationTypeEnum[accommodationTypeValue as keyof typeof AccommodationTypeEnum];
+  
     const accommodation: AccommodationPostDTO = {
       name: this.createAccommodationForm.value.name,
       description: this.createAccommodationForm.value.description,
@@ -91,15 +87,18 @@ register(){
       },
       minGuests: this.createAccommodationForm.value.minGuests,
       maxGuests: this.createAccommodationForm.value.maxGuests,
-      type: accommodationTypeEnum as AccommodationTypeEnum,
+      type: (this.createAccommodationForm.value.type !== null && this.createAccommodationForm.value.type !== undefined) ? this.createAccommodationForm.value.type as AccommodationTypeEnum : null,
       assets: this.createAccommodationForm.get('amenities')?.value,
       prices: this.prices,
       ownerId: this.createAccommodationForm.value.ownerId,
       cancellationDeadline: this.createAccommodationForm.value.cancellationDeadline,
       images: []
     };
-  
+
+    console.log(accommodation.type);
+    console.log(typeof(accommodation.type))
+    
     this.accommodationService.create(accommodation).subscribe({ });
     } 
   }
-}
+

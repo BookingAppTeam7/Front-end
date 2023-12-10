@@ -4,20 +4,29 @@ import { CreateAccommodationComponent } from './create-accommodation/create-acco
 import { AvailabilityCardComponent } from './availability-card/availability-card.component';
 import { EditAccommodationComponent } from './edit-accommodation/edit-accommodation.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { EditPriceCardDialogComponent } from './edit-price-card-dialog/edit-price-card-dialog.component'; 
+import { MatNativeDateModule } from '@angular/material/core';
+
+
 
 @NgModule({
   declarations: [
     CreateAccommodationComponent,
-    AvailabilityCardComponent,
-    EditAccommodationComponent
+    EditAccommodationComponent,
+   EditPriceCardDialogComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MatDatepicker,
-    FormsModule
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule
   ]
 })
 export class AccommodationManagmentModule { }

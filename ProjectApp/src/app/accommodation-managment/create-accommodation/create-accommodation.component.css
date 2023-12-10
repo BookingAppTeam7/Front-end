@@ -60,9 +60,13 @@ mat-form-field {
 }
 
 .data-container {
-  max-width: 70%;
+  max-width: 60%;
   margin: 20px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
+}
+
+h2,h3{
+  color: #007bff; 
 }

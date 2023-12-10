@@ -16,7 +16,7 @@ import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker
 import { MatNativeDateModule } from '@angular/material/core';
 import { PriceTypeEnum } from 'src/app/models/enums/priceTypeEnum';
 import { TimeSlotEnum } from 'src/app/models/enums/timeSlotEnum';
-import { FormControl } from '@angular/forms';
+import { FormControl ,Validators} from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { AccommodationTypeEnum } from 'src/app/models/enums/accommodationTypeEnum';
 import { AccommodationService } from 'src/app/accommodation/accommodation.service';
@@ -25,6 +25,10 @@ import { AccommodationPutDTO } from 'src/app/models/dtos/accommodationPutDTO.mod
 import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
 import { FormBuilder } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { EditPriceCardDialogComponent } from '../edit-price-card-dialog/edit-price-card-dialog.component';
+
+
 @Component({
   selector: 'app-edit-accommodation',
   templateUrl: './edit-accommodation.component.html',
@@ -36,19 +40,30 @@ export class EditAccommodationComponent  implements OnInit{
 
   AccommodationTypeEnum = AccommodationTypeEnum;
   ReservationConfirmationEnum=ReservationConfirmationEnum;
+  accommodationTypeEnum=AccommodationTypeEnum;
+  editedItem: PriceCard;
+  selectedElement: PriceCard; 
 
 
   priceCards: PriceCard[];
-  accommodationId:number=42;    //accommodation id 
+  accommodationId:number=46;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
   ownerId :String= "username"                   //ownerId
-  dataSource:MatTableDataSource<PriceCard>;
-  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
+  dataSource = new MatTableDataSource<PriceCard>([]);
+  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type','actions'];
+
+  editForm: FormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private cdr: ChangeDetectorRef,private fb:FormBuilder,private priceCardService: PriceCardService,private accommodationService:AccommodationService) {}
-
+  constructor(private cdr: ChangeDetectorRef,private fb:FormBuilder,private priceCardService: PriceCardService,private accommodationService:AccommodationService,private dialog:MatDialog) {
+    this.editForm = this.fb.group({
+      startDateEdit: [''],
+      endDateEdit: [''],
+      priceEdit: [''],
+    });
+  }
+  
   editAccommodationFormGroup=new FormGroup({
     name: new FormControl(),
     description:new FormControl(),
@@ -65,9 +80,16 @@ export class EditAccommodationComponent  implements OnInit{
     price:new FormControl(),
     priceType:new FormControl(),
     amenities:new FormControl(),
-    type:new FormControl(),
-    reservationConfirmation:new FormControl()
+    type: new FormControl(null, Validators.required),
+    reservationConfirmation:new FormControl(),
+    startDateEdit:new FormControl(),
+    endDateEdit:new FormControl(),
+    priceEdit:new FormControl(),
+    priceCardId:new FormControl(),
  })
+ 
+
+
   ngOnInit(): void {
 
     this.accommodationService.getById(this.accommodationId)
@@ -86,11 +108,10 @@ export class EditAccommodationComponent  implements OnInit{
         this.editAccommodationFormGroup.get('maxGuests')?.setValue(this.accommodation?.maxGuests|| '');
 
         this.setAmenitiesSelection();
-
+        this.priceCards=this.accommodation.prices;
         this.dataSource = new MatTableDataSource<PriceCard>(this.accommodation.prices);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-
 
         this.cdr.detectChanges();
       },
@@ -119,7 +140,6 @@ export class EditAccommodationComponent  implements OnInit{
         const newTimeSlot={
           startDate:this.editAccommodationFormGroup.value.startDate,
           endDate:this.editAccommodationFormGroup.value.endDate,
-          //type:TimeSlotEnum.PRICECARD
         }
         const newPriceCard = {
             timeSlot:newTimeSlot,
@@ -127,6 +147,11 @@ export class EditAccommodationComponent  implements OnInit{
             type: priceTypeValueEnum
         };
         this.priceCards.push(newPriceCard);
+        // console.log(typeof(priceTypeValue));
+        // console.log(priceTypeValue);
+        // console.log(typeof(priceTypeValueEnum));
+        // console.log(priceTypeValueEnum);
+        //this.dataSource.data = this.priceCards;
     } 
   }
 
@@ -171,14 +196,68 @@ export class EditAccommodationComponent  implements OnInit{
     this.editAccommodationFormGroup.get('type')?.setValue(event.target.value);
   }
 
-  saveChanges(){
+  openEditDialog(element: PriceCard): void {
 
-    const accommodationTypeValue: string | undefined= this.editAccommodationFormGroup.get('type')?.value;
-    const reservationConfirmationValue: string | undefined= this.editAccommodationFormGroup.get('reservationConfirmation')?.value;
-    if(accommodationTypeValue!==undefined && reservationConfirmationValue!==undefined){
-      const accommodationTypeEnum: AccommodationTypeEnum = AccommodationTypeEnum[accommodationTypeValue as keyof typeof AccommodationTypeEnum];
-     
-      const reservationConfirmationEnum: ReservationConfirmationEnum = ReservationConfirmationEnum[reservationConfirmationValue as keyof typeof ReservationConfirmationEnum];
+    console.log(element)
+
+  const dialogRef = this.dialog.open(EditPriceCardDialogComponent, {
+    width: '800px', 
+    data: {element:element}, 
+  });
+
+  dialogRef.afterClosed().subscribe((updatedElement: PriceCard) => {
+    if (updatedElement) {
+      console.log('Ažurirani element:', updatedElement);
+      this.updatePriceCard(updatedElement);
+    }
+  });
+}
+
+updatePriceCard(updatedElement: PriceCard): void {
+  const index = this.priceCards.findIndex((element) => element.id === updatedElement.id);
+
+  if (index !== -1) {
+    this.priceCards[index] = updatedElement;
+    this.dataSource.data = this.priceCards;
+  }
+}
+
+  // saveItem() {
+  //   if (this.editedItem) {
+  //     this.editedItem.timeSlot.startDate = this.editAccommodationFormGroup.get('startDateEdit')?.value;
+  //     console.log(this.editAccommodationFormGroup.get('startDateEdit')?.value)
+  //     this.editedItem.timeSlot.endDate = this.editAccommodationFormGroup.get('endDateEdit')?.value;
+  //     this.editedItem.price = this.editAccommodationFormGroup.get('priceEdit')?.value;
+
+  
+  //     this.priceCardService.update(this.editedItem).subscribe(
+  //       (response) => {
+  //         console.log('Item updated successfully:', response);
+  //         // this.editedItem = null;
+  //       },
+  //       (error) => {
+  //         console.error('Error updating item:', error);
+  //       }
+  //     );
+  //   }
+  // }
+
+  
+  deleteItem(element: any) {
+    console.log('Delete item:', element);
+    const index = this.priceCards.indexOf(element);
+    if (index !== -1) {
+      this.priceCards.splice(index, 1);
+    }
+  }
+
+  cancelEdit(element: any) {
+    element.editing = false;
+  }
+
+  saveChanges(){
+    // const reservationConfirmationValue: ReservationConfirmationEnum | undefined= this.editAccommodationFormGroup.get('reservationConfirmation')?.value;
+    //   const reservationConfirmationEnum: ReservationConfirmationEnum = ReservationConfirmationEnum[reservationConfirmationValue as keyof typeof ReservationConfirmationEnum];
       const updatedAccommodation: AccommodationPutDTO = {
         name: this.editAccommodationFormGroup.value.name,
         description: this.editAccommodationFormGroup.value.description,
@@ -191,16 +270,18 @@ export class EditAccommodationComponent  implements OnInit{
         },
         minGuests: this.editAccommodationFormGroup.value.minGuests,
         maxGuests: this.editAccommodationFormGroup.value.maxGuests,
-        type: accommodationTypeEnum,
+        type: (this.editAccommodationFormGroup.value.type !== null && this.editAccommodationFormGroup.value.type !== undefined) ? this.editAccommodationFormGroup.value.type as AccommodationTypeEnum : null,
         assets: this.editAccommodationFormGroup.get('amenities')?.value,
         prices: this.priceCards,
         ownerId:this.ownerId,
-        reservationConfirmation:reservationConfirmationEnum,
+        reservationConfirmation:(this.editAccommodationFormGroup.value.reservationConfirmation !== null && this.editAccommodationFormGroup.value.reservationConfirmation !== undefined) ? this.editAccommodationFormGroup.value.reservationConfirmation as ReservationConfirmationEnum : null,
         cancellationDeadline: this.editAccommodationFormGroup.value.cancellationDeadline,
         images: []
       };
       
       this.accommodationService.update(updatedAccommodation,this.accommodationId).subscribe({ });
+      
       } 
     }
-}
+
+

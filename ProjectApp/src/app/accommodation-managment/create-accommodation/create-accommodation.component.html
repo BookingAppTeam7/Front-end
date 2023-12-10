@@ -3,14 +3,15 @@
     <h2 class="register-header">Registration of new Accommodation</h2>
     <p>
         <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
           <input matInput placeholder="Accommodation Name" formControlName="name">
         </mat-form-field>
         <h3>Accommodation type : </h3>
         <div class="type-container">
           <mat-radio-group aria-label="Select an option" formControlName="type">
-            <mat-radio-button value="'ROOM'">ROOM</mat-radio-button>
-            <mat-radio-button value="'APARTMENT'">APARTMENT</mat-radio-button>
-            <mat-radio-button value="'VIP_ROOM'">VIP_ROOM</mat-radio-button>
+            <mat-radio-button [value]="accommodationTypeEnum.ROOM">ROOM</mat-radio-button>
+            <mat-radio-button [value]="accommodationTypeEnum.APARTMENT">APARTMENT</mat-radio-button>
+            <mat-radio-button [value]="accommodationTypeEnum.VIP_ROOM">VIP_ROOM</mat-radio-button>
           </mat-radio-group>
         </div>
       
@@ -18,23 +19,28 @@
       <h2 style="margin-bottom: 2%;">Location Data : </h2>
       <div class="location-data-container">
         <mat-form-field appearance="outline">
+          <mat-label>Address</mat-label>
           <input matInput placeholder="Address" formControlName="address">
        
         </mat-form-field>
         <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
           <input matInput placeholder="City" formControlName="city">
        
         </mat-form-field>
         <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
           <input matInput placeholder="Country" formControlName="country">
         </mat-form-field>
       </div>
     
 <div class="location-data-container">
         <mat-form-field appearance="outline">
+          <mat-label>X coordinate</mat-label>
           <input matInput placeholder="X coordinate" formControlName="xCoordinate">
         </mat-form-field>
         <mat-form-field appearance="outline">
+          <mat-label>Y coordinate</mat-label>
           <input matInput placeholder="Y coordinate" formControlName="yCoordinate">
         </mat-form-field>
       </div>
@@ -43,30 +49,35 @@
       <div class="guests-container">
         <p style="margin-right: 10px;">
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Min guests"  formControlName="minGuests">
+            <mat-label>Min Guests</mat-label>
+            <input matInput placeholder="0"  formControlName="minGuests">
            
           </mat-form-field>
         </p>
         <p>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Max guests" formControlName="maxGuests">
+            <mat-label>Max Guests</mat-label>
+            <input matInput placeholder="0" formControlName="maxGuests">
           </mat-form-field>
         </p>
       </div>
       
       <p>
         <mat-form-field appearance="outline">
+          <mat-label>Cancellation Deadline</mat-label>
           <input matInput placeholder="Cancellation Deadline" formControlName="cancellationDeadline">
         </mat-form-field>
       </p>
       <p>
         <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
           <input matInput placeholder="Description"  formControlName="description">
         </mat-form-field>
       </p>
 
       <p>
         <mat-form-field appearance="outline">
+          <mat-label>Owner`s username</mat-label>
           <input matInput placeholder="Owner id"  formControlName="ownerId">
         </mat-form-field>
       </p>
@@ -101,6 +112,7 @@
       </mat-form-field>
     
       <mat-form-field appearance="outline">
+        <mat-label>Price</mat-label>
         <input matInput placeholder="Price for chosen period" formControlName="price">
       </mat-form-field>
 

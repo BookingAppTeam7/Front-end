@@ -10,11 +10,11 @@ export interface AccommodationPutDTO {
     location:Location;
     minGuests: number;
     maxGuests: number;
-    type:AccommodationTypeEnum;
+    type:AccommodationTypeEnum | null;
     assets:String[];
     prices:PriceCard[];
     ownerId:String;
-    reservationConfirmation:ReservationConfirmationEnum;
+    reservationConfirmation:ReservationConfirmationEnum | null;
     cancellationDeadline:number;
     images:String[];
   }

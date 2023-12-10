@@ -25,5 +25,16 @@ export class PriceCardService {
     return this.httpClient.get<PriceCard[]>(environment.apiHost + 'priceCards/accommodation/' + id);
   }
 
+  update(priceCard:PriceCard):Observable<PriceCard>{
+    console.log(priceCard.price)
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.httpClient.put<PriceCard>(
+      environment.apiHost + 'priceCards',
+      JSON.stringify(priceCard),
+      { headers: headers }
+    );
+
+  }
+
 
 }
