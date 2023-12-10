@@ -35,6 +35,11 @@ export class AccommodationService {
       { headers: headers }
     );
   }
+
+  delete(id: number): Observable<Accommodation | undefined> {
+    return this.httpClient.delete<Accommodation>(environment.apiHost + 'accommodations/' + id);
+  }
+
 }
 
 

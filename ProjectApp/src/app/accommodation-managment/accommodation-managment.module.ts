@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { EditPriceCardDialogComponent } from './edit-price-card-dialog/edit-price-card-dialog.component'; 
 import { MatNativeDateModule } from '@angular/material/core';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -26,7 +26,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSnackBarModule
   ]
 })
 export class AccommodationManagmentModule { }
