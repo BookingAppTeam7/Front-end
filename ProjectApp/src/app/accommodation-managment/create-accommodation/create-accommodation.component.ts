@@ -100,7 +100,6 @@ export class CreateAccommodationComponent {
     newEndDate.setHours(0, 0, 0, 0);
   
     const overlap = this.prices.some(existingPriceCard => {
-      // if(existingPriceCard.id!=newPriceCard.id){
       const existingStartDate = new Date(existingPriceCard.timeSlot.startDate);
       const existingEndDate = new Date(existingPriceCard.timeSlot.endDate);
   
@@ -117,8 +116,6 @@ export class CreateAccommodationComponent {
       console.log('Overlap End Date:', overlapEndDate);
   
       return overlapStartDate && overlapEndDate;
-      // }
-      // return false;
     });
 
     console.log('Overlap:', overlap);
@@ -220,7 +217,6 @@ register(){
     
     this.accommodationService.create(accommodation).subscribe(
       (createdAccommodation: Accommodation) => {
-        console.log('Novi smestaj:', createdAccommodation.id);
         this.prices.forEach((priceCard: PriceCard) => {
           const newPriceCard = {
             timeSlot:priceCard.timeSlot,
@@ -228,11 +224,8 @@ register(){
             type: priceCard.type,
             accommodationId:createdAccommodation.id
         };
-
         this.priceCardService.create(newPriceCard).subscribe({})
-  
         });  
-       
       },
       (error) => {
         console.error('Error during creating new object:', error);
