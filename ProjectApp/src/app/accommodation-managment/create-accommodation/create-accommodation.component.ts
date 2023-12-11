@@ -18,6 +18,7 @@ import { TimeSlotEnum } from 'src/app/models/enums/timeSlotEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PriceCardService } from 'src/app/accommodation/priceCard.service';
+import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
 
 @Component({
   selector: 'app-create-accommodation',
@@ -99,7 +100,7 @@ export class CreateAccommodationComponent {
     newEndDate.setHours(0, 0, 0, 0);
   
     const overlap = this.prices.some(existingPriceCard => {
-      if(existingPriceCard.id!=newPriceCard.id){
+      // if(existingPriceCard.id!=newPriceCard.id){
       const existingStartDate = new Date(existingPriceCard.timeSlot.startDate);
       const existingEndDate = new Date(existingPriceCard.timeSlot.endDate);
   
@@ -116,8 +117,8 @@ export class CreateAccommodationComponent {
       console.log('Overlap End Date:', overlapEndDate);
   
       return overlapStartDate && overlapEndDate;
-      }
-      return false;
+      // }
+      // return false;
     });
 
     console.log('Overlap:', overlap);
@@ -140,7 +141,7 @@ export class CreateAccommodationComponent {
         const newPriceCard = {
             timeSlot:newTimeSlot,
             price: this.createAccommodationForm.value.price,
-            type: priceTypeValueEnum
+            type: priceTypeValueEnum,
         };
         if (this.validatePriceCard(newPriceCard)) {
           this.prices.push(newPriceCard);
@@ -211,16 +212,32 @@ register(){
       maxGuests: this.createAccommodationForm.value.maxGuests,
       type: (this.createAccommodationForm.value.type !== null && this.createAccommodationForm.value.type !== undefined) ? this.createAccommodationForm.value.type as AccommodationTypeEnum : null,
       assets: this.createAccommodationForm.get('amenities')?.value,
-      prices: this.prices,
+      //prices: this.prices,
       ownerId: this.createAccommodationForm.value.ownerId,
       cancellationDeadline: this.createAccommodationForm.value.cancellationDeadline,
       images: []
     };
-
-    console.log(accommodation.type);
-    console.log(typeof(accommodation.type))
     
-    this.accommodationService.create(accommodation).subscribe({ });
+    this.accommodationService.create(accommodation).subscribe(
+      (createdAccommodation: Accommodation) => {
+        console.log('Novi smestaj:', createdAccommodation.id);
+        this.prices.forEach((priceCard: PriceCard) => {
+          const newPriceCard = {
+            timeSlot:priceCard.timeSlot,
+            price: priceCard.price,
+            type: priceCard.type,
+            accommodationId:createdAccommodation.id
+        };
+
+        this.priceCardService.create(newPriceCard).subscribe({})
+  
+        });  
+       
+      },
+      (error) => {
+        console.error('Error during creating new object:', error);
+      }
+     );
     } 
   }
 

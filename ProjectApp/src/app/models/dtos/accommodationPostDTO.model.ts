@@ -11,7 +11,7 @@ export interface AccommodationPostDTO {
     maxGuests: number |null|undefined;
     type:AccommodationTypeEnum | null;
     assets:String[];
-    prices:PriceCard[];
+    //prices:PriceCard[];
     ownerId:String;
     cancellationDeadline:number |null|undefined;
     images:String[];

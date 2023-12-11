@@ -4,6 +4,7 @@ import { environment } from 'src/env/env';
 import {Observable} from "rxjs";
 import { HttpHeaders } from '@angular/common/http';
 import { PriceCard } from './accommodation/model/priceCard.model';
+import { PriceCardPostDTO } from '../models/dtos/priceCardPostDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class PriceCardService {
   constructor(private httpClient: HttpClient) {
   }
 
-  create(priceCard: PriceCard): Observable<PriceCard> {
+  create(priceCard: PriceCardPostDTO): Observable<PriceCard> {
+    console.log("kreiranjeeee "+priceCard)
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.httpClient.post<PriceCard>(
       environment.apiHost + 'priceCards',

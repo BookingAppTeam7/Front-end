@@ -30,6 +30,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PriceCardService } from 'src/app/accommodation/priceCard.service';
 import { Reservation } from 'src/app/models/reservation/reservation.model';
 import { ReservationService } from 'src/app/models/reservation/reservation.service';
+import { PriceCardPostDTO } from 'src/app/models/dtos/priceCardPostDTO.model';
 @Component({
   selector: 'app-edit-accommodation',
   templateUrl: './edit-accommodation.component.html',
@@ -47,7 +48,7 @@ export class EditAccommodationComponent  implements OnInit{
 
   priceCards: PriceCard[];
   reservations:Reservation[]|undefined;
-  accommodationId:number=49;    //accommodation id 
+  accommodationId:number=54;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
   ownerId :String= "username"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
@@ -221,7 +222,8 @@ export class EditAccommodationComponent  implements OnInit{
         const newPriceCard = {
             timeSlot:newTimeSlot,
             price: this.editAccommodationFormGroup.value.price,
-            type: priceTypeValueEnum
+            type: priceTypeValueEnum,
+            accommodationId:this.accommodationId
         };
 
         if (this.validatePriceCard(newPriceCard) && this.validatePriceCardAndReservations(newPriceCard)) {
@@ -242,7 +244,7 @@ export class EditAccommodationComponent  implements OnInit{
     } 
   }
 
-  validatePriceCard(newPriceCard: PriceCard): boolean { 
+  validatePriceCard(newPriceCard: PriceCardPostDTO|PriceCard): boolean { 
 
     const newStartDate = new Date(newPriceCard.timeSlot.startDate);
     const newEndDate = new Date(newPriceCard.timeSlot.endDate);
