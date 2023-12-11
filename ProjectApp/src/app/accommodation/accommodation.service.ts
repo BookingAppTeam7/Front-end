@@ -14,9 +14,9 @@ export class AccommodationService {
   constructor(private httpClient: HttpClient) {
   }
 
-  create(accommodation: AccommodationPostDTO): Observable<AccommodationPostDTO> {
+  create(accommodation: AccommodationPostDTO): Observable<Accommodation> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.httpClient.post<AccommodationPostDTO>(
+    return this.httpClient.post<Accommodation>(
       environment.apiHost + 'accommodations',
       JSON.stringify(accommodation),
       { headers: headers }
@@ -35,6 +35,11 @@ export class AccommodationService {
       { headers: headers }
     );
   }
+
+  delete(id: number): Observable<Accommodation | undefined> {
+    return this.httpClient.delete<Accommodation>(environment.apiHost + 'accommodations/' + id);
+  }
+
 }
 
 

@@ -1,42 +1,51 @@
 <form [formGroup]="editAccommodationFormGroup">
 <div  style="text-align: center;">
     <h2 class="register-header">Edit Accommodations Data</h2>
-    <p>
-        <mat-form-field appearance="outline">
-          <input matInput formControlName="name"  [value]="accommodation?.name" (input)="onNameInput($event)" >
-          <mat-icon matSuffix>edit_note</mat-icon>
-        </mat-form-field>
-      </p>
+  
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" [value]="accommodation?.name" (input)="onNameInput($event)">
+      <mat-icon matSuffix>edit_note</mat-icon>
+      <mat-error *ngIf="editAccommodationFormGroup.get('name')?.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+    
+     
       <div class="type-container">
+        <!-- <mat-label>Type of accommodation : </mat-label> -->
         <mat-radio-group aria-label="Select an option" formControlName="type"  (input)="onTypeInput($event)">
-          <mat-radio-button  value="1" [checked]="accommodation?.type === AccommodationTypeEnum.ROOM">ROOM</mat-radio-button>
-          <mat-radio-button  value="2" [checked]="accommodation?.type === AccommodationTypeEnum.APARTMENT">APARTMENT</mat-radio-button>
-          <mat-radio-button  value="3" [checked]="accommodation?.type === AccommodationTypeEnum.VIP_ROOM">VIP ROOM</mat-radio-button>
+          <mat-radio-button  [value]="accommodationTypeEnum.ROOM" [checked]="accommodation?.type === AccommodationTypeEnum.ROOM">ROOM</mat-radio-button>
+          <mat-radio-button  [value]="accommodationTypeEnum.APARTMENT" [checked]="accommodation?.type === AccommodationTypeEnum.APARTMENT">APARTMENT</mat-radio-button>
+          <mat-radio-button  [value]="accommodationTypeEnum.VIP_ROOM" [checked]="accommodation?.type === AccommodationTypeEnum.VIP_ROOM">VIP ROOM</mat-radio-button>
         </mat-radio-group>
       </div>
       <p>
         <div class="data-container">
         <h2>Location Data</h2>
         <mat-form-field appearance="outline">
+          <mat-label>Address</mat-label>
           <input matInput placeholder="Address" [value]="accommodation?.location?.address" formControlName="address"  (input)="onAddressInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
         </mat-form-field>
         <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
           <input matInput placeholder="City" formControlName="city" [value]="accommodation?.location?.city || ''" (input)="onCityInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
         </mat-form-field>
         <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
           <input matInput placeholder="Country" formControlName="country"  [value]="accommodation?.location?.country || ''" (input)="onCountryInput($event)"  >
           <mat-icon matSuffix>edit_note</mat-icon>
         </mat-form-field>
       
       <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="X coordinate" formControlName="xCoordinate"  [value]="accommodation?.location?.x || ''"  (input)="onXInput($event)" >
+          <mat-label>X coordinate</mat-label>
+          <input matInput placeholder="X coordinate" formControlName="xCoordinate"  [value]="accommodation?.location?.x"  (input)="onXInput($event)" >
         <mat-icon matSuffix>edit_note</mat-icon>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput placeholder="Y coordinate" formControlName="yCoordinate"  [value]="accommodation?.location?.y || ''" (input)="onYInput($event)" >
+        <mat-label>Y coordinate</mat-label>
+        <input matInput placeholder="Y coordinate" formControlName="yCoordinate"  [value]="accommodation?.location?.y" (input)="onYInput($event)" >
         <mat-icon matSuffix>edit_note</mat-icon>
       </mat-form-field></p>
 
@@ -45,28 +54,39 @@
       <div class="guests-container">
         <p style="margin-right: 10px;">
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Min guests" formControlName="minGuests"  [value]="accommodation?.minGuests || ''" (input)="onMinGuestsInput($event)" >
+            <mat-label>Min Guests</mat-label>
+            <input matInput placeholder="Min guests" formControlName="minGuests"  [value]="accommodation?.minGuests" (input)="onMinGuestsInput($event)" >
             <mat-icon matSuffix>edit_note</mat-icon>
+            <mat-error *ngIf="editAccommodationFormGroup.get('minGuests')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="editAccommodationFormGroup.get('minGuests')?.hasError('pattern')">Enter a valid number</mat-error>
           </mat-form-field>
         </p>
         <p>
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Max guests" formControlName="maxGuests"  [value]="accommodation?.maxGuests || ''" (input)="onMaxGuestsInput($event)" >
+            <mat-label>Max Guests</mat-label>
+            <input matInput placeholder="Max guests" formControlName="maxGuests"  [value]="accommodation?.maxGuests" (input)="onMaxGuestsInput($event)" >
             <mat-icon matSuffix>edit_note</mat-icon>
+            <mat-error *ngIf="editAccommodationFormGroup.get('minGuests')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="editAccommodationFormGroup.get('minGuests')?.hasError('pattern')">Enter a valid number</mat-error>
           </mat-form-field>
         </p>
       </div>
       
       <p>
         <mat-form-field appearance="outline">
-          <input matInput placeholder="Cancellation Deadline" formControlName="cancellationDeadline"  [value]="accommodation?.cancellationDeadline || ''" (input)="onCancellationDeadlineInput($event)" >
+          <mat-label>Cancellation Deadline</mat-label>
+          <input matInput placeholder="Cancellation Deadline" formControlName="cancellationDeadline"  [value]="accommodation?.cancellationDeadline" (input)="onCancellationDeadlineInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
+          <mat-error *ngIf="editAccommodationFormGroup.get('cancellationDeadline')?.hasError('required')">This field is required</mat-error>
+          <mat-error *ngIf="editAccommodationFormGroup.get('cancellationDeadline')?.hasError('pattern')">Enter a valid number</mat-error>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
           <input matInput placeholder="Description" formControlName="description" [value]="accommodation?.description || ''" (input)="onDescriptionInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
+          <mat-error *ngIf="editAccommodationFormGroup.get('description')?.hasError('required')">This field is required</mat-error>
         </mat-form-field>
       </p>
       
@@ -82,13 +102,14 @@
     <p>Reservation confirmation : </p>
     <div class="reservation-confirmation-container">
       <mat-radio-group aria-label="Select an option" formControlName="reservationConfirmation" (input)="onReservationConfirmationInput($event)">
-        <mat-radio-button value="1" [checked]="accommodation?.reservationConfirmation === 'MANUAL'">MANUAL</mat-radio-button>
-        <mat-radio-button value="2" [checked]="accommodation?.reservationConfirmation === 'AUTOMATIC'">AUTOMATIC</mat-radio-button>
+        <mat-radio-button value="0" [checked]="accommodation?.reservationConfirmation === 'MANUAL'">MANUAL</mat-radio-button>
+        <mat-radio-button value="1" [checked]="accommodation?.reservationConfirmation === 'AUTOMATIC'">AUTOMATIC</mat-radio-button>
       </mat-radio-group>
     </div>
     <div class="mat-elevation-z8">
       <h2>Prices and availability intervals</h2>
       <table mat-table [dataSource]="dataSource" matSort>
+        
       
         <ng-container matColumnDef="Id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
@@ -97,17 +118,21 @@
     
         <ng-container matColumnDef="Start Date">
           <th mat-header-cell *matHeaderCellDef> Start Date</th>
-          <td mat-cell *matCellDef="let element"> {{element.timeSlot.startDate | date: 'short' }} </td>
+          <td mat-cell *matCellDef="let element"> 
+            {{element.timeSlot.startDate | date: 'shortDate'}}
+          </td>
         </ng-container>
     
         <ng-container matColumnDef="End Date">
           <th mat-header-cell *matHeaderCellDef> End Date </th>
-          <td mat-cell *matCellDef="let element"> {{element.timeSlot.endDate | date: 'short' }} </td>
+          <td mat-cell *matCellDef="let element"> {{element.timeSlot.endDate | date: 'shortDate'}}</td>
         </ng-container>
     
         <ng-container matColumnDef="Price">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
-          <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+          <td mat-cell *matCellDef="let element"> 
+            {{element.price}}
+            </td>
         </ng-container>
         
         <ng-container matColumnDef="Type">
@@ -115,7 +140,19 @@
           <td mat-cell *matCellDef="let element"> {{element.type}} </td>
         </ng-container>
 
-  
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button  (click)="openEditDialog(element)">
+              <mat-icon>edit</mat-icon>
+            </button>
+        
+            <button mat-icon-button  (click)="deleteItem(element)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+      
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
@@ -125,7 +162,7 @@
                      aria-label="Select page of periodic elements">
       </mat-paginator>
       <div class="data-container">
-        <h2>Select Dates and Price</h2>
+        <h2>Add new price card</h2>
         <div class="date-picker-container">
           <mat-form-field>
             <mat-label>Choose a start date</mat-label>
@@ -144,7 +181,10 @@
           </mat-form-field>
         
           <mat-form-field appearance="outline">
-            <input matInput placeholder="Price" formControlName="price">
+            <mat-label>Price for choosen period</mat-label>
+            <input matInput formControlName="price">
+            <mat-error *ngIf="editAccommodationFormGroup.get('price')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="editAccommodationFormGroup.get('price')?.hasError('pattern')">Enter a valid number</mat-error>
           </mat-form-field>
     
         </div>
@@ -166,7 +206,7 @@
       </div>
       <div style="align-items: center; text-align: center;margin-top: 3%;">
         <button (click)="saveChanges()" mat-button  style="background-color: #1e88e5; color: white;font-size: 16px;">Save changes</button>
-        <button mat-fab background-color="red" style="margin-left: 2%;">
+        <button (click)="delete()" mat-fab background-color="red" style="margin-left: 2%;">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

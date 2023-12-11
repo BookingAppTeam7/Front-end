@@ -28,6 +28,11 @@ export class ReservationService{
             environment.apiHost+'reservations/'+id);
     }
 
+    getByAccommodationId(id: number): Observable<Reservation[] | undefined>{
+        return this.httpClient.get<Reservation[]>(
+            environment.apiHost+'reservations/accommodation/'+id);
+    }
+
     update(updatedReservation:ReservationPutDTO, id:number):Observable<ReservationPutDTO>{
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.httpClient.put<ReservationPutDTO>(
