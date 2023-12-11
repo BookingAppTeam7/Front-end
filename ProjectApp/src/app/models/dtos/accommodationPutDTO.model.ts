@@ -12,7 +12,7 @@ export interface AccommodationPutDTO {
     maxGuests: number | null |undefined;
     type:AccommodationTypeEnum | null;
     assets:String[];
-    prices:PriceCard[];
+    //prices:PriceCard[];
     ownerId:String;
     reservationConfirmation:ReservationConfirmationEnum | null;
     cancellationDeadline:number | null |undefined;

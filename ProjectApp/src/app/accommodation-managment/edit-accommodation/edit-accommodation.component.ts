@@ -48,7 +48,7 @@ export class EditAccommodationComponent  implements OnInit{
 
   priceCards: PriceCard[];
   reservations:Reservation[]|undefined;
-  accommodationId:number=54;    //accommodation id 
+  accommodationId:number=53;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
   ownerId :String= "username"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
@@ -343,7 +343,16 @@ export class EditAccommodationComponent  implements OnInit{
 }
 
 updatePriceCard(updatedElement: PriceCard): void {
-  this.priceCardService.update(updatedElement).subscribe(
+
+  const newPriceCard = {
+    id:updatedElement.id,
+    timeSlot:updatedElement.timeSlot,
+    price: updatedElement.price,
+    type: updatedElement.type,
+    accommodationId:this.accommodationId
+};
+
+  this.priceCardService.update(newPriceCard).subscribe(
     updatedPriceCard => {
       const index = this.priceCards.findIndex((element) => element.id === updatedPriceCard.id);
 
@@ -428,7 +437,7 @@ updatePriceCard(updatedElement: PriceCard): void {
         maxGuests: this.editAccommodationFormGroup.value.maxGuests,
         type: (this.editAccommodationFormGroup.value.type !== null && this.editAccommodationFormGroup.value.type !== undefined) ? this.editAccommodationFormGroup.value.type as AccommodationTypeEnum : null,
         assets: this.editAccommodationFormGroup.get('amenities')?.value,
-        prices: this.priceCards,
+        //prices: this.priceCards,
         ownerId:this.ownerId,
         reservationConfirmation:(this.editAccommodationFormGroup.value.reservationConfirmation !== null && this.editAccommodationFormGroup.value.reservationConfirmation !== undefined) ? this.editAccommodationFormGroup.value.reservationConfirmation as ReservationConfirmationEnum : null,
         cancellationDeadline: this.editAccommodationFormGroup.value.cancellationDeadline,
