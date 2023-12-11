@@ -25,6 +25,13 @@
             <input matInput placeholder="Price for chosen period" formControlName="priceEdit">
           </mat-form-field>
         </div>
+
+        <div class="type-container" style="text-align: center;margin-bottom: 10px;">
+          <mat-radio-group aria-label="Select an option" formControlName="priceTypeEdit">
+            <mat-radio-button value="PERGUEST">PERGUEST</mat-radio-button>
+            <mat-radio-button value="PERUNIT">PERUNIT</mat-radio-button>
+          </mat-radio-group>
+        </div>
     </div>
 
     <div mat-dialog-actions class="dialog-actions" style="text-align: center; margin-bottom: 2%;">

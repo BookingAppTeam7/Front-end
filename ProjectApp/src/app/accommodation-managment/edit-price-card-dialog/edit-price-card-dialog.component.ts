@@ -11,12 +11,13 @@ import { CommonModule } from '@angular/common';
 import { MatNativeDateModule, MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatRadioModule } from '@angular/material/radio';
 @Component({
   selector: 'app-edit-price-card-dialog',
   templateUrl: 'edit-price-card-dialog.component.html',
   styleUrls: ['./edit-price-card-dialog.component.css'],
   standalone:true,
-  imports:[ReactiveFormsModule,MatNativeDateModule,MatDatepickerModule,MatInputModule,MatButtonModule,CommonModule,MatFormFieldModule,MatSnackBarModule]
+  imports:[ReactiveFormsModule,MatNativeDateModule,MatDatepickerModule,MatInputModule,MatButtonModule,CommonModule,MatFormFieldModule,MatSnackBarModule,MatRadioModule]
 })
 export class EditPriceCardDialogComponent  implements OnInit {
   element:PriceCard;
@@ -30,18 +31,21 @@ export class EditPriceCardDialogComponent  implements OnInit {
     this.form = this.fb.group({
       startDateEdit: [null],
       endDateEdit: [null],
-      priceEdit: [null],});
+      priceEdit: [null],
+    priceTypeEdit:[null],});
 
     this.element = this.data.element;
     if (this.data && this.data.element && this.data.element.timeSlot) {
       const startDate = this.data.element.timeSlot.startDate;
       const endDate = this.data.element.timeSlot.endDate;
       const price = this.data.element.price;
+      const priceType=this.data.element.type;
   
       this.form.patchValue({
         startDateEdit: startDate,
         endDateEdit: endDate,
         priceEdit: price,
+        priceTypeEdit:priceType,
       });
     }
   }
@@ -74,6 +78,8 @@ export class EditPriceCardDialogComponent  implements OnInit {
     this.element.timeSlot.startDate = updatedValues.startDateEdit;
     this.element.timeSlot.endDate = updatedValues.endDateEdit;
     this.element.price = updatedValues.priceEdit;
+    console.log(this.element.type)
+    this.element.type=updatedValues.priceTypeEdit;
   
     this.dialogRef.close(this.element);
   }

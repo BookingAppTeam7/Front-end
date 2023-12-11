@@ -43,7 +43,7 @@ export class EditAccommodationComponent  implements OnInit{
   selectedElement: PriceCard; 
 
   priceCards: PriceCard[];
-  accommodationId:number=24;    //accommodation id 
+  accommodationId:number=46;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
   ownerId :String= "username"                   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
@@ -171,12 +171,11 @@ export class EditAccommodationComponent  implements OnInit{
   }
 
   validatePriceCard(newPriceCard: PriceCard): boolean {
-
-    const index = this.priceCards.indexOf(newPriceCard);  //da ne bismo poredili novu i staru verziju datuma
-    if (index !== -1) {
-      this.priceCards.splice(index, 1);
-    }
-      
+    // var count=0;
+    // const index = this.priceCards.findIndex(priceCard => priceCard.id === newPriceCard.id);
+    // if (index !== -1) {
+    //   this.priceCards.splice(index, 1);
+    // }   
 
     const newStartDate = new Date(newPriceCard.timeSlot.startDate);
     const newEndDate = new Date(newPriceCard.timeSlot.endDate);
@@ -200,12 +199,15 @@ export class EditAccommodationComponent  implements OnInit{
       console.log('Overlap Start Date:', overlapStartDate);
       console.log('Overlap End Date:', overlapEndDate);
 
-      if (index !== -1) {
-        this.priceCards.push(newPriceCard); //vracamo uklonjenu vrednost
-      }
+      // if (index !== -1 && count!=1) {
+      //   count++;
+      //   this.priceCards.push(newPriceCard); //vracamo uklonjenu vrednost
+      // }
   
       return overlapStartDate && overlapEndDate;
     });
+
+
   
     console.log('Overlap:', overlap);
     return !overlap;
