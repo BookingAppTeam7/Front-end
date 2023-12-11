@@ -143,14 +143,7 @@ export class CreateAccommodationComponent {
             type: priceTypeValueEnum
         };
         if (this.validatePriceCard(newPriceCard)) {
-          this.priceCardService.create(newPriceCard).subscribe(
-            createdPriceCard => {
-              this.prices.push(createdPriceCard);
-              return;
-            },
-            error => {
-              console.error('Error during creating new object:', error);
-          })
+          this.prices.push(newPriceCard);
         } else {
           this.openSnackBar("Price for this timeslot is already defined!")
         }
