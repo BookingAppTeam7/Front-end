@@ -15,36 +15,39 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { PriceCard } from 'src/app/accommodation/accommodation/model/priceCard.model';
 import { PriceTypeEnum } from 'src/app/models/enums/priceTypeEnum';
 import { TimeSlotEnum } from 'src/app/models/enums/timeSlotEnum';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PriceCardService } from 'src/app/accommodation/priceCard.service';
 
 @Component({
   selector: 'app-create-accommodation',
   templateUrl: './create-accommodation.component.html',
   styleUrls: ['./create-accommodation.component.css'],
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatChipsModule,MatRadioModule,LayoutModule,ReactiveFormsModule,MatDatepickerModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,MatButtonModule],
+  imports: [MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatChipsModule,MatRadioModule,LayoutModule,ReactiveFormsModule,MatDatepickerModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,MatButtonModule,MatSnackBarModule],
 })
 export class CreateAccommodationComponent {
 
   prices:PriceCard[]
   accommodationTypeEnum = AccommodationTypeEnum;
-  constructor(private accommodationService:AccommodationService) {}
+  constructor(private accommodationService:AccommodationService,private snackBar:MatSnackBar,private priceCardService:PriceCardService) {}
 
   ngOnInit() {
      this.prices = [];
   }
 
   createAccommodationForm=new FormGroup({
-    name: new FormControl(),
+    name: new FormControl('',Validators.required),
     address:new FormControl(),
     city: new FormControl(),
     country: new FormControl(),
     xCoordinate: new FormControl(),
     yCoordinate: new FormControl(),
     type: new FormControl(null, Validators.required),
-    minGuests:new FormControl(),
-    maxGuests:new FormControl(),
-    cancellationDeadline: new FormControl(),
-    description:new FormControl(),
+    minGuests:new FormControl(0,[Validators.required, Validators.pattern('^[0-9]+$'),Validators.min(0)]),
+    maxGuests:new FormControl(0,[Validators.required, Validators.pattern('^[0-9]+$'),Validators.min(0)]),
+    cancellationDeadline: new FormControl(0,[Validators.required, Validators.pattern('^[0-9]+$'),Validators.min(0)]),
+    description:new FormControl('',Validators.required),
     amenities: new FormControl(),
     ownerId:new FormControl(),
     startDate:new FormControl(),
@@ -53,7 +56,77 @@ export class CreateAccommodationComponent {
     priceType:new FormControl()
   })
 
+  validatePriceCardForm():boolean{
+    const startDate: Date = this.createAccommodationForm.value.startDate;
+    const endDate: Date = this.createAccommodationForm.value.endDate;
+
+    if(this.createAccommodationForm.value.startDate==null || this.createAccommodationForm.value.endDate==null){
+      this.openSnackBar('Missing date.');
+      return false;
+    }
+
+    if (startDate >= endDate) {
+      this.openSnackBar('Start date must be before end date.');
+      return false;
+    }
+
+    const today = new Date();
+    if (startDate <= today || endDate <= today) {
+      this.openSnackBar('Selected dates must be in the future.');
+      return false;
+    }
+
+    if (isNaN(this.createAccommodationForm.get('price')?.value) || this.createAccommodationForm.get('price')?.value==null) {
+      this.openSnackBar('Price field is required number.');
+      return false;
+    }
+
+    const priceTypeValue: PriceTypeEnum | undefined = this.createAccommodationForm.get('priceType')?.value;
+
+    if(priceTypeValue==undefined){
+      this.openSnackBar('Type of price must be defined.');
+      return false;
+    }
+    return true;
+  }
+
+  validatePriceCard(newPriceCard: PriceCard): boolean { 
+
+    const newStartDate = new Date(newPriceCard.timeSlot.startDate);
+    const newEndDate = new Date(newPriceCard.timeSlot.endDate);
+  
+    newStartDate.setHours(0, 0, 0, 0);
+    newEndDate.setHours(0, 0, 0, 0);
+  
+    const overlap = this.prices.some(existingPriceCard => {
+      if(existingPriceCard.id!=newPriceCard.id){
+      const existingStartDate = new Date(existingPriceCard.timeSlot.startDate);
+      const existingEndDate = new Date(existingPriceCard.timeSlot.endDate);
+  
+      existingStartDate.setHours(0, 0, 0, 0);
+      existingEndDate.setHours(0, 0, 0, 0);
+  
+      console.log('Existing Price Card Start Date:', existingStartDate);
+      console.log('Existing Price Card End Date:', existingEndDate);
+  
+      const overlapStartDate = existingStartDate <= newEndDate && existingEndDate >= newStartDate;
+      const overlapEndDate = existingEndDate >= newStartDate && existingStartDate <= newEndDate;
+  
+      console.log('Overlap Start Date:', overlapStartDate);
+      console.log('Overlap End Date:', overlapEndDate);
+  
+      return overlapStartDate && overlapEndDate;
+      }
+      return false;
+    });
+
+    console.log('Overlap:', overlap);
+    return !overlap;
+  }
+
+
   savePrice(){
+    if(!this.validatePriceCardForm()){return;}
     let priceTypeValueEnum=PriceTypeEnum.PERUNIT
     const priceTypeValue: PriceTypeEnum | undefined = this.createAccommodationForm.get('priceType')?.value;
     if(priceTypeValue==0){
@@ -69,11 +142,67 @@ export class CreateAccommodationComponent {
             price: this.createAccommodationForm.value.price,
             type: priceTypeValueEnum
         };
-        this.prices.push(newPriceCard);
-    } 
+        if (this.validatePriceCard(newPriceCard)) {
+          this.priceCardService.create(newPriceCard).subscribe(
+            createdPriceCard => {
+              this.prices.push(createdPriceCard);
+              return;
+            },
+            error => {
+              console.error('Error during creating new object:', error);
+          })
+        } else {
+          this.openSnackBar("Price for this timeslot is already defined!")
+        }
+      
+      }
   }
 
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+    });
+  }
+
+  formValidation():boolean{
+    if (this.createAccommodationForm.get('name')?.value === '') {
+      console.error('Accommodation name is required.');
+      this.openSnackBar('Accommodation name is required.');
+      return false;
+    }
+    if (this.createAccommodationForm.get('type')?.value === null) {
+      console.error('Please select a type of accommodation.');
+      this.openSnackBar('Please select a type of accommodation.');
+      return false;
+    }
+    if (this.createAccommodationForm.get('description')?.value === '') {
+      console.error('Description is required.');
+      this.openSnackBar('Description is required.');
+      return false;
+      }
+    const minGuestsValue = this.createAccommodationForm.get('minGuests')?.value;
+    const maxGuestsValue = this.createAccommodationForm.get('maxGuests')?.value;
+    const cancellationDeadlineValue = this.createAccommodationForm.get('cancellationDeadline')?.value;
+
+    if ((minGuestsValue!=undefined && isNaN(minGuestsValue)) || (maxGuestsValue!=undefined && isNaN(maxGuestsValue)) ||(cancellationDeadlineValue!=undefined && isNaN(cancellationDeadlineValue))) {
+      console.error('Please enter valid numbers for minGuests, maxGuests, and cancellationDeadline.');
+      this.openSnackBar('Please enter valid numbers for minGuests, maxGuests, and cancellationDeadline.');
+      return false;
+    }
+
+    if ((minGuestsValue!=undefined && !isNaN(minGuestsValue)) || (maxGuestsValue!=undefined && !isNaN(maxGuestsValue))) {
+      if(minGuestsValue!=null && maxGuestsValue!=null && minGuestsValue>maxGuestsValue){
+        this.openSnackBar('Max num of guests must be above min number of guests.');
+        return false;
+      }
+    }
+    return true;
+  }
+
+
 register(){
+
+  if(!this.formValidation()){return;}
   
     const accommodation: AccommodationPostDTO = {
       name: this.createAccommodationForm.value.name,

@@ -27,6 +27,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditPriceCardDialogComponent } from '../edit-price-card-dialog/edit-price-card-dialog.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PriceCardService } from 'src/app/accommodation/priceCard.service';
+import { Reservation } from 'src/app/models/reservation/reservation.model';
+import { ReservationService } from 'src/app/models/reservation/reservation.service';
 @Component({
   selector: 'app-edit-accommodation',
   templateUrl: './edit-accommodation.component.html',
@@ -43,9 +46,10 @@ export class EditAccommodationComponent  implements OnInit{
   selectedElement: PriceCard; 
 
   priceCards: PriceCard[];
-  accommodationId:number=46;    //accommodation id 
+  reservations:Reservation[]|undefined;
+  accommodationId:number=47;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
-  ownerId :String= "username"                   //ownerId
+  ownerId :String= "username"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type','actions'];
 
@@ -53,7 +57,7 @@ export class EditAccommodationComponent  implements OnInit{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private dialog:MatDialog) {
+  constructor(private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private priceCardService:PriceCardService,private reservationService:ReservationService,private dialog:MatDialog) {
     this.editForm = this.fb.group({
       startDateEdit: [''],
       endDateEdit: [''],
@@ -62,23 +66,23 @@ export class EditAccommodationComponent  implements OnInit{
   }
   
   editAccommodationFormGroup=new FormGroup({
-    name: new FormControl(),
-    description:new FormControl(),
+    name: new FormControl('',Validators.required),
+    description:new FormControl('',Validators.required),
     address: new FormControl(),
     city:new FormControl(),
     country: new FormControl(),
     xCoordinate:new FormControl(),
     yCoordinate:new FormControl(),
-    minGuests: new FormControl(),
-    maxGuests: new FormControl(),
-    cancellationDeadline:new FormControl(),
+    minGuests: new FormControl(0,[Validators.required, Validators.pattern('^[0-9]+$')]),
+    maxGuests: new FormControl(0,[Validators.required, Validators.pattern('^[0-9]+$')]),
+    cancellationDeadline:new FormControl(0,[Validators.required, Validators.pattern('^[0-9]+$')]),
     startDate:new FormControl(),
     endDate:new FormControl(),
     price:new FormControl(),
     priceType:new FormControl(),
     amenities:new FormControl(),
     type: new FormControl(null, Validators.required),
-    reservationConfirmation:new FormControl(),
+    reservationConfirmation:new FormControl(null,Validators.required),
     startDateEdit:new FormControl(),
     endDateEdit:new FormControl(),
     priceEdit:new FormControl(),
@@ -91,22 +95,32 @@ export class EditAccommodationComponent  implements OnInit{
     .subscribe(
       (response) => {
         this.accommodation = response as Accommodation;
-        this.editAccommodationFormGroup.get('name')?.setValue(this.accommodation?.name || '');
+        this.editAccommodationFormGroup.get('name')?.setValue(this.accommodation?.name || '', { emitEvent: false });
         this.editAccommodationFormGroup.get('address')?.setValue(this.accommodation?.location?.address || '');
         this.editAccommodationFormGroup.get('country')?.setValue(this.accommodation?.location?.country || '');
         this.editAccommodationFormGroup.get('city')?.setValue(this.accommodation?.location?.city || '');
         this.editAccommodationFormGroup.get('xCoordinate')?.setValue(this.accommodation?.location?.x || '');
-        this.editAccommodationFormGroup.get('cancellationDeadline')?.setValue(this.accommodation?.cancellationDeadline || '');
+        this.editAccommodationFormGroup.get('cancellationDeadline')?.setValue(this.accommodation?.cancellationDeadline || 0,{ emitEvent: false });
         this.editAccommodationFormGroup.get('yCoordinate')?.setValue(this.accommodation?.location?.y || '');
         this.editAccommodationFormGroup.get('description')?.setValue(this.accommodation?.description || '');
-        this.editAccommodationFormGroup.get('minGuests')?.setValue(this.accommodation?.minGuests || '');
-        this.editAccommodationFormGroup.get('maxGuests')?.setValue(this.accommodation?.maxGuests|| '');
+        this.editAccommodationFormGroup.get('minGuests')?.setValue(this.accommodation?.minGuests || 0,{ emitEvent: false });
+        this.editAccommodationFormGroup.get('maxGuests')?.setValue(this.accommodation?.maxGuests|| 0,{ emitEvent: false });
 
         this.setAmenitiesSelection();
         this.priceCards=this.accommodation.prices;
         this.dataSource = new MatTableDataSource<PriceCard>(this.accommodation.prices);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        this.reservationService.getByAccommodationId(this.accommodationId).subscribe(
+          (reservations: Reservation[]|undefined) => {
+            this.reservations = reservations;
+            console.log(this.reservations);
+          },
+          (error) => {
+            console.error('Error getting reservations for accommodation:', error);
+          }
+        );
 
         this.cdr.detectChanges();
       },
@@ -130,25 +144,73 @@ export class EditAccommodationComponent  implements OnInit{
     });
   }
 
-  savePrice(){
-    let priceTypeValueEnum=PriceTypeEnum.PERUNIT
-    const priceTypeValue: PriceTypeEnum | undefined = this.editAccommodationFormGroup.get('priceType')?.value;
-    if(priceTypeValue==0){
-      priceTypeValueEnum=PriceTypeEnum.PERGUEST
+  validatePriceCardForm():boolean{
+    if(this.editAccommodationFormGroup.value.startDate==null || this.editAccommodationFormGroup.value.endDate==null){
+      this.openSnackBar('Missing date.');
+      return false;
     }
-
     const startDate: Date = this.editAccommodationFormGroup.value.startDate;
-  const endDate: Date = this.editAccommodationFormGroup.value.endDate;
+    const endDate: Date = this.editAccommodationFormGroup.value.endDate;
 
     if (startDate >= endDate) {
       this.openSnackBar('Start date must be before end date.');
-      return;
+      return false;
     }
 
     const today = new Date();
     if (startDate <= today || endDate <= today) {
       this.openSnackBar('Selected dates must be in the future.');
-      return;
+      return false;
+    }
+
+    if (isNaN(this.editAccommodationFormGroup.get('price')?.value) || this.editAccommodationFormGroup.get('price')?.value==null) {
+      this.openSnackBar('Price field is required number.');
+      return false;
+    }
+
+    const priceTypeValue: PriceTypeEnum | undefined = this.editAccommodationFormGroup.get('priceType')?.value;
+
+    if(priceTypeValue==undefined){
+      this.openSnackBar('Type of price must be defined.');
+      return false;
+    }
+    return true;
+  }
+
+  validatePriceCardAndReservations(newPriceCard:PriceCard):boolean{
+    const newStartDate = new Date(newPriceCard.timeSlot.startDate);
+    const newEndDate = new Date(newPriceCard.timeSlot.endDate);
+  
+    newStartDate.setHours(0, 0, 0, 0);
+    newEndDate.setHours(0, 0, 0, 0);
+
+    const overlap = this.reservations?.some(existingReservation => {
+      const existingStartDate = new Date(existingReservation.timeSlot.startDate);
+      const existingEndDate = new Date(existingReservation.timeSlot.endDate);
+  
+      existingStartDate.setHours(0, 0, 0, 0);
+      existingEndDate.setHours(0, 0, 0, 0);
+
+      console.log('Existing Reservation Start Date:', existingStartDate);
+      console.log('Existing  End Date:', existingEndDate);
+  
+      const overlapStartDate = existingStartDate <= newEndDate && existingEndDate >= newStartDate;
+      const overlapEndDate = existingEndDate >= newStartDate && existingStartDate <= newEndDate;
+  
+      return overlapStartDate && overlapEndDate;
+      
+    })
+    return !overlap;
+  }
+
+  savePrice(){
+
+    if(!this.validatePriceCardForm()){return;}
+
+    let priceTypeValueEnum=PriceTypeEnum.PERUNIT
+    const priceTypeValue: PriceTypeEnum | undefined = this.editAccommodationFormGroup.get('priceType')?.value;
+    if(priceTypeValue==0){
+      priceTypeValueEnum=PriceTypeEnum.PERGUEST
     }
 
     if (priceTypeValue !== undefined) {
@@ -162,20 +224,25 @@ export class EditAccommodationComponent  implements OnInit{
             type: priceTypeValueEnum
         };
 
-        if (this.validatePriceCard(newPriceCard)) {
-          this.priceCards.push(newPriceCard);
+        if (this.validatePriceCard(newPriceCard) && this.validatePriceCardAndReservations(newPriceCard)) {
+          this.priceCardService.create(newPriceCard).subscribe(
+            createdPriceCard => {
+              this.priceCards.push(createdPriceCard);
+              this.dataSource.data=this.priceCards;
+              return;
+              
+            },
+            error => {
+              console.error('Error during creating new object:', error);
+            
+          })
         } else {
-          this.openSnackBar("Price for this timeslot is already defined!")
+          this.openSnackBar("Price for this timeslot is already defined and reservations are confirmed!")
         }
     } 
   }
 
-  validatePriceCard(newPriceCard: PriceCard): boolean {
-    // var count=0;
-    // const index = this.priceCards.findIndex(priceCard => priceCard.id === newPriceCard.id);
-    // if (index !== -1) {
-    //   this.priceCards.splice(index, 1);
-    // }   
+  validatePriceCard(newPriceCard: PriceCard): boolean { 
 
     const newStartDate = new Date(newPriceCard.timeSlot.startDate);
     const newEndDate = new Date(newPriceCard.timeSlot.endDate);
@@ -184,6 +251,7 @@ export class EditAccommodationComponent  implements OnInit{
     newEndDate.setHours(0, 0, 0, 0);
   
     const overlap = this.priceCards.some(existingPriceCard => {
+      if(existingPriceCard.id!=newPriceCard.id){
       const existingStartDate = new Date(existingPriceCard.timeSlot.startDate);
       const existingEndDate = new Date(existingPriceCard.timeSlot.endDate);
   
@@ -198,17 +266,12 @@ export class EditAccommodationComponent  implements OnInit{
   
       console.log('Overlap Start Date:', overlapStartDate);
       console.log('Overlap End Date:', overlapEndDate);
-
-      // if (index !== -1 && count!=1) {
-      //   count++;
-      //   this.priceCards.push(newPriceCard); //vracamo uklonjenu vrednost
-      // }
   
       return overlapStartDate && overlapEndDate;
+      }
+      return false;
     });
 
-
-  
     console.log('Overlap:', overlap);
     return !overlap;
   }
@@ -264,11 +327,11 @@ export class EditAccommodationComponent  implements OnInit{
     dialogRef.afterClosed().subscribe((updatedElement: PriceCard | string) => {
       if(typeof(updatedElement)!='string' && updatedElement){
         if (updatedElement.timeSlot.startDate!=originalElement.timeSlot.startDate || updatedElement.timeSlot.endDate!=originalElement.timeSlot.endDate) {  //nije zamenjen vec postojeci tj.postoji korekcija intervala a ne samo cene
-          if (this.validatePriceCard(updatedElement)){
+          if (this.validatePriceCard(updatedElement) && this.validatePriceCardAndReservations(updatedElement)){
             this.updatePriceCard(updatedElement);
           }
           else{
-            this.openSnackBar("Price for this timeslot is already defined!")
+            this.openSnackBar("Price for this timeslot is already defined and reservations are confirmed!")
             return;
           }
         }
@@ -278,15 +341,24 @@ export class EditAccommodationComponent  implements OnInit{
 }
 
 updatePriceCard(updatedElement: PriceCard): void {
-  const index = this.priceCards.findIndex((element) => element.id === updatedElement.id);
+  this.priceCardService.update(updatedElement).subscribe(
+    updatedPriceCard => {
+      const index = this.priceCards.findIndex((element) => element.id === updatedPriceCard.id);
 
-  if (index !== -1) {
-    this.priceCards[index] = updatedElement;
-    this.dataSource.data = this.priceCards;
-  }
+      if (index !== -1) {
+        this.priceCards[index] = updatedElement;
+      }
+      this.dataSource.data=this.priceCards;
+      
+    },
+    error => {
+      console.error('Error during updating object:', error);
+    
+  });
 }
   
   deleteItem(element: any) {
+    //this.priceCardService.delete(element.id).subscribe({});
     console.log('Delete item:', element);
     const index = this.priceCards.indexOf(element);
     if (index !== -1) {
@@ -295,7 +367,51 @@ updatePriceCard(updatedElement: PriceCard): void {
     this.dataSource.data=this.priceCards;
   }
 
+  formValidation():boolean{
+    if (this.editAccommodationFormGroup.get('name')?.value === '') {
+      console.error('Accommodation name is required.');
+      this.openSnackBar('Accommodation name is required.');
+      return false;
+    }
+    if (this.editAccommodationFormGroup.get('type')?.value === null) {
+      console.error('Please select a type of accommodation.');
+      this.openSnackBar('Please select a type of accommodation.');
+      return false;
+    }
+    if (this.editAccommodationFormGroup.get('description')?.value === '') {
+      console.error('Description is required.');
+      this.openSnackBar('Description is required.');
+      return false;
+      }
+    const minGuestsValue = this.editAccommodationFormGroup.get('minGuests')?.value;
+    const maxGuestsValue = this.editAccommodationFormGroup.get('maxGuests')?.value;
+    const cancellationDeadlineValue = this.editAccommodationFormGroup.get('cancellationDeadline')?.value;
+
+    if ((minGuestsValue!=undefined && isNaN(minGuestsValue)) || (maxGuestsValue!=undefined && isNaN(maxGuestsValue)) ||(cancellationDeadlineValue!=undefined && isNaN(cancellationDeadlineValue))) {
+      console.error('Please enter valid numbers for minGuests, maxGuests, and cancellationDeadline.');
+      this.openSnackBar('Please enter valid numbers for minGuests, maxGuests, and cancellationDeadline.');
+      return false;
+    }
+
+    if ((minGuestsValue!=undefined && !isNaN(minGuestsValue)) || (maxGuestsValue!=undefined && !isNaN(maxGuestsValue))) {
+      if(minGuestsValue!=null && maxGuestsValue!=null && minGuestsValue>maxGuestsValue){
+        this.openSnackBar('Max num of guests must be above min number of guests.');
+        return false;
+      }
+    }
+
+    if (this.editAccommodationFormGroup.get('reservationConfirmtion')?.value === null) {
+      console.error('Please select a type of reservation confirmation.');
+      this.openSnackBar('Please select a type of reservation confirmation.');
+      return false;
+    }
+    return true;
+  }
+
   saveChanges(){
+
+    if(!this.formValidation()){return;}
+
       const updatedAccommodation: AccommodationPutDTO = {
         name: this.editAccommodationFormGroup.value.name,
         description: this.editAccommodationFormGroup.value.description,
@@ -319,15 +435,15 @@ updatePriceCard(updatedElement: PriceCard): void {
       this.accommodationService.update(updatedAccommodation,this.accommodationId).subscribe({ });
       } 
 
-      delete() {
-        if (this.accommodation.id !== undefined) {
-          this.accommodationService.delete(this.accommodation.id).subscribe({
-          });
-        } else {
-          console.error('Accommodation id is undefined');
-        }
-      }
-
+  delete() {
+    if (this.accommodation.id !== undefined) {
+      this.accommodationService.delete(this.accommodation.id).subscribe({
+      });
+    } else {
+      console.error('Accommodation id is undefined');
     }
+  }
+
+}
 
 

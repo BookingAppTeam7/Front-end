@@ -1,12 +1,12 @@
 <form [formGroup]="editAccommodationFormGroup">
 <div  style="text-align: center;">
     <h2 class="register-header">Edit Accommodations Data</h2>
-
   
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput formControlName="name" [value]="accommodation?.name" (input)="onNameInput($event)">
       <mat-icon matSuffix>edit_note</mat-icon>
+      <mat-error *ngIf="editAccommodationFormGroup.get('name')?.hasError('required')">This field is required</mat-error>
   </mat-form-field>
     
      
@@ -57,6 +57,8 @@
             <mat-label>Min Guests</mat-label>
             <input matInput placeholder="Min guests" formControlName="minGuests"  [value]="accommodation?.minGuests" (input)="onMinGuestsInput($event)" >
             <mat-icon matSuffix>edit_note</mat-icon>
+            <mat-error *ngIf="editAccommodationFormGroup.get('minGuests')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="editAccommodationFormGroup.get('minGuests')?.hasError('pattern')">Enter a valid number</mat-error>
           </mat-form-field>
         </p>
         <p>
@@ -64,6 +66,8 @@
             <mat-label>Max Guests</mat-label>
             <input matInput placeholder="Max guests" formControlName="maxGuests"  [value]="accommodation?.maxGuests" (input)="onMaxGuestsInput($event)" >
             <mat-icon matSuffix>edit_note</mat-icon>
+            <mat-error *ngIf="editAccommodationFormGroup.get('minGuests')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="editAccommodationFormGroup.get('minGuests')?.hasError('pattern')">Enter a valid number</mat-error>
           </mat-form-field>
         </p>
       </div>
@@ -73,6 +77,8 @@
           <mat-label>Cancellation Deadline</mat-label>
           <input matInput placeholder="Cancellation Deadline" formControlName="cancellationDeadline"  [value]="accommodation?.cancellationDeadline" (input)="onCancellationDeadlineInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
+          <mat-error *ngIf="editAccommodationFormGroup.get('cancellationDeadline')?.hasError('required')">This field is required</mat-error>
+          <mat-error *ngIf="editAccommodationFormGroup.get('cancellationDeadline')?.hasError('pattern')">Enter a valid number</mat-error>
         </mat-form-field>
       </p>
       <p>
@@ -80,6 +86,7 @@
           <mat-label>Description</mat-label>
           <input matInput placeholder="Description" formControlName="description" [value]="accommodation?.description || ''" (input)="onDescriptionInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
+          <mat-error *ngIf="editAccommodationFormGroup.get('description')?.hasError('required')">This field is required</mat-error>
         </mat-form-field>
       </p>
       
@@ -176,6 +183,8 @@
           <mat-form-field appearance="outline">
             <mat-label>Price for choosen period</mat-label>
             <input matInput formControlName="price">
+            <mat-error *ngIf="editAccommodationFormGroup.get('price')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="editAccommodationFormGroup.get('price')?.hasError('pattern')">Enter a valid number</mat-error>
           </mat-form-field>
     
         </div>

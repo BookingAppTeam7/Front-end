@@ -5,16 +5,16 @@ import { Location } from "src/app/accommodation/accommodation/model/location.mod
 import { ReservationConfirmationEnum } from "../enums/reservationConfirmationEnum";
 
 export interface AccommodationPutDTO {
-    name: string;
-    description: string;
+    name: string | null |undefined;
+    description: string | null |undefined;
     location:Location;
-    minGuests: number;
-    maxGuests: number;
+    minGuests: number | null |undefined;
+    maxGuests: number | null |undefined;
     type:AccommodationTypeEnum | null;
     assets:String[];
     prices:PriceCard[];
     ownerId:String;
     reservationConfirmation:ReservationConfirmationEnum | null;
-    cancellationDeadline:number;
+    cancellationDeadline:number | null |undefined;
     images:String[];
   }

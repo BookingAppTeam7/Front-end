@@ -4,15 +4,15 @@ import { AccommodationTypeEnum } from "../enums/accommodationTypeEnum";
 import { Location } from "src/app/accommodation/accommodation/model/location.model";
 
 export interface AccommodationPostDTO {
-    name: string;
-    description: string;
+    name: string | null|undefined;
+    description: string | null|undefined;
     location:Location;
-    minGuests: number;
-    maxGuests: number;
+    minGuests: number |null|undefined;
+    maxGuests: number |null|undefined;
     type:AccommodationTypeEnum | null;
     assets:String[];
     prices:PriceCard[];
     ownerId:String;
-    cancellationDeadline:number;
+    cancellationDeadline:number |null|undefined;
     images:String[];
   }

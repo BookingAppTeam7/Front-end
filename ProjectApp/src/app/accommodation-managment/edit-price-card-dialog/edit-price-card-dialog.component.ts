@@ -12,6 +12,7 @@ import { MatNativeDateModule, MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } f
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatRadioModule } from '@angular/material/radio';
+import { PriceTypeEnum } from 'src/app/models/enums/priceTypeEnum';
 @Component({
   selector: 'app-edit-price-card-dialog',
   templateUrl: 'edit-price-card-dialog.component.html',
@@ -75,10 +76,14 @@ export class EditPriceCardDialogComponent  implements OnInit {
       return;
     }
 
+    if (isNaN(this.form.get('priceEdit')?.value) || this.form.get('priceEdit')?.value==null) {
+      this.openSnackBar('Price field is required number.');
+      return;
+    }
+
     this.element.timeSlot.startDate = updatedValues.startDateEdit;
     this.element.timeSlot.endDate = updatedValues.endDateEdit;
     this.element.price = updatedValues.priceEdit;
-    console.log(this.element.type)
     this.element.type=updatedValues.priceTypeEdit;
   
     this.dialogRef.close(this.element);

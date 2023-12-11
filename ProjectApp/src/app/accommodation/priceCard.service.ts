@@ -26,15 +26,19 @@ export class PriceCardService {
   }
 
   update(priceCard:PriceCard):Observable<PriceCard>{
-    console.log(priceCard.price)
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.httpClient.put<PriceCard>(
       environment.apiHost + 'priceCards',
       JSON.stringify(priceCard),
       { headers: headers }
     );
-
   }
+
+  delete(id: number): Observable<void> {
+    console.log(id)
+    return this.httpClient.delete<void>(environment.apiHost+'priceCards/'+id);
+  }
+
 
 
 }

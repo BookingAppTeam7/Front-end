@@ -5,6 +5,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
           <input matInput placeholder="Accommodation Name" formControlName="name">
+          <mat-error *ngIf="createAccommodationForm.get('name')?.hasError('required')">This field is required</mat-error>
         </mat-form-field>
         <h3>Accommodation type : </h3>
         <div class="type-container">
@@ -50,14 +51,17 @@
         <p style="margin-right: 10px;">
           <mat-form-field appearance="outline">
             <mat-label>Min Guests</mat-label>
-            <input matInput placeholder="0"  formControlName="minGuests">
-           
+            <input matInput placeholder="0"  formControlName="minGuests" type="number">
+            <mat-error *ngIf="createAccommodationForm.get('minGuests')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="createAccommodationForm.get('minGuests')?.hasError('pattern')">Enter a valid number</mat-error>
           </mat-form-field>
         </p>
         <p>
           <mat-form-field appearance="outline">
             <mat-label>Max Guests</mat-label>
-            <input matInput placeholder="0" formControlName="maxGuests">
+            <input matInput placeholder="0" formControlName="maxGuests" type="number">
+            <mat-error *ngIf="createAccommodationForm.get('maxGuests')?.hasError('required')">This field is required</mat-error>
+            <mat-error *ngIf="createAccommodationForm.get('maxGuests')?.hasError('pattern')">Enter a valid number</mat-error>
           </mat-form-field>
         </p>
       </div>
@@ -65,22 +69,25 @@
       <p>
         <mat-form-field appearance="outline">
           <mat-label>Cancellation Deadline</mat-label>
-          <input matInput placeholder="Cancellation Deadline" formControlName="cancellationDeadline">
+          <input matInput placeholder="Cancellation Deadline" formControlName="cancellationDeadline" type="number">
+          <mat-error *ngIf="createAccommodationForm.get('cancellationDeadline')?.hasError('required')">This field is required</mat-error>
+          <mat-error *ngIf="createAccommodationForm.get('cancellationDeadline')?.hasError('pattern')">Enter a valid number</mat-error>
         </mat-form-field>
       </p>
       <p>
         <mat-form-field appearance="outline">
           <mat-label>Description</mat-label>
           <input matInput placeholder="Description"  formControlName="description">
+          <mat-error *ngIf="createAccommodationForm.get('description')?.hasError('required')">This field is required</mat-error>
         </mat-form-field>
       </p>
 
-      <p>
+      <!-- <p>
         <mat-form-field appearance="outline">
           <mat-label>Owner`s username</mat-label>
           <input matInput placeholder="Owner id"  formControlName="ownerId">
         </mat-form-field>
-      </p>
+      </p> -->
       <div class="data-container">
       <h2>Accommodations amenities : </h2>
       <div class="options-container">
@@ -114,6 +121,8 @@
       <mat-form-field appearance="outline">
         <mat-label>Price</mat-label>
         <input matInput placeholder="Price for chosen period" formControlName="price">
+        <mat-error *ngIf="createAccommodationForm.get('price')?.hasError('required')">This field is required</mat-error>
+        <mat-error *ngIf="createAccommodationForm.get('price')?.hasError('pattern')">Enter a valid number</mat-error>
       </mat-form-field>
 
     </div>
