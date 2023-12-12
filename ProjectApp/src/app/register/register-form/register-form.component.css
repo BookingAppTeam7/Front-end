@@ -38,4 +38,9 @@
     margin-left: 100px;
     margin-bottom: 20px;
   }
+
+  .error-message {
+    color: red;
+    margin-top: 15px;
+  }
   
