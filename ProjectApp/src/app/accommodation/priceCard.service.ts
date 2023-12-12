@@ -27,10 +27,10 @@ export class PriceCardService {
     return this.httpClient.get<PriceCard[]>(environment.apiHost + 'priceCards/accommodation/' + id);
   }
 
-  update(priceCard:PriceCardPutDTO):Observable<PriceCard>{
+  update(priceCard:PriceCardPutDTO,id:number):Observable<PriceCard>{
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.httpClient.put<PriceCard>(
-      environment.apiHost + 'priceCards',
+      environment.apiHost + 'priceCards/'+id,
       JSON.stringify(priceCard),
       { headers: headers }
     );
@@ -40,7 +40,5 @@ export class PriceCardService {
     console.log(id)
     return this.httpClient.delete<void>(environment.apiHost+'priceCards/'+id);
   }
-
-
 
 }

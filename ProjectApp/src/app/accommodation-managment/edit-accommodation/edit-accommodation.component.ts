@@ -345,14 +345,14 @@ export class EditAccommodationComponent  implements OnInit{
 updatePriceCard(updatedElement: PriceCard): void {
 
   const newPriceCard = {
-    id:updatedElement.id,
+    //id:updatedElement.id,
     timeSlot:updatedElement.timeSlot,
     price: updatedElement.price,
     type: updatedElement.type,
     accommodationId:this.accommodationId
 };
-
-  this.priceCardService.update(newPriceCard).subscribe(
+  if(updatedElement.id==undefined){return;}
+  this.priceCardService.update(newPriceCard,updatedElement.id).subscribe(
     updatedPriceCard => {
       const index = this.priceCards.findIndex((element) => element.id === updatedPriceCard.id);
 
