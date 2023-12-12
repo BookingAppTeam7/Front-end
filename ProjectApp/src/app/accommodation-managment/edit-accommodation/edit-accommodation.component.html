@@ -12,11 +12,16 @@
      
       <div class="type-container">
         <!-- <mat-label>Type of accommodation : </mat-label> -->
-        <mat-radio-group aria-label="Select an option" formControlName="type"  (input)="onTypeInput($event)">
+        <mat-chip-listbox aria-label="Accommodation type selection" formControlName="type" (input)="onTypeInput($event)">
+          <mat-chip-option>APARTMENT</mat-chip-option>
+          <mat-chip-option>ROOM</mat-chip-option>
+          <mat-chip-option>VIP_ROOM</mat-chip-option>
+        </mat-chip-listbox>
+        <!-- <mat-radio-group aria-label="Select an option" formControlName="type"  (input)="onTypeInput($event)">
           <mat-radio-button  [value]="accommodationTypeEnum.ROOM" [checked]="accommodation?.type === AccommodationTypeEnum.ROOM">ROOM</mat-radio-button>
           <mat-radio-button  [value]="accommodationTypeEnum.APARTMENT" [checked]="accommodation?.type === AccommodationTypeEnum.APARTMENT">APARTMENT</mat-radio-button>
           <mat-radio-button  [value]="accommodationTypeEnum.VIP_ROOM" [checked]="accommodation?.type === AccommodationTypeEnum.VIP_ROOM">VIP ROOM</mat-radio-button>
-        </mat-radio-group>
+        </mat-radio-group> -->
       </div>
       <p>
         <div class="data-container">
@@ -28,12 +33,12 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>City</mat-label>
-          <input matInput placeholder="City" formControlName="city" [value]="accommodation?.location?.city || ''" (input)="onCityInput($event)" >
+          <input matInput placeholder="City" formControlName="city" [value]="accommodation?.location?.city" (input)="onCityInput($event)" >
           <mat-icon matSuffix>edit_note</mat-icon>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Country</mat-label>
-          <input matInput placeholder="Country" formControlName="country"  [value]="accommodation?.location?.country || ''" (input)="onCountryInput($event)"  >
+          <input matInput placeholder="Country" formControlName="country"  [value]="accommodation?.location?.country" (input)="onCountryInput($event)"  >
           <mat-icon matSuffix>edit_note</mat-icon>
         </mat-form-field>
       
@@ -101,10 +106,14 @@
     </div>
     <p>Reservation confirmation : </p>
     <div class="reservation-confirmation-container">
-      <mat-radio-group aria-label="Select an option" formControlName="reservationConfirmation" (input)="onReservationConfirmationInput($event)">
+      <mat-chip-listbox aria-label="Reservation confirmation selection" formControlName="reservationConfirmation" (input)="onReservationConfirmationInput($event)">
+        <mat-chip-option>MANUAL</mat-chip-option>
+        <mat-chip-option>AUTOMATIC</mat-chip-option>
+      </mat-chip-listbox>
+      <!-- <mat-radio-group aria-label="Select an option" formControlName="reservationConfirmation" (input)="onReservationConfirmationInput($event)">
         <mat-radio-button value="0" [checked]="accommodation?.reservationConfirmation === 'MANUAL'">MANUAL</mat-radio-button>
         <mat-radio-button value="1" [checked]="accommodation?.reservationConfirmation === 'AUTOMATIC'">AUTOMATIC</mat-radio-button>
-      </mat-radio-group>
+      </mat-radio-group> -->
     </div>
     <div class="mat-elevation-z8">
       <h2>Prices and availability intervals</h2>

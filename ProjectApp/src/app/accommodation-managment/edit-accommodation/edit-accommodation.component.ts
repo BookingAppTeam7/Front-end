@@ -50,7 +50,7 @@ export class EditAccommodationComponent  implements OnInit{
   reservations:Reservation[]|undefined;
   accommodationId:number=53;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
-  ownerId :String= "username"   //ownerId
+  ownerId :String= "tamara@gmail.com"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type','actions'];
 
@@ -82,8 +82,8 @@ export class EditAccommodationComponent  implements OnInit{
     price:new FormControl(),
     priceType:new FormControl(),
     amenities:new FormControl(),
-    type: new FormControl(null, Validators.required),
-    reservationConfirmation:new FormControl(null,Validators.required),
+    type: new FormControl(),
+    reservationConfirmation:new FormControl(),
     startDateEdit:new FormControl(),
     endDateEdit:new FormControl(),
     priceEdit:new FormControl(),
@@ -108,6 +108,8 @@ export class EditAccommodationComponent  implements OnInit{
         this.editAccommodationFormGroup.get('maxGuests')?.setValue(this.accommodation?.maxGuests|| 0,{ emitEvent: false });
 
         this.setAmenitiesSelection();
+        this.setReservationConfirmation();
+        this.setType();
         this.priceCards=this.accommodation.prices;
         this.dataSource = new MatTableDataSource<PriceCard>(this.accommodation.prices);
         this.dataSource.paginator = this.paginator;
@@ -136,6 +138,18 @@ export class EditAccommodationComponent  implements OnInit{
     const amenitiesControl = this.editAccommodationFormGroup.get('amenities');
     if (amenitiesControl && this.accommodation?.assets) {
       amenitiesControl.setValue(this.accommodation.assets);
+      }
+  }
+  setReservationConfirmation() {
+    const reservationConfirmationControl = this.editAccommodationFormGroup.get('reservationConfirmation');
+    if (reservationConfirmationControl && this.accommodation?.reservationConfirmation) {
+      reservationConfirmationControl.setValue(this.accommodation.reservationConfirmation);
+      }
+  }
+  setType() {
+    const typeControl = this.editAccommodationFormGroup.get('type');
+    if (typeControl && this.accommodation?.type) {
+      typeControl.setValue(this.accommodation.type);
       }
   }
 
@@ -384,7 +398,8 @@ updatePriceCard(updatedElement: PriceCard): void {
       this.openSnackBar('Accommodation name is required.');
       return false;
     }
-    if (this.editAccommodationFormGroup.get('type')?.value === null) {
+    
+    if (this.editAccommodationFormGroup.get('type')?.value === null || this.editAccommodationFormGroup.get('type')?.value === undefined) {
       console.error('Please select a type of accommodation.');
       this.openSnackBar('Please select a type of accommodation.');
       return false;
@@ -411,7 +426,9 @@ updatePriceCard(updatedElement: PriceCard): void {
       }
     }
 
-    if (this.editAccommodationFormGroup.get('reservationConfirmtion')?.value === null) {
+    console.log(this.editAccommodationFormGroup.get('reservationConfirmation')?.value)
+
+    if (this.editAccommodationFormGroup.get('reservationConfirmation')?.value === null || this.editAccommodationFormGroup.get('reservationConfirmation')?.value == undefined) {
       console.error('Please select a type of reservation confirmation.');
       this.openSnackBar('Please select a type of reservation confirmation.');
       return false;
@@ -435,11 +452,13 @@ updatePriceCard(updatedElement: PriceCard): void {
         },
         minGuests: this.editAccommodationFormGroup.value.minGuests,
         maxGuests: this.editAccommodationFormGroup.value.maxGuests,
-        type: (this.editAccommodationFormGroup.value.type !== null && this.editAccommodationFormGroup.value.type !== undefined) ? this.editAccommodationFormGroup.value.type as AccommodationTypeEnum : null,
+        type:this.editAccommodationFormGroup.get('type')?.value,
+       // type: (this.editAccommodationFormGroup.value.type !== null && this.editAccommodationFormGroup.value.type !== undefined) ? this.editAccommodationFormGroup.value.type as AccommodationTypeEnum : null,
         assets: this.editAccommodationFormGroup.get('amenities')?.value,
         //prices: this.priceCards,
         ownerId:this.ownerId,
-        reservationConfirmation:(this.editAccommodationFormGroup.value.reservationConfirmation !== null && this.editAccommodationFormGroup.value.reservationConfirmation !== undefined) ? this.editAccommodationFormGroup.value.reservationConfirmation as ReservationConfirmationEnum : null,
+        reservationConfirmation:this.editAccommodationFormGroup.get('reservationConfirmation')?.value,
+        // reservationConfirmation:(this.editAccommodationFormGroup.value.reservationConfirmation !== null && this.editAccommodationFormGroup.value.reservationConfirmation !== undefined) ? this.editAccommodationFormGroup.value.reservationConfirmation as ReservationConfirmationEnum : null,
         cancellationDeadline: this.editAccommodationFormGroup.value.cancellationDeadline,
         images: []
       };
