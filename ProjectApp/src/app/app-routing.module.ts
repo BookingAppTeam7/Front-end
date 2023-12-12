@@ -13,6 +13,7 @@ import { UsersViewComponent } from './users/users-view/users-view.component';
 import { CreateReservationComponent } from './reservation-managment/create-reservation/create-reservation.component';
 import { EditReservationComponent } from './reservation-managment/edit-reservation/edit-reservation.component';
 import { SuccessComponent } from './register/success/success.component';
+import { AccommodationRequestsComponent } from './accommodation-managment/accommodation-requests/accommodation-requests.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -26,7 +27,8 @@ const routes: Routes = [
   {component:AccommodationComponent,path:"accommodation"},
   {component:AccommodationCardsComponent,path:"accommodation-cards"},
   {component: AccommodationDetailsComponent ,path: 'accommodations/:id'},
-  {component:UsersViewComponent,path:'users-view'}
+  {component:UsersViewComponent,path:'users-view'},
+  {component:AccommodationRequestsComponent,path:'accommodationsRequests'}
 ];
 
 @NgModule({

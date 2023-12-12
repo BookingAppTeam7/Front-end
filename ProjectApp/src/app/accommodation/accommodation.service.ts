@@ -6,6 +6,8 @@ import { AccommodationPostDTO } from '../models/dtos/accommodationPostDTO.model'
 import { AccommodationPutDTO } from '../models/dtos/accommodationPutDTO.model';
 import { Accommodation } from './accommodation/model/accommodation.model';
 import { HttpHeaders } from '@angular/common/http';
+import { AccommodationStatusEnum } from '../models/enums/accommodationStatusEnum';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +29,10 @@ export class AccommodationService {
     return this.httpClient.get<Accommodation>(environment.apiHost + 'accommodations/' + id);
   }
 
+  getByStatus(status: AccommodationStatusEnum): Observable<Accommodation[] | undefined> {
+    return this.httpClient.get<Accommodation[]>(environment.apiHost + 'accommodations/status/' + status);
+  }
+
   update(updatedAccommodation: AccommodationPutDTO, id: number): Observable<AccommodationPutDTO> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.httpClient.put<AccommodationPutDTO>(
@@ -34,6 +40,12 @@ export class AccommodationService {
       JSON.stringify(updatedAccommodation),
       { headers: headers }
     );
+  }
+  
+  updateStatus(id: number, status: AccommodationStatusEnum): Observable<Accommodation> {
+    const params = new HttpParams().set('status', status);
+    const apiUrl = `${environment.apiHost}accommodations/${id}/update-status`;0
+    return this.httpClient.put<Accommodation>(apiUrl, null, { params });
   }
 
   delete(id: number): Observable<Accommodation | undefined> {

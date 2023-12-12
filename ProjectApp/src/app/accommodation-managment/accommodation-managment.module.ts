@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { EditPriceCardDialogComponent } from './edit-price-card-dialog/edit-price-card-dialog.component'; 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AccommodationRequestsComponent } from './accommodation-requests/accommodation-requests.component';
+import { AccommodationReviewDialogComponent } from './accommodation-review-dialog/accommodation-review-dialog.component';
 
 
 @NgModule({
@@ -18,6 +20,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     CreateAccommodationComponent,
     EditAccommodationComponent,
    EditPriceCardDialogComponent,
+   AccommodationRequestsComponent,
+   AccommodationReviewDialogComponent,
   ],
   imports: [
     CommonModule,
