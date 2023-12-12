@@ -25,5 +25,8 @@
   gap: 10px; 
   margin-bottom: 20px;
 }
-
+.error-message {
+  color: red;
+  margin-top: 15px;
+}
   

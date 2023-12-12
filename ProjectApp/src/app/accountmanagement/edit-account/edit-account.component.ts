@@ -4,7 +4,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import { LayoutModule } from 'src/app/layout/layout.module';
-import {FormControl, Validators, FormsModule, ReactiveFormsModule, FormGroup} from '@angular/forms';
+import {FormControl, Validators, FormsModule, ReactiveFormsModule, FormGroup, AbstractControl, ValidationErrors} from '@angular/forms';
 import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { RoleEnum, StatusEnum } from 'src/app/models/userEnums.model';
@@ -14,6 +14,7 @@ import {MatSelectChange, MatSelectModule} from '@angular/material/select';
 import { UserGetDTO } from 'src/app/models/userGetDTO.model';
 import {MatSlideToggleChange, MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ThemePalette } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-account',
@@ -21,7 +22,7 @@ import { ThemePalette } from '@angular/material/core';
   styleUrls: ['./edit-account.component.css'],
   standalone: true,
   imports: [MatFormFieldModule, MatSelectModule,MatInputModule, MatIconModule,MatButtonModule,
-    MatSlideToggleModule,LayoutModule,FormsModule, ReactiveFormsModule],
+    MatSlideToggleModule,LayoutModule,FormsModule, ReactiveFormsModule,CommonModule],
 })
 export class EditAccountComponent implements OnInit { 
   user:UserGetDTO;
@@ -35,21 +36,21 @@ export class EditAccountComponent implements OnInit {
   ownerRepliedToRequestNotification:boolean=false;
 
   editAccountDataForm=new FormGroup({
-    name: new FormControl(),
-    surname:new FormControl(),
-    phoneNumber: new FormControl(),
-    address: new FormControl(),
-    username: new FormControl(),
-    password:new FormControl(),
-    confirmPassword:new FormControl(),
+    name: new FormControl('', Validators.required),
+    surname:new FormControl('', Validators.required),
+    phoneNumber: new FormControl('', [Validators.required, Validators.pattern(/^\d{10}$/)]),
+    address: new FormControl('', Validators.required),
+    username: new FormControl('', [Validators.required, Validators.email]),
+    password:new FormControl('', Validators.required),
+    confirmPassword:new FormControl('', Validators.required),
     status:new FormControl(),
-    role:new FormControl(),
+    role:new FormControl('', Validators.required),
     requestNotification:new FormControl(),
     cancellationNotification:new FormControl(),
     accommodationRatingNotification:new FormControl(),
     ownerRatingNotification:new FormControl(),
     ownerRepliedNotification:new FormControl(),
-  })
+  },{ validators: this.passwordMatchValidator })
   hide=true;
   constructor(private route:ActivatedRoute,
     private userService:UserService,private router: Router) {
@@ -59,7 +60,7 @@ export class EditAccountComponent implements OnInit {
       this.editAccountDataForm.get('accommodationRatingNotification')?.disable();
       this.editAccountDataForm.get('ownerRepliedNotification')?.disable();
      }
-  email = new FormControl('', [Validators.required, Validators.email]);
+//  email = new FormControl('', [Validators.required, Validators.email]);
   
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -80,34 +81,28 @@ export class EditAccountComponent implements OnInit {
     });
   }
 
-  getErrorMessage() {
-    if (this.email.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.email.hasError('email') ? 'Not a valid email' : '';
-  }
 
 
   saveChanges(){
 
   
         
-    const userRoleValue: string | undefined= this.editAccountDataForm.get('role')?.value;
+    const userRoleValue: string | undefined= this.editAccountDataForm.get('role')?.value ?? undefined;
     const userStatusValue: string | undefined= this.editAccountDataForm.get('status')?.value;
 
     if(userRoleValue!==undefined && userStatusValue!==undefined){
 
       const userRoleEnum: RoleEnum = RoleEnum[userRoleValue as keyof typeof RoleEnum];
       const userStatusEnum: StatusEnum = StatusEnum[userStatusValue as keyof typeof StatusEnum];
+      console.log("USERNAME--> ",this.editAccountDataForm.value.username )
       const changedUser: UserPutDTO = {
-        firstName: this.editAccountDataForm.value.name,
-        lastName:this.editAccountDataForm.value.surname,
-        phoneNumber: this.editAccountDataForm.value.phoneNumber,
-        address: this.editAccountDataForm.value.address,
-        username:this.editAccountDataForm.value.username,
-        password:this.editAccountDataForm.value.password,
-        passwordConfirmation:this.editAccountDataForm.value.confirmPassword,
+        firstName: this.editAccountDataForm.value.name ?? '',
+        lastName:this.editAccountDataForm.value.surname ?? '',
+        phoneNumber: this.editAccountDataForm.value.phoneNumber ?? '',
+        address: this.editAccountDataForm.value.address ?? '',
+        username:this.editAccountDataForm.value.username ?? '',
+        password:this.editAccountDataForm.value.password ?? '',
+        passwordConfirmation:this.editAccountDataForm.value.confirmPassword ?? '',
         status:userStatusEnum,
         role: userRoleEnum,
         reservationRequestNotification:this.reservationRequestNotification,
@@ -116,7 +111,7 @@ export class EditAccountComponent implements OnInit {
         accommodationRatingNotification:this.accommodationRatingNotification,
         ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
         deleted:false,
-        token:this.user.token
+        token:'',
       }
 
       this.userService.update(changedUser,changedUser.username).subscribe(
@@ -130,7 +125,7 @@ export class EditAccountComponent implements OnInit {
     }
 
     delete(){
-      const username=this.editAccountDataForm.value.username
+      const username=this.editAccountDataForm.value.username ?? ''
       this.userService.deleteUser(username).subscribe(
         {
           next: () => {
@@ -185,5 +180,16 @@ export class EditAccountComponent implements OnInit {
         this.editAccountDataForm.get('ownerRepliedNotification')?.disable();
       }
     }
+
+    passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+      const password = control.get('password')?.value;
+      const confirmPassword = control.get('confirmPassword')?.value;
+  
+      return password === confirmPassword ? null : { passwordMismatch: true };
+    }
+  
+    get isFormValid(): boolean {
+      return this.editAccountDataForm.valid;
+  }
 
 }
