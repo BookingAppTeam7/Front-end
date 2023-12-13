@@ -202,15 +202,15 @@ register(){
         address: this.createAccommodationForm.value.address,
         city: this.createAccommodationForm.value.city,
         country: this.createAccommodationForm.value.country,
-        x: this.createAccommodationForm.value.xCoordinate,
-        y: this.createAccommodationForm.value.yCoordinate
+        x: 0.0,
+        y: 0.0
       },
       minGuests: this.createAccommodationForm.value.minGuests,
       maxGuests: this.createAccommodationForm.value.maxGuests,
       type: (this.createAccommodationForm.value.type !== null && this.createAccommodationForm.value.type !== undefined) ? this.createAccommodationForm.value.type as AccommodationTypeEnum : null,
       assets: this.createAccommodationForm.get('amenities')?.value,
       //prices: this.prices,
-      ownerId: this.createAccommodationForm.value.ownerId,
+      ownerId: "tamara@gmail.com",//this.createAccommodationForm.value.ownerId,
       cancellationDeadline: this.createAccommodationForm.value.cancellationDeadline,
       images: []
     };

@@ -48,7 +48,7 @@ export class EditAccommodationComponent  implements OnInit{
 
   priceCards: PriceCard[];
   reservations:Reservation[]|undefined;
-  accommodationId:number=53;    //accommodation id 
+  accommodationId:number=68;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
   ownerId :String= "tamara@gmail.com"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
@@ -100,9 +100,9 @@ export class EditAccommodationComponent  implements OnInit{
         this.editAccommodationFormGroup.get('address')?.setValue(this.accommodation?.location?.address || '');
         this.editAccommodationFormGroup.get('country')?.setValue(this.accommodation?.location?.country || '');
         this.editAccommodationFormGroup.get('city')?.setValue(this.accommodation?.location?.city || '');
-        this.editAccommodationFormGroup.get('xCoordinate')?.setValue(this.accommodation?.location?.x || '');
+       //this.editAccommodationFormGroup.get('xCoordinate')?.setValue(this.accommodation?.location?.x || '');
         this.editAccommodationFormGroup.get('cancellationDeadline')?.setValue(this.accommodation?.cancellationDeadline || 0,{ emitEvent: false });
-        this.editAccommodationFormGroup.get('yCoordinate')?.setValue(this.accommodation?.location?.y || '');
+        //this.editAccommodationFormGroup.get('yCoordinate')?.setValue(this.accommodation?.location?.y || '');
         this.editAccommodationFormGroup.get('description')?.setValue(this.accommodation?.description || '');
         this.editAccommodationFormGroup.get('minGuests')?.setValue(this.accommodation?.minGuests || 0,{ emitEvent: false });
         this.editAccommodationFormGroup.get('maxGuests')?.setValue(this.accommodation?.maxGuests|| 0,{ emitEvent: false });
@@ -114,6 +114,7 @@ export class EditAccommodationComponent  implements OnInit{
         this.dataSource = new MatTableDataSource<PriceCard>(this.accommodation.prices);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
 
         this.reservationService.getByAccommodationId(this.accommodationId).subscribe(
           (reservations: Reservation[]|undefined) => {
@@ -447,8 +448,8 @@ updatePriceCard(updatedElement: PriceCard): void {
           address: this.editAccommodationFormGroup.value.address,
           city: this.editAccommodationFormGroup.value.city,
           country: this.editAccommodationFormGroup.value.country,
-          x: this.editAccommodationFormGroup.value.xCoordinate,
-          y: this.editAccommodationFormGroup.value.yCoordinate
+          x: this.accommodation.location.x,
+          y: this.accommodation.location.y
         },
         minGuests: this.editAccommodationFormGroup.value.minGuests,
         maxGuests: this.editAccommodationFormGroup.value.maxGuests,
