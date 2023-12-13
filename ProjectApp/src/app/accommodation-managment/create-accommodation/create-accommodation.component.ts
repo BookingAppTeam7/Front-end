@@ -181,6 +181,24 @@ export class CreateAccommodationComponent {
       return false;
     }
 
+    if (this.createAccommodationForm.get('address')?.value === '') {
+      console.error('Address is required.');
+      this.openSnackBar('Address is required.');
+      return false;
+      }
+    
+    if (this.createAccommodationForm.get('country')?.value === '') {
+      console.error('Country is required.');
+      this.openSnackBar('Country is required.');
+      return false;
+    }
+
+    if (this.createAccommodationForm.get('city')?.value === '') {
+      console.error('City is required.');
+      this.openSnackBar('City is required.');
+      return false;
+    }
+
     if ((minGuestsValue!=undefined && !isNaN(minGuestsValue)) || (maxGuestsValue!=undefined && !isNaN(maxGuestsValue))) {
       if(minGuestsValue!=null && maxGuestsValue!=null && minGuestsValue>maxGuestsValue){
         this.openSnackBar('Max num of guests must be above min number of guests.');

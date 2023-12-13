@@ -409,7 +409,24 @@ updatePriceCard(updatedElement: PriceCard): void {
       console.error('Description is required.');
       this.openSnackBar('Description is required.');
       return false;
-      }
+    }
+
+    if (this.editAccommodationFormGroup.get('country')?.value === '') {
+      console.error('Country is required.');
+      this.openSnackBar('Country is required.');
+      return false;
+    }
+    if (this.editAccommodationFormGroup.get('city')?.value === '') {
+      console.error('City is required.');
+      this.openSnackBar('City is required.');
+      return false;
+    }
+    if (this.editAccommodationFormGroup.get('address')?.value === '') {
+      console.error('Address is required.');
+      this.openSnackBar('Adress is required.');
+      return false;
+    }
+
     const minGuestsValue = this.editAccommodationFormGroup.get('minGuests')?.value;
     const maxGuestsValue = this.editAccommodationFormGroup.get('maxGuests')?.value;
     const cancellationDeadlineValue = this.editAccommodationFormGroup.get('cancellationDeadline')?.value;
