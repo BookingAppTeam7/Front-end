@@ -1,8 +1,7 @@
 <mat-card class="custom-card">
   <mat-card-content>
     <h2>{{accommodation.name}}</h2>
-    <p>{{accommodation.location}}</p>
-    <p>Price:{{accommodation.prices}}$</p>
+    <p>{{accommodation.location.country}}, {{accommodation.location.city}}</p>
     <img src="{{accommodation.images}}">
     <br>
     <button [routerLink]="['/accommodations', accommodation.id]">Show details</button>

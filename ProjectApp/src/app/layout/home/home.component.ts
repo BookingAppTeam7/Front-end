@@ -1,16 +1,105 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { AccommodationDataService } from 'src/app/accommodation/accommodation-data.service.module';
 import { AccommodationService } from 'src/app/accommodation/accommodation.service';
 import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
+import { AccommodationDetails } from 'src/app/accommodation/accommodation/model/accommodationDetails.model';
+
 
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-
+ 
 })
 export class HomeComponent {
    accommodationList: Accommodation[] = []
+   searchedAccommodations: AccommodationDetails[] | undefined
+   constructor(private service: AccommodationService, private snackBar:MatSnackBar, private fb: FormBuilder,
+    private dataService: AccommodationDataService,private router: Router) {
+  }
+  ngOnInit(): void {
+    this.service.getAll().subscribe({
+       next: (data: Accommodation[]) => {
+        this.accommodationList = data
+       },
+      error: (_) => {console.log("Greska!")}
+     })
+  }
+  searchAccommodationForm = this.fb.group({
+    city: ['', Validators.required],
+    guests: [0, [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0)]],
+    startDate: [null, Validators.required],
+    endDate: [null, Validators.required]
+  }, { validators: this.dateValidator });
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+    });
+  }
+  dateValidator(formGroup: FormGroup) {
+    const startDate = formGroup.get('startDate')?.value;
+    const endDate = formGroup.get('endDate')?.value;
+
+    if (startDate && endDate && startDate >= endDate) {
+      formGroup.get('endDate')?.setErrors({ dateRange: true });
+    } else {
+      formGroup.get('endDate')?.setErrors(null);
+    }
+
+    if (startDate && endDate && startDate < new Date()) {
+      formGroup.get('startDate')?.setErrors({ pastDate: true });
+    } else {
+      formGroup.get('startDate')?.setErrors(null);
+    }
+
+    if (endDate && endDate < new Date()) {
+      formGroup.get('endDate')?.setErrors({ pastDate: true });
+    } else {
+      formGroup.get('endDate')?.setErrors(null);
+    }
+
+    return null;
+  }
+
+  formValidation():boolean{
+    if (this.searchAccommodationForm.get('city')?.value === '') {
+      console.error('City is required.');
+      this.openSnackBar('Accommodation name is required.');
+      return false;
+    }
+    
+    const guestsValue = this.searchAccommodationForm.get('guests')?.value;
+
+    if (guestsValue!=undefined && isNaN(guestsValue)) {
+      console.error('Please enter valid number for guests');
+      this.openSnackBar('Please enter valid number for guests');
+      return false;
+    }
+    return true;
+  }
+
+  searchAccommodations() {
+    this.service.search(
+      this.searchAccommodationForm.get('city')?.value,
+      this.searchAccommodationForm.get('guests')?.value,
+      this.searchAccommodationForm.get('startDate')?.value,
+      this.searchAccommodationForm.get('endDate')?.value
+    ).subscribe({
+      next: (data: AccommodationDetails[]) => {
+        this.dataService.updateSearchedAccommodations(data);
+        this.router.navigate(['/searched-accommodation-cards']);
+      },
+      error: (error) => {
+        console.error('Error fetching accommodations:', error);
+      }
+    });
+  }
+  }
 //     id: 1,
 //     name: 'Cozy Cottage',
 //     description: "Escape to a charming cottage near the countryside where tranquility meets comfort. This cozy retreat is designed to provide a warm and inviting atmosphere for your stay. Surrounded by nature, the Cozy Cottage offers a perfect blend of rustic charm and modern amenities. Whether you're looking for a romantic getaway or a family vacation, this retreat in Rural Retreat, USA, promises a delightful experience for a minimum of 2 and a maximum of 4 guests. The accommodation is currently available for booking at a price of $150.0 per night, with a commendable rating of 4.4.",
@@ -107,14 +196,5 @@ export class HomeComponent {
 //     rating: 3.3
 //   }
 // ];
-constructor(private service: AccommodationService) {
-}
-ngOnInit(): void {
-  // this.service.getAll().subscribe({
-  //   next: (data: Accommodation[]) => {
-  //     this.accommodationList = data
-  //   },
-  //   error: (_) => {console.log("Greska!")}
-  // })
-}
-}
+
+
