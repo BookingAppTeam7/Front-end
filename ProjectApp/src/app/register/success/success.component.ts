@@ -50,7 +50,8 @@ export class SuccessComponent{
             accommodationRatingNotification: user.accommodationRatingNotification, 
             ownerRepliedToRequestNotification: user.ownerRepliedToRequestNotification, 
             deleted: user.deleted,
-            token: user.token
+            token: user.token,
+            jwt:user.jwt
           };
 
           // Update the user using the UserService

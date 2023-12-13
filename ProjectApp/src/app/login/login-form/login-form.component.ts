@@ -5,22 +5,35 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import { Router } from '@angular/router';
 import { ViewChild, ElementRef } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Login } from 'src/app/auth/model/login.model';
+import { AuthService } from 'src/app/auth/auth.service';
+import { AuthResponse } from 'src/app/auth/model/auth-resposne.model';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css'],
   standalone:true,
-  imports:[MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatIconModule],
+  imports:[MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatIconModule,ReactiveFormsModule],
 })
 
 export class LoginFormComponent {
+
+  constructor(private authService: AuthService,
+    private router: Router) {
+
+}
   hide=true;
   @ViewChild('usernameInput') usernameInput!: ElementRef;
   @ViewChild('passwordInput') passwordInput!: ElementRef;
 
+  loginForm = new FormGroup({
+    username: new FormControl(),
+    password: new FormControl()
+  })
   
-  constructor(private router: Router) { }
   navigateToHome() {
 
     const username = this.usernameInput.nativeElement.value;
@@ -33,6 +46,26 @@ export class LoginFormComponent {
 
     
   }
+
+  login(): void {
+    console.log("USAOOOO LOGGGG VESNA")
+    if(this.loginForm.valid) {
+      const login: Login = {
+        username: this.loginForm.value.username || "",
+        password: this.loginForm.value.password || ""
+      }
+      console.log("USAOOOO LOGGGG VESNICCAAAAAAA 57")
+      this.authService.login(login).subscribe({
+        next: (response: AuthResponse) => {
+          console.log("TOKEEEEN : ",response.token)
+          localStorage.setItem('user', response.token);
+          this.authService.setUser()
+          this.router.navigate(['home'])
+        }
+      })
+    }
+  }
+
 
   register(){
     this.router.navigate(['register'])

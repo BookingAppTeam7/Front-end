@@ -16,4 +16,5 @@ export interface UserGetDTO {
     ownerRepliedToRequestNotification:boolean,
     deleted:boolean,
     token:string;
+    jwt:string;
   }
