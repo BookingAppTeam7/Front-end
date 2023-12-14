@@ -8,6 +8,9 @@ import { Accommodation } from './accommodation/model/accommodation.model';
 import { HttpHeaders } from '@angular/common/http';
 import { AccommodationStatusEnum } from '../models/enums/accommodationStatusEnum';
 import { HttpParams } from '@angular/common/http';
+import { AccommodationDetails } from './accommodation/model/accommodationDetails.model';
+import { formatDate } from '@angular/common';
+import { AccommodationTypeEnum } from '../models/enums/accommodationTypeEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +27,19 @@ export class AccommodationService {
       { headers: headers }
     );
   }
-
+  getAll():Observable<Accommodation[]>{
+    return this.httpClient.get<Accommodation[]>(environment.apiHost+'accommodations');
+  }
   getById(id: number): Observable<Accommodation | undefined> {
     return this.httpClient.get<Accommodation>(environment.apiHost + 'accommodations/' + id);
   }
-
+  search(params: HttpParams):Observable<AccommodationDetails[]>{
+    console.log(params);
+    return this.httpClient.get<AccommodationDetails[]>(environment.apiHost+'accommodations/search',{params});
+  }
+  filter(params: HttpParams): Observable<AccommodationDetails[]> {
+    return this.httpClient.get<AccommodationDetails[]>(environment.apiHost + 'accommodations/filter', { params });
+  }
   getByStatus(status: AccommodationStatusEnum): Observable<Accommodation[] | undefined> {
     return this.httpClient.get<Accommodation[]>(environment.apiHost + 'accommodations/status/' + status);
   }

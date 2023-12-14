@@ -14,6 +14,8 @@ import { CreateReservationComponent } from './reservation-managment/create-reser
 import { EditReservationComponent } from './reservation-managment/edit-reservation/edit-reservation.component';
 import { SuccessComponent } from './register/success/success.component';
 import { AccommodationRequestsComponent } from './accommodation-managment/accommodation-requests/accommodation-requests.component';
+import { SearchedAccommodationCardsComponent } from './accommodation-managment/searched-accommodation-cards/searched-accommodation-cards.component';
+import { SearchedAccommodationComponent } from './accommodation-managment/searched-accommodation/searched-accommodation.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -28,7 +30,9 @@ const routes: Routes = [
   {component:AccommodationCardsComponent,path:"accommodation-cards"},
   {component: AccommodationDetailsComponent ,path: 'accommodations/:id'},
   {component:UsersViewComponent,path:'users-view'},
-  {component:AccommodationRequestsComponent,path:'accommodationsRequests'}
+  {component:AccommodationRequestsComponent,path:'accommodationsRequests'},
+  {component:SearchedAccommodationCardsComponent,path:'searched-accommodation-cards'},
+  {component:SearchedAccommodationComponent,path:'searched-accommodation'}
 ];
 
 @NgModule({

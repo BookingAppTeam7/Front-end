@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccommodationModule } from './accommodation/accommodation.module';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MaterialModule } from './infrastructure/material/material.module';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     FlexLayoutModule,
     MatDatepickerModule,
     MatDialogModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

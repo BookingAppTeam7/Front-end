@@ -7,6 +7,16 @@ import {MaterialModule} from "../infrastructure/material/material.module";
 import { FooterComponent } from './footer/footer.component';
 import {RouterModule} from "@angular/router";
 import { AccommodationComponent } from '../accommodation/accommodation/accommodation.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatRadioModule } from '@angular/material/radio';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -24,7 +34,20 @@ import { AccommodationComponent } from '../accommodation/accommodation/accommoda
   imports: [
     CommonModule,
     MaterialModule,
-    RouterModule
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatInputModule, 
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatSnackBarModule
   ]
 })
 export class LayoutModule { }
