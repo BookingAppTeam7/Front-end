@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -19,22 +19,34 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PriceCardService } from 'src/app/accommodation/priceCard.service';
 import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
-
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-create-accommodation',
   templateUrl: './create-accommodation.component.html',
   styleUrls: ['./create-accommodation.component.css'],
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatChipsModule,MatRadioModule,LayoutModule,ReactiveFormsModule,MatDatepickerModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,MatButtonModule,MatSnackBarModule],
+  imports: [CommonModule,MatTableModule,MatPaginatorModule,MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatChipsModule,MatRadioModule,LayoutModule,ReactiveFormsModule,MatDatepickerModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,MatButtonModule,MatSnackBarModule],
 })
 export class CreateAccommodationComponent {
 
   prices:PriceCard[]
   accommodationTypeEnum = AccommodationTypeEnum;
+
+  dataSource = new MatTableDataSource<PriceCard>([]);
+  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(private accommodationService:AccommodationService,private snackBar:MatSnackBar,private priceCardService:PriceCardService) {}
 
   ngOnInit() {
      this.prices = [];
+     this.dataSource = new MatTableDataSource<PriceCard>(this.prices);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
   }
 
   createAccommodationForm=new FormGroup({
@@ -142,6 +154,7 @@ export class CreateAccommodationComponent {
         };
         if (this.validatePriceCard(newPriceCard)) {
           this.prices.push(newPriceCard);
+          this.dataSource.data=this.prices;
         } else {
           this.openSnackBar("Price for this timeslot is already defined!")
         }
@@ -153,6 +166,15 @@ export class CreateAccommodationComponent {
     this.snackBar.open(message, 'OK', {
       duration: 3000,
     });
+  }
+
+  getTypeString(type: number): string {
+    switch (type) {
+      case 0:
+        return 'PERGUEST';
+      default:
+        return 'PERUNIT';
+    }
   }
 
   formValidation():boolean{

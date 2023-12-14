@@ -48,7 +48,7 @@ export class EditAccommodationComponent  implements OnInit{
 
   priceCards: PriceCard[];
   reservations:Reservation[]|undefined;
-  accommodationId:number=68;    //accommodation id 
+  accommodationId:number=70;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
   ownerId :String= "tamara@gmail.com"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
