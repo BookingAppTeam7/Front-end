@@ -1,7 +1,9 @@
 <div class="details-container">
   <div class="heading">
     <h2>{{ accommodation?.name }}</h2>
-    <img src="{{ accommodation?.images }}" alt="{{ accommodation?.name }} Image" style="margin-right:200px ;">
+    <div *ngIf="accommodation && accommodation.images && accommodation.images.length > 0">
+      <img [src]="accommodation?.images?.[0]" alt="{{ accommodation?.name }} Image">
+    </div>
   </div>
     
     <div class="content">
@@ -12,11 +14,14 @@
     <!--<p><strong>Rating:</strong> {{accommodation.rating}}</p>-->
     <p><strong>Assets:</strong></p>
     <div class="options-container">
-      <div class="custom-chip">Free Wi-Fi</div>
-      <div class="custom-chip">Free Parking</div>
-      <div class="custom-chip">Air conditioner</div>
-      <div class="custom-chip">Kitchen</div>
-  </div>
+      <div *ngFor="let asset of accommodation?.assets" class="custom-chip">{{ asset }}</div>
+    </div>
+
+  <p><strong>Additional Images:</strong></p>
+    <!-- Iterate over all images starting from index 1 -->
+    <div class="image-container" *ngIf="accommodation && accommodation?.images && accommodation.images.length > 1">
+      <div *ngFor="let image of accommodation.images.slice(1); let i = index" class="image-thumbnail" [style.backgroundImage]="'url(' + image + ')'" [attr.alt]="accommodation?.name + ' Image ' + (i + 1)"></div>
+    </div>
     <button (click)="goBack()" style="margin-top: 3%;margin-left: 80%;"><mat-icon>arrow_back</mat-icon></button>
     </div>
   </div>

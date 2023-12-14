@@ -8,13 +8,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-accommodation-details',
   templateUrl: './accommodation-details.component.html',
   styleUrls: ['./accommodation-details.component.css'],
   standalone:true,
-  imports:[MatChipsModule,MatIconModule,MatInputModule,MatFormFieldModule,MatButtonModule,MatListModule],
+  imports:[MatChipsModule,MatIconModule,MatInputModule,MatFormFieldModule,MatButtonModule,MatListModule,CommonModule],
 })
 export class AccommodationDetailsComponent implements OnInit{
   accommodation: Accommodation | undefined;
@@ -44,6 +45,10 @@ export class AccommodationDetailsComponent implements OnInit{
   }
   goBack() {
     this.router.navigate(['/home']);
+  }
+  // Add a getter to explicitly check for non-null images
+  get accommodationImages(): string[] | undefined {
+    return this.accommodation?.images;
   }
 }
 
