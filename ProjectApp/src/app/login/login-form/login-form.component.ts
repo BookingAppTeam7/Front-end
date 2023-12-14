@@ -57,8 +57,8 @@ export class LoginFormComponent {
       console.log("USAOOOO LOGGGG VESNICCAAAAAAA 57")
       this.authService.login(login).subscribe({
         next: (response: AuthResponse) => {
-          console.log("TOKEEEEN : ",response.token)
-          localStorage.setItem('user', response.token);
+          console.log("TOKEEEEN : ",response.jwt)
+          localStorage.setItem('user', response.jwt);
           this.authService.setUser()
           this.router.navigate(['home'])
         }

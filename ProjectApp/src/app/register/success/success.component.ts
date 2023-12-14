@@ -51,7 +51,7 @@ export class SuccessComponent{
             ownerRepliedToRequestNotification: user.ownerRepliedToRequestNotification, 
             deleted: user.deleted,
             token: user.token,
-            jwt:user.jwt
+          //  jwt:user.jwt
           };
 
           // Update the user using the UserService

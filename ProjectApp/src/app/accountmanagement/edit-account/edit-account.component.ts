@@ -155,13 +155,14 @@ if (decodedToken) {
     const userStatusValue: string | undefined= this.editAccountDataForm.get('status')?.value;
     const userGet =this.userService.getById(this.editAccountDataForm.value.username?? '');
    
-    userGet.pipe(
-      tap((user: UserGetDTO) => {
-        // Extract the JWT token from the user and set it in another property
-        const jwtToken = user.jwt;
-        // Assuming you have a property named jwt in your component, set it like this
-        this.jwt = jwtToken;
-      }))
+    // userGet.pipe(
+    //   tap((user: UserGetDTO) => {
+    //     // Extract the JWT token from the user and set it in another property
+    //     const jwtToken = user.jwt;
+    //     console.log("U EDIT ACCCOUNT ----> jwt jeee: " ,  user.jwt);
+    //     // Assuming you have a property named jwt in your component, set it like this
+    //     this.jwt = jwtToken;
+    //   }))
 
     if(userRoleValue!==undefined && userStatusValue!==undefined){
 
@@ -186,7 +187,7 @@ if (decodedToken) {
         ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
         deleted:false,
         token:'',
-        jwt:this.jwt
+        //jwt:this.jwt
       }
 
       this.userService.update(changedUser,changedUser.username).subscribe(
