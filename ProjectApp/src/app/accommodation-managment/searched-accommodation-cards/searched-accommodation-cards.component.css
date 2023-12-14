@@ -1,3 +1,6 @@
+*{
+  font-size: medium;
+}
 .card-container {
     display: flex;
     flex-wrap: wrap; 
@@ -12,6 +15,17 @@
     box-sizing: border-box;
     height:100%;
   }
+  .type-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1%;
+    align-items: center;
+}
+.options-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1%;
+}
   mat-card-content {
     display: flex;
     flex-direction: column;
@@ -47,7 +61,9 @@
     cursor: pointer;
     transition: background-color 0.3s ease; /* Smooth transition on hover */
   }
-  
+  mat-form-field {
+    flex: 1; 
+  }
   button:hover {
     background-color: #0056b3; /* Darker blue color on hover */
   }
@@ -60,7 +76,15 @@
     border: 1px solid #ddd; /* Ivica */
     overflow: hidden; /* Skrivanje ivica slike ako je veća od kartice */
   }
-  
+  .input-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+}
   .custom-card img {
     max-width: 100%; /* Da bi se slika prilagodila širini kartice */
     height: auto; /* Automatska visina kako bi se očuvali proporcije */

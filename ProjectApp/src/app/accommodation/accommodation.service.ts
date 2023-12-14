@@ -10,6 +10,7 @@ import { AccommodationStatusEnum } from '../models/enums/accommodationStatusEnum
 import { HttpParams } from '@angular/common/http';
 import { AccommodationDetails } from './accommodation/model/accommodationDetails.model';
 import { formatDate } from '@angular/common';
+import { AccommodationTypeEnum } from '../models/enums/accommodationTypeEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,18 @@ export class AccommodationService {
     .set('checkout', formatDate(endDate, 'yyyy-MM-dd', 'en-US'));
     console.log(params);
     return this.httpClient.get<AccommodationDetails[]>(environment.apiHost+'accommodations/search',{params});
+  }
+  filter(accommodations: string, assets: string[], type: AccommodationTypeEnum, minPrice: number, maxPrice: number): Observable<AccommodationDetails[]> {
+    const assetsString = assets.join(',');
+  
+    const params = new HttpParams()
+      .set('searched', accommodations)
+      .set('assets', assetsString)
+      .set('type', type.toString())
+      .set('minTotalPrice', minPrice.toString())
+      .set('maxTotalPrice', maxPrice.toString());
+  
+    return this.httpClient.get<AccommodationDetails[]>(environment.apiHost + 'accommodations/filter', { params });
   }
   getByStatus(status: AccommodationStatusEnum): Observable<Accommodation[] | undefined> {
     return this.httpClient.get<Accommodation[]>(environment.apiHost + 'accommodations/status/' + status);
