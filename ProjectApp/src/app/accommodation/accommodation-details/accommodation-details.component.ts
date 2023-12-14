@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AccommodationDetailsComponent implements OnInit{
   accommodation: Accommodation | undefined;
-
+  availableDates: Date[] = [];
   constructor(
     private route:ActivatedRoute,
     private router:Router,
@@ -33,6 +33,7 @@ export class AccommodationDetailsComponent implements OnInit{
         (foundAccommodation) => {
           if (foundAccommodation) {
             this.accommodation = foundAccommodation;
+            this.availableDates = this.extractAvailableDates();
           } else {
             console.error(`Accommodation with ID ${accommodationId} not found`);
           }
@@ -50,6 +51,35 @@ export class AccommodationDetailsComponent implements OnInit{
   get accommodationImages(): string[] | undefined {
     return this.accommodation?.images;
   }
+  private extractAvailableDates(): Date[] {
+    let dates: Date[] = [];
+    if (this.accommodation && this.accommodation.prices) {
+      for (const priceCard of this.accommodation.prices) {
+        if (priceCard.timeSlot && priceCard.timeSlot.startDate && priceCard.timeSlot.endDate) {
+          const startDate = new Date(priceCard.timeSlot.startDate);
+          const endDate = new Date(priceCard.timeSlot.endDate);
+          startDate.setDate(startDate.getDate()-1);
+          endDate.setDate(endDate.getDate()-1);
+          while (startDate <= endDate) {
+            dates.push(new Date(startDate));
+            startDate.setDate(startDate.getDate() + 1);
+          }
+        }
+      }
+    }
+    return dates;
+  }
+
+  isDateAvailable(date: Date): boolean {
+    return this.availableDates.some((availableDate) => this.isSameDate(date, availableDate));
+  }
+
+  private isSameDate(date1: Date, date2: Date): boolean {
+    return date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
+  }
+
 }
 
 

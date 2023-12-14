@@ -22,6 +22,28 @@
     <div class="image-container" *ngIf="accommodation && accommodation?.images && accommodation.images.length > 1">
       <div *ngFor="let image of accommodation.images.slice(1); let i = index" class="image-thumbnail" [style.backgroundImage]="'url(' + image + ')'" [attr.alt]="accommodation?.name + ' Image ' + (i + 1)"></div>
     </div>
+
+    
+    
     <button (click)="goBack()" style="margin-top: 3%;margin-left: 80%;"><mat-icon>arrow_back</mat-icon></button>
+    </div>
+    
+  </div>
+  <br>
+  <p style="padding-left:25px;"><strong>Reviews:</strong></p>
+    <div *ngFor="let review of accommodation?.reviews">
+      <div class="review">
+        <p><strong>User ID:</strong> {{ review.userId }}</p>
+        <p><strong>Reviewing </strong> {{ review.type }}</p>
+        <p><strong>Comment:</strong> {{ review.comment }}</p>
+        <p><strong>Grade:</strong> {{ review.grade }}</p>
+        <p><strong>Date:</strong> {{ review.dateTime | date:'medium' }}</p>
+      </div>
+    </div>
+
+    <p><strong>Available Dates for Reservation:</strong></p>
+  <div class="calendar">
+    <div *ngFor="let date of availableDates" class="calendar-day" [class.available]="isDateAvailable(date)">
+      {{ date | date:'shortDate' }}
     </div>
   </div>
