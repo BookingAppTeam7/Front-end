@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,7 +36,8 @@ export class SearchedAccommodationCardsComponent implements OnInit{
   ngOnInit(): void {
     this.dataService.searchedAccommodations$.subscribe((data) => {
       this.accommodationList = data;
-      console.log(this.accommodationList[0]);
+      this.filteredAccommodations=data;
+      console.log(this.accommodationList);
     });
   }
   showDetails(accommodation: AccommodationDetails) {
@@ -43,18 +45,38 @@ export class SearchedAccommodationCardsComponent implements OnInit{
     this.router.navigate(['/accommodations', accommodation.accommodation.id]);
   }
   filterData(){
-    const type = this.filterAccommodationForm.get('type')?.value;
+    const type = this.filterAccommodationForm.get('type')?.value || "";
   const amenities = this.filterAccommodationForm.get('amenities')?.value || [];
-  const minPrice = this.filterAccommodationForm.get('minPrice')?.value ?? 0;
-  const maxPrice = this.filterAccommodationForm.get('maxPrice')?.value ?? 0;
+  const minPrice = this.filterAccommodationForm.get('minPrice')?.value;
+  const maxPrice = this.filterAccommodationForm.get('maxPrice')?.value;
 
   console.log('Selected type:', type);
   console.log('Selected amenities:', amenities.join(','));
   console.log('Minimum price:', minPrice);
   console.log('Maximum price:', maxPrice);
-    console.log(JSON.stringify(this.accommodationList));
-  this.accommodationService
-    .filter(JSON.stringify(this.accommodationList), amenities, type, minPrice, maxPrice)
+
+  // Build the HttpParams conditionally
+  let params = new HttpParams().set('searched', JSON.stringify(this.accommodationList));
+
+  if (type) {
+    params = params.set('type', type.toString());
+  }
+
+  if (minPrice !== null && minPrice !== undefined) {
+    params = params.set('minTotalPrice', minPrice.toString());
+  }
+
+  if (maxPrice !== null && maxPrice !== undefined) {
+    params = params.set('maxTotalPrice', maxPrice.toString());
+  }
+
+  if (amenities.length > 0) {
+    const assetsString = amenities.join(',');
+    params = params.set('assets', assetsString);
+  }
+
+  // Make the API call with the constructed params
+  this.accommodationService.filter(params)
     .subscribe(
       (filteredAccommodations) => {
         this.filteredAccommodations = filteredAccommodations;

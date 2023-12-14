@@ -33,25 +33,11 @@ export class AccommodationService {
   getById(id: number): Observable<Accommodation | undefined> {
     return this.httpClient.get<Accommodation>(environment.apiHost + 'accommodations/' + id);
   }
-  search(city: string, guests: number, startDate: Date, endDate:Date):Observable<AccommodationDetails[]>{
-    const params = new HttpParams()
-    .set('city', city)
-    .set('guests', guests.toString())
-    .set('arrival', formatDate(startDate, 'yyyy-MM-dd', 'en-US'))
-    .set('checkout', formatDate(endDate, 'yyyy-MM-dd', 'en-US'));
+  search(params: HttpParams):Observable<AccommodationDetails[]>{
     console.log(params);
     return this.httpClient.get<AccommodationDetails[]>(environment.apiHost+'accommodations/search',{params});
   }
-  filter(accommodations: string, assets: string[], type: AccommodationTypeEnum, minPrice: number, maxPrice: number): Observable<AccommodationDetails[]> {
-    const assetsString = assets.join(',');
-  
-    const params = new HttpParams()
-      .set('searched', accommodations)
-      .set('assets', assetsString)
-      .set('type', type.toString())
-      .set('minTotalPrice', minPrice.toString())
-      .set('maxTotalPrice', maxPrice.toString());
-  
+  filter(params: HttpParams): Observable<AccommodationDetails[]> {
     return this.httpClient.get<AccommodationDetails[]>(environment.apiHost + 'accommodations/filter', { params });
   }
   getByStatus(status: AccommodationStatusEnum): Observable<Accommodation[] | undefined> {

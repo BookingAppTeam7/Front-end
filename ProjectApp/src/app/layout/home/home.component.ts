@@ -1,3 +1,5 @@
+import { formatDate } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -30,10 +32,10 @@ export class HomeComponent {
      })
   }
   searchAccommodationForm = this.fb.group({
-    city: ['', Validators.required],
-    guests: [0, [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0)]],
+    city: [''],
+    guests: [0, [Validators.pattern('^[0-9]+$'), Validators.min(1)]],
     startDate: [null, Validators.required],
-    endDate: [null, Validators.required]
+    endDate: [null, Validators.required],
   }, { validators: this.dateValidator });
 
   openSnackBar(message: string) {
@@ -67,36 +69,51 @@ export class HomeComponent {
   }
 
   formValidation():boolean{
-    if (this.searchAccommodationForm.get('city')?.value === '') {
-      console.error('City is required.');
-      this.openSnackBar('Accommodation name is required.');
-      return false;
-    }
+    //if (this.searchAccommodationForm.get('city')?.value === '') {
+    //  console.error('City is required.');
+    //  this.openSnackBar('Accommodation name is required.');
+    //  return false;
+    //}
     
     const guestsValue = this.searchAccommodationForm.get('guests')?.value;
-
+    console.log(guestsValue);
     if (guestsValue!=undefined && isNaN(guestsValue)) {
       console.error('Please enter valid number for guests');
       this.openSnackBar('Please enter valid number for guests');
       return false;
-    }
+    }else if(guestsValue!=undefined && guestsValue<=0)
+      return false;
+
     return true;
   }
 
   searchAccommodations() {
-    this.service.search(
-      this.searchAccommodationForm.get('city')?.value,
-      this.searchAccommodationForm.get('guests')?.value,
-      this.searchAccommodationForm.get('startDate')?.value,
-      this.searchAccommodationForm.get('endDate')?.value
-    ).subscribe({
+    if (!this.formValidation()) {
+      return;
+    }
+
+    const city = this.searchAccommodationForm.get('city')?.value;
+    const guests = this.searchAccommodationForm.get('guests')?.value;
+    const startDate = this.searchAccommodationForm.get('startDate')?.value;
+    const endDate = this.searchAccommodationForm.get('endDate')?.value;
+
+    let params = new HttpParams()
+      .set('arrival', formatDate(startDate, 'yyyy-MM-dd', 'en-US'))
+      .set('checkout', formatDate(endDate, 'yyyy-MM-dd', 'en-US'))
+      .set('guests', guests.toString());
+
+    if (city) {
+      params = params.set('city', city);
+    }
+
+    this.service.search(params).subscribe({
       next: (data: AccommodationDetails[]) => {
         this.dataService.updateSearchedAccommodations(data);
         this.router.navigate(['/searched-accommodation-cards']);
       },
       error: (error) => {
         console.error('Error fetching accommodations:', error);
-      }
+      },
     });
   }
   }
