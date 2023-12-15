@@ -33,7 +33,9 @@ import { ReservationService } from 'src/app/models/reservation/reservation.servi
 import { PriceCardPostDTO } from 'src/app/models/dtos/priceCardPostDTO.model';
 import { AccommodationStatusEnum } from 'src/app/models/enums/accommodationStatusEnum';
 import { AccommodationReviewDialogComponent } from '../accommodation-review-dialog/accommodation-review-dialog.component';
-
+import { AccommodationRequestService } from '../accommodationRequestService';
+import { AccommodationRequestStatus } from 'src/app/models/enums/accommodationRequestStatus';
+import { AccommodationRequest } from 'src/app/accommodation/accommodation/model/accommodationRequest.model';
 @Component({
   selector: 'app-accommodation-requests',
   templateUrl: './accommodation-requests.component.html',
@@ -46,17 +48,16 @@ export class AccommodationRequestsComponent implements OnInit{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private accommodationService:AccommodationService,private dialog:MatDialog){}
-  displayedColumns: string[] = ['Id', 'Name', 'Type', 'Status','actions'];
-  dataSource = new MatTableDataSource<Accommodation>([]);
+  constructor(private accommodationService:AccommodationService,private dialog:MatDialog,private requestsService:AccommodationRequestService){}
+  displayedColumns: string[] = ['Id', 'Status','actions'];
+  dataSource = new MatTableDataSource<AccommodationRequest>([]);
   accommodations:Accommodation[] | undefined;
   
 
   ngOnInit(): void {
-    this.accommodationService.getByStatus(AccommodationStatusEnum.PENDING).subscribe(
-      (accommodations: Accommodation[] | undefined) => {
-        this.accommodations = accommodations;
-        this.dataSource.data = accommodations || [];
+    this.requestsService.getByTwoStatuses(AccommodationRequestStatus.PENDING_CREATED,AccommodationRequestStatus.PENDING_EDITED).subscribe(
+      (requests: AccommodationRequest[] | undefined) => {
+        this.dataSource.data = requests || [];
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
@@ -64,29 +65,29 @@ export class AccommodationRequestsComponent implements OnInit{
         console.error('Error getting accommodations:', error);
       }
     );
+    
   }
 
-  openReviewDialog(originalElement: Accommodation): void {
-
-    const dialogRef = this.dialog.open(AccommodationReviewDialogComponent, {
-      width: '800px', 
-      data: {element:JSON.parse(JSON.stringify(originalElement)) }, //Deep copy
-    });
-
-    dialogRef.afterClosed().subscribe((updatedElement: Accommodation | string) => {
-      this.accommodationService.getByStatus(AccommodationStatusEnum.PENDING).subscribe(
-        (accommodations: Accommodation[] | undefined) => {
-          this.accommodations = accommodations;
-          this.dataSource.data = accommodations || [];
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+  openReviewDialog(originalElement: AccommodationRequest): void {
+    this.accommodationService.getById(originalElement.unapprovedAccommodationId)
+      .subscribe(
+        (response) => {
+          console.log(response)
+          const dialogRef = this.dialog.open(AccommodationReviewDialogComponent, {
+            width: '800px', 
+            data: {
+              element: response, // Dodajte Accommodation objekt u data
+              requestId:originalElement.id
+            },
+          });
         },
         (error) => {
-          console.error('Error getting accommodations:', error);
+          console.error('Error fetching accommodation:', error);
         }
       );
-    });
-}
+  }
+
+  
 
 
 }
