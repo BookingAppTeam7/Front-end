@@ -56,10 +56,9 @@ export class LoginFormComponent {
         username: this.loginForm.value.username || "",
         password: this.loginForm.value.password || ""
       }
-      console.log("USAOOOO LOGGGG VESNICCAAAAAAA 57")
+      //console.log("USAOOOO LOGGGG VESNICCAAAAAAA 57")
       this.authService.login(login).subscribe({
         next: (response: AuthResponse) => {
-          console.log("TOKEEEEN : ",response.jwt)
           localStorage.setItem('user', response.jwt);
           this.authService.setUser()
           this.router.navigate(['home'])
@@ -68,7 +67,7 @@ export class LoginFormComponent {
 
           console.error('Failed to login ',error);
           this.snackBar.open('Failed login. Please check the username and password', 'Close', {
-            duration: 5000, // Trajanje poruke u milisekundama
+            duration: 5000, 
           });
         }
       })

@@ -27,4 +27,6 @@ import { AccommodationComponent } from '../accommodation/accommodation/accommoda
     RouterModule
   ]
 })
-export class LayoutModule { }
+export class LayoutModule {
+
+ }

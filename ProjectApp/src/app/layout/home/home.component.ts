@@ -11,6 +11,8 @@ import { Accommodation } from 'src/app/accommodation/accommodation/model/accommo
 })
 export class HomeComponent {
    accommodationList: Accommodation[] = []
+  
+
 //     id: 1,
 //     name: 'Cozy Cottage',
 //     description: "Escape to a charming cottage near the countryside where tranquility meets comfort. This cozy retreat is designed to provide a warm and inviting atmosphere for your stay. Surrounded by nature, the Cozy Cottage offers a perfect blend of rustic charm and modern amenities. Whether you're looking for a romantic getaway or a family vacation, this retreat in Rural Retreat, USA, promises a delightful experience for a minimum of 2 and a maximum of 4 guests. The accommodation is currently available for booking at a price of $150.0 per night, with a commendable rating of 4.4.",
@@ -110,6 +112,8 @@ export class HomeComponent {
 constructor(private service: AccommodationService) {
 }
 ngOnInit(): void {
+
+ 
   // this.service.getAll().subscribe({
   //   next: (data: Accommodation[]) => {
   //     this.accommodationList = data
