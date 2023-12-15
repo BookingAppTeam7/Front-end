@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   logout(): void {
-     this.http.get(environment.apiHost + 'logout', {
+     this.http.get(environment.apiHost + 'logOut', {
 
       responseType: 'text',
     }).subscribe({
@@ -38,6 +38,7 @@ export class AuthService {
         localStorage.removeItem('user');
       }
     });
+    localStorage.removeItem('user');
   }
   
 

@@ -10,5 +10,6 @@
     <button [routerLink]="['register']" style="float: right" mat-raised-button color="">Register</button>
     <button [routerLink]="['login']" style="float: right" mat-raised-button color="">Log in</button>
     <button [routerLink]="['home']"  style="float: right" mat-raised-button color="">Home</button>
+    <button  [routerLink]="['home']" (click)="logout()" style="float: right" mat-raised-button color="">Log out</button>
   </div>
 </mat-toolbar>
