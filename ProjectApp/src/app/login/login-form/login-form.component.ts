@@ -10,22 +10,23 @@ import { Login } from 'src/app/auth/model/login.model';
 import { AuthService } from 'src/app/auth/auth.service';
 import { AuthResponse } from 'src/app/auth/model/auth-resposne.model';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css'],
   standalone:true,
-  imports:[MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatIconModule,ReactiveFormsModule],
+  imports:[MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatIconModule,ReactiveFormsModule,
+  MatSnackBarModule]
   
 })
 
 export class LoginFormComponent {
 
   constructor(private authService: AuthService,
-    private router: Router) {
+    private router: Router,private snackBar: MatSnackBar) {}
 
-}
   hide=true;
   @ViewChild('usernameInput') usernameInput!: ElementRef;
   @ViewChild('passwordInput') passwordInput!: ElementRef;
@@ -62,6 +63,13 @@ export class LoginFormComponent {
           localStorage.setItem('user', response.jwt);
           this.authService.setUser()
           this.router.navigate(['home'])
+        },
+        error:(error)=>{
+
+          console.error('Failed to login ',error);
+          this.snackBar.open('Failed login. Please check the username and password', 'Close', {
+            duration: 5000, // Trajanje poruke u milisekundama
+          });
         }
       })
     }
