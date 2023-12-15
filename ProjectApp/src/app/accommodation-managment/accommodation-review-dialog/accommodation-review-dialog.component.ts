@@ -33,6 +33,8 @@ import { ReservationService } from 'src/app/models/reservation/reservation.servi
 import { PriceCardPostDTO } from 'src/app/models/dtos/priceCardPostDTO.model';
 import { AccommodationStatusEnum } from 'src/app/models/enums/accommodationStatusEnum';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AccommodationRequestService } from '../accommodationRequestService';
+import { AccommodationRequestStatus } from 'src/app/models/enums/accommodationRequestStatus';
 @Component({
   selector: 'app-accommodation-review-dialog',
   templateUrl: './accommodation-review-dialog.component.html',
@@ -43,6 +45,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class AccommodationReviewDialogComponent implements OnInit{
 
+  requestId:number;
   element:Accommodation;
   form:FormGroup;
 
@@ -53,8 +56,8 @@ export class AccommodationReviewDialogComponent implements OnInit{
   dataSource = new MatTableDataSource<PriceCard>([]);
 
   constructor(private snackBar:MatSnackBar,public dialogRef: MatDialogRef<AccommodationReviewDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {element:Accommodation},
-    private fb: FormBuilder,private accommodationService:AccommodationService
+    @Inject(MAT_DIALOG_DATA) public data: {element:Accommodation,requestId:number},
+    private fb: FormBuilder,private accommodationService:AccommodationService,private requestsService:AccommodationRequestService
   ) {  }
 
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Type'];
@@ -63,10 +66,14 @@ export class AccommodationReviewDialogComponent implements OnInit{
     this.form = this.fb.group({
       amenities: [null]
     });
-
+    this.requestId=this.data.requestId;
     this.element = this.data.element;
+    console.log(this.requestId);
     this.setAmenitiesSelection();
-    this.dataSource = new MatTableDataSource<PriceCard>(this.element.prices);
+    if (this.element && this.element.prices != null) {
+      this.dataSource = new MatTableDataSource<PriceCard>(this.element.prices);
+    }
+
   }
 
   ngAfterViewInit(): void {  
@@ -84,7 +91,7 @@ export class AccommodationReviewDialogComponent implements OnInit{
 
   approve(){
     if(this.element.id!=null){
-    this.accommodationService.updateStatus(this.element.id,AccommodationStatusEnum.APPROVED).subscribe(
+    this.requestsService.updateStatus(this.requestId,AccommodationRequestStatus.APPROVED).subscribe(
       (response) => {
         console.log('Server response:', response);
       },
@@ -97,7 +104,7 @@ export class AccommodationReviewDialogComponent implements OnInit{
 
   reject(){
     if(this.element.id!=null){
-      this.accommodationService.updateStatus(this.element.id,AccommodationStatusEnum.BLOCKED).subscribe(
+      this.requestsService.updateStatus(this.requestId,AccommodationRequestStatus.REJECTED).subscribe(
         (response) => {
           console.log('Server response:', response);
         },
@@ -105,8 +112,7 @@ export class AccommodationReviewDialogComponent implements OnInit{
           console.error('Error from server:', error);
         }
       );}
-  
-    this.dialogRef.close('cancel');
+      this.dialogRef.close('cancel');
   }
 
 
