@@ -9,13 +9,15 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
+import { LayoutModule } from "../../layout/layout.module";
+import { ReservationComponent } from "../../reservation/reservation.component";
 
 @Component({
-  selector: 'app-accommodation-details',
-  templateUrl: './accommodation-details.component.html',
-  styleUrls: ['./accommodation-details.component.css'],
-  standalone:true,
-  imports:[MatChipsModule,MatIconModule,MatInputModule,MatFormFieldModule,MatButtonModule,MatListModule,CommonModule],
+    selector: 'app-accommodation-details',
+    templateUrl: './accommodation-details.component.html',
+    styleUrls: ['./accommodation-details.component.css'],
+    standalone: true,
+    imports: [MatChipsModule, MatIconModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatListModule, CommonModule, LayoutModule, ReservationComponent]
 })
 export class AccommodationDetailsComponent implements OnInit{
   accommodation: Accommodation | undefined;

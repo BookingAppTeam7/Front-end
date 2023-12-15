@@ -13,11 +13,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AccommodationModule } from './accommodation/accommodation.module';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MaterialModule } from './infrastructure/material/material.module';
+import { ReservationComponent } from './reservation/reservation.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -29,7 +31,8 @@ import { MaterialModule } from './infrastructure/material/material.module';
     MatDatepickerModule,
     MatDialogModule,
     MatNativeDateModule,
-    MaterialModule
+    MaterialModule,
+    ReservationComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

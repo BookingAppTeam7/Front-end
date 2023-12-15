@@ -41,9 +41,11 @@
       </div>
     </div>
 
-    <p><strong>Available Dates for Reservation:</strong></p>
+    <p style="margin-left: 10px;"><strong>Available Dates for Reservation:</strong></p>
   <div class="calendar">
     <div *ngFor="let date of availableDates" class="calendar-day" [class.available]="isDateAvailable(date)">
       {{ date | date:'shortDate' }}
     </div>
   </div>
+  <app-map></app-map>
+  <app-reservation></app-reservation>
