@@ -17,6 +17,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [
@@ -24,12 +25,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     HeaderComponent,
     NavBarComponent,
     FooterComponent,
-    AccommodationComponent
+    AccommodationComponent,
+    MapComponent
   ],
   exports: [
     NavBarComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    MapComponent
   ],
   imports: [
     CommonModule,
