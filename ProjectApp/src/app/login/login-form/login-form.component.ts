@@ -17,6 +17,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./login-form.component.css'],
   standalone:true,
   imports:[MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatIconModule,ReactiveFormsModule],
+  
 })
 
 export class LoginFormComponent {

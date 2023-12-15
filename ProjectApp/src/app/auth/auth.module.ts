@@ -6,12 +6,13 @@ import { MaterialModule } from '../infrastructure/material/material.module';
 
 @NgModule({
   declarations: [
-    LoginFormComponent
+   // LoginFormComponent
   ],
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        MaterialModule
+        MaterialModule,
+       
     ]
 })
 export class AuthModule { }

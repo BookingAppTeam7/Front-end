@@ -29,11 +29,17 @@ export class AuthService {
     });
   }
 
-  logout(): Observable<string> {
-    return this.http.get(environment.apiHost + 'logout', {
+  logout(): void {
+     this.http.get(environment.apiHost + 'logout', {
+
       responseType: 'text',
+    }).subscribe({
+      next:()=>{
+        localStorage.removeItem('user');
+      }
     });
   }
+  
 
   getRole(): any {
     if (this.isLoggedIn()) {
@@ -51,4 +57,6 @@ export class AuthService {
   setUser(): void {
     this.user$.next(this.getRole());
   }
+
+  
 }

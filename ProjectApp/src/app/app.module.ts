@@ -12,6 +12,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AccommodationModule } from './accommodation/accommodation.module';
 import { MatNativeDateModule } from '@angular/material/core';
+import { Interceptor } from './auth/interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthModule } from './auth/auth.module';
+import { LoginFormComponent } from './login/login-form/login-form.component';
 
 
 @NgModule({
@@ -27,9 +31,14 @@ import { MatNativeDateModule } from '@angular/material/core';
     FlexLayoutModule,
     MatDatepickerModule,
     MatDialogModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    AuthModule
   ],
-  providers: [],
+  providers: [ {
+    provide: HTTP_INTERCEPTORS,
+    useClass: Interceptor,
+    multi: true,
+  },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
