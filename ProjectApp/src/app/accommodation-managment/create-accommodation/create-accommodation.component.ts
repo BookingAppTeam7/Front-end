@@ -276,6 +276,7 @@ register(){
             accommodationId:createdAccommodation.id
         };
         this.priceCardService.create(newPriceCard).subscribe({})
+        this.openSnackBar('Sucessfully created request! Wait for admin to approve!');
         });  
       },
       (error) => {
