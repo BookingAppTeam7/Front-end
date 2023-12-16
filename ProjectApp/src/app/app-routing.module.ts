@@ -16,6 +16,7 @@ import { SuccessComponent } from './register/success/success.component';
 import { AccommodationRequestsComponent } from './accommodation-managment/accommodation-requests/accommodation-requests.component';
 import { SearchedAccommodationCardsComponent } from './accommodation-managment/searched-accommodation-cards/searched-accommodation-cards.component';
 import { SearchedAccommodationComponent } from './accommodation-managment/searched-accommodation/searched-accommodation.component';
+import { OwnersAccommodationsComponent } from './accommodation-managment/owners-accommodations/owners-accommodations.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -23,7 +24,7 @@ const routes: Routes = [
   {component:SuccessComponent, path:"activate/:token"},
   {component:EditAccountComponent,path:"editAccount"},
   {component:CreateAccommodationComponent,path:"createAccommodation"},
-  {component:EditAccommodationComponent, path:"editAccommodation"},
+  {component:EditAccommodationComponent, path:"editAccommodation/:id"},
   {component:CreateReservationComponent, path:"createReservation"},
   {component:EditReservationComponent, path:"editReservation"},
   {component:AccommodationComponent,path:"accommodation"},
@@ -32,7 +33,8 @@ const routes: Routes = [
   {component:UsersViewComponent,path:'users-view'},
   {component:AccommodationRequestsComponent,path:'accommodationsRequests'},
   {component:SearchedAccommodationCardsComponent,path:'searched-accommodation-cards'},
-  {component:SearchedAccommodationComponent,path:'searched-accommodation'}
+  {component:SearchedAccommodationComponent,path:'searched-accommodation'},
+  {component:OwnersAccommodationsComponent,path:'ownersAccommodations'}
 ];
 
 @NgModule({
