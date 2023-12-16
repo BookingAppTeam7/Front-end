@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
+import { ChangeDetectorRef, Component, Injectable, NgZone } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from 'src/app/auth/auth.service';
 import { RoleEnum } from 'src/app/models/userEnums.model';
@@ -6,6 +6,7 @@ import { UserGetDTO } from 'src/app/models/userGetDTO.model';
 import { UserService } from 'src/app/user.service';
 import { environment } from 'src/env/env';
 
+@Injectable()
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',

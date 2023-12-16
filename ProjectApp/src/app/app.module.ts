@@ -36,7 +36,7 @@ import { ReservationComponent } from './reservation/reservation.component';
     MatDatepickerModule,
     MatDialogModule,
     MatNativeDateModule,
-    AuthModule
+    AuthModule,
     MaterialModule,
     ReservationComponent
 

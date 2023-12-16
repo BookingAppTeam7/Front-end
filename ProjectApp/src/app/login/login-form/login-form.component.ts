@@ -63,9 +63,9 @@ export class LoginFormComponent {
           this.authService.setUser()
           this.router.navigate(['home'])
         },
-        error:(error)=>{
+        error:()=>{
 
-          console.error('Failed to login ',error);
+          console.error('Failed to login ');
           this.snackBar.open('Failed login. Please check the username and password', 'Close', {
             duration: 5000, 
           });
