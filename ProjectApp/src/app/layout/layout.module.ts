@@ -53,4 +53,6 @@ import { MapComponent } from './map/map.component';
     MatSnackBarModule
   ]
 })
-export class LayoutModule { }
+export class LayoutModule {
+
+ }

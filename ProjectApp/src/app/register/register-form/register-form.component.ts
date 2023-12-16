@@ -92,7 +92,7 @@ export class RegisterFormComponent {
       this.userService.create(user).subscribe(
         {
           next: (data: UserPostDTO) => {
-            this.router.navigate(['users-view'])
+            this.router.navigate(['home'])
           },
         }
       );

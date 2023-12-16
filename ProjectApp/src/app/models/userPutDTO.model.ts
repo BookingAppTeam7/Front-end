@@ -17,4 +17,5 @@ export interface UserPutDTO {
     ownerRepliedToRequestNotification:boolean,
     deleted:boolean,
     token:string
+   // jwt:string
   }
