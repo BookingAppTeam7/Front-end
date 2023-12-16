@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MaterialModule } from '../infrastructure/material/material.module';
+import { OwnersAccommodationsComponent } from './owners-accommodations/owners-accommodations.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { MaterialModule } from '../infrastructure/material/material.module';
    AccommodationReviewDialogComponent,
    SearchedAccommodationComponent,
    SearchedAccommodationCardsComponent,
+   OwnersAccommodationsComponent,
   ],
   imports: [
     CommonModule,

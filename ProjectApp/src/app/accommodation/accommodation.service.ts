@@ -62,6 +62,11 @@ export class AccommodationService {
   delete(id: number): Observable<Accommodation | undefined> {
     return this.httpClient.delete<Accommodation>(environment.apiHost + 'accommodations/' + id);
   }
+  getByOwnerId(ownerId: string): Observable<Accommodation | undefined> {
+    return this.httpClient.get<Accommodation>(
+      `${environment.apiHost}accommodations/owner/${ownerId}`
+    );
+  }
 
 }
 

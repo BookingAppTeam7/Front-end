@@ -1,5 +1,6 @@
 <mat-toolbar>
   <div>
+    <button [routerLink]="['ownersAccommodations']"  style="float: right" mat-raised-button color="">My Accommodations</button>
     <button  *ngIf="role == 'ADMIN'" [routerLink]="['accommodationsRequests']"  style="float: right" mat-raised-button color="">A requests</button>
     <button *ngIf="role == 'GUEST'" [routerLink]="['editReservation']"  style="float: right" mat-raised-button color="">Edit reservation</button>
     <button *ngIf="role == 'GUEST'"   [routerLink]="['createReservation']"  style="float: right" mat-raised-button color="">Create reservation</button>

@@ -32,6 +32,8 @@ import { Reservation } from 'src/app/models/reservation/reservation.model';
 import { ReservationService } from 'src/app/models/reservation/reservation.service';
 import { PriceCardPostDTO } from 'src/app/models/dtos/priceCardPostDTO.model';
 import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnum';
+import { Router} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-edit-accommodation',
   templateUrl: './edit-accommodation.component.html',
@@ -50,7 +52,7 @@ export class EditAccommodationComponent  implements OnInit{
   result:boolean=true;
   priceCards: PriceCard[];
   reservations:Reservation[]|undefined;
-  accommodationId:number=70;    //accommodation id 
+  accommodationId:number;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
   ownerId :String= "tamara@gmail.com"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
@@ -60,7 +62,8 @@ export class EditAccommodationComponent  implements OnInit{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private priceCardService:PriceCardService,private reservationService:ReservationService,private dialog:MatDialog) {
+  constructor(private route: ActivatedRoute,
+    private router: Router,private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private priceCardService:PriceCardService,private reservationService:ReservationService,private dialog:MatDialog) {
     this.editForm = this.fb.group({
       startDateEdit: [''],
       endDateEdit: [''],
@@ -93,6 +96,10 @@ export class EditAccommodationComponent  implements OnInit{
  })
  
   ngOnInit(): void {
+
+    this.route.paramMap.subscribe((params) => {
+      this.accommodationId = +params.get('id')!;
+    });
 
     this.accommodationService.getById(this.accommodationId)
     .subscribe(
