@@ -136,7 +136,7 @@
       </mat-paginator>
   </div>
 
-    <div class="data-container">
+    <div class="data-container" style="margin-bottom: 50px;">
     <h2>Select Dates and Price</h2>
     <div class="date-picker-container">
       <mat-form-field>
@@ -176,7 +176,11 @@
     <div class="button-container">
       <div class="buttons">
       </div>
-      <button mat-button style="background-color: rgb(163, 161, 161);margin-top: 1%;margin-right: 15px;">+ Add images</button>
+      <mat-form-field appearance="outline" style="margin-right: 50px;">
+        <mat-label>Image path</mat-label>
+        <input matInput placeholder="Image path" formControlName="image">
+      </mat-form-field>
+      <button mat-button style="background-color: rgb(163, 161, 161);margin-right: 15px;" (click)="addImage()">+ Add image</button>
       </div>
       <button (click)="register()" mat-button style="background-color: #1e88e5; color: white;margin-top: 4%;">Register accommodation</button>
     </div>

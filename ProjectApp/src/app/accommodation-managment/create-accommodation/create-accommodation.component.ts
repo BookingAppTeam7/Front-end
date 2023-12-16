@@ -33,6 +33,7 @@ import { CommonModule } from '@angular/common';
 export class CreateAccommodationComponent {
 
   prices:PriceCard[]
+  images:String[]
   accommodationTypeEnum = AccommodationTypeEnum;
 
   dataSource = new MatTableDataSource<PriceCard>([]);
@@ -66,7 +67,8 @@ export class CreateAccommodationComponent {
     startDate:new FormControl(),
     endDate:new FormControl(),
     price:new FormControl(),
-    priceType:new FormControl()
+    priceType:new FormControl(),
+    image:new FormControl(),
   })
 
   validatePriceCardForm():boolean{
@@ -230,6 +232,15 @@ export class CreateAccommodationComponent {
     return true;
   }
 
+addImage(){
+  let imagePath=this.createAccommodationForm.value.image
+  if(imagePath==null){
+    this.openSnackBar('Image path is empty!');
+    return;
+  }
+  this.images.push(imagePath)
+}
+
 
 register(){
 
@@ -252,7 +263,7 @@ register(){
       //prices: this.prices,
       ownerId: "tamara@gmail.com",//this.createAccommodationForm.value.ownerId,
       cancellationDeadline: this.createAccommodationForm.value.cancellationDeadline,
-      images: []
+      images: this.images
     };
     
     this.accommodationService.create(accommodation).subscribe(

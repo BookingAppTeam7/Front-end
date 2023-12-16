@@ -31,6 +31,7 @@ import { PriceCardService } from 'src/app/accommodation/priceCard.service';
 import { Reservation } from 'src/app/models/reservation/reservation.model';
 import { ReservationService } from 'src/app/models/reservation/reservation.service';
 import { PriceCardPostDTO } from 'src/app/models/dtos/priceCardPostDTO.model';
+import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnum';
 @Component({
   selector: 'app-edit-accommodation',
   templateUrl: './edit-accommodation.component.html',
@@ -46,6 +47,7 @@ export class EditAccommodationComponent  implements OnInit{
   editedItem: PriceCard;
   selectedElement: PriceCard; 
 
+  result:boolean=true;
   priceCards: PriceCard[];
   reservations:Reservation[]|undefined;
   accommodationId:number=70;    //accommodation id 
@@ -375,6 +377,7 @@ updatePriceCard(updatedElement: PriceCard): void {
         this.priceCards[index] = updatedElement;
       }
       this.dataSource.data=this.priceCards;
+      this.openSnackBar('Price card is updated...');
       
     },
     error => {
@@ -451,7 +454,37 @@ updatePriceCard(updatedElement: PriceCard): void {
       this.openSnackBar('Please select a type of reservation confirmation.');
       return false;
     }
+
+    this.reservationService
+  .getByAccommodationId(this.accommodationId)
+  .subscribe((reservations) => {
+    this.reservations = reservations;
+    
+    if (this.reservations) {
+      for (let i = 0; i < this.reservations.length; i++) {
+        const reservation = this.reservations[i];
+        
+        if (
+          reservation.status === ReservationStatusEnum.APPROVED ||
+          reservation.status === ReservationStatusEnum.INPROCESS ||
+          reservation.status === ReservationStatusEnum.PENDING
+        ) {
+          if (this.isFutureDate(reservation.timeSlot.startDate)) {
+            this.openSnackBar("Can't update accommodation data - there are existing reservations...");
+            this.result = false;
+            break; // Izlazimo iz petlje
+          }
+        }
+      }
+    }
+  });
+
     return true;
+  }
+
+  isFutureDate(date:Date): boolean {
+    const today = new Date();
+    return date > today;
   }
 
   saveChanges(){
@@ -481,6 +514,7 @@ updatePriceCard(updatedElement: PriceCard): void {
         images: []
       };
       this.accommodationService.update(updatedAccommodation,this.accommodationId).subscribe({ });
+      this.openSnackBar('Sucessfully created request for change!');
       } 
 
   delete() {
