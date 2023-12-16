@@ -1,23 +1,51 @@
 <div class="details-container">
   <div class="heading">
-    <h2>{{ accommodation.name }}</h2>
-    <img src="{{ accommodation.images }}" alt="{{ accommodation.name }} Image" style="margin-right:200px ;">
+    <h2>{{ accommodation?.name }}</h2>
+    <div *ngIf="accommodation && accommodation.images && accommodation.images.length > 0">
+      <img [src]="accommodation?.images?.[0]" alt="{{ accommodation?.name }} Image">
+    </div>
   </div>
     
     <div class="content">
-      <p><strong>Description:</strong> {{ accommodation.description }}</p>
-    <p><strong>Location:</strong> {{ accommodation.location }}</p>
-    <p><strong>Guests:</strong> {{ accommodation.minGuests }} - {{ accommodation.maxGuests }}</p>
-    <p><strong>Status:</strong> {{ accommodation.status }}</p>
-    <p><strong>Price:</strong> {{accommodation.prices}}$</p>
+      <p><strong>Description:</strong> {{ accommodation?.description }}</p>
+    <p><strong>Location:</strong> {{ accommodation?.location?.country }}, {{accommodation?.location?.city}}, {{accommodation?.location?.address}}</p>
+    <p><strong>Guests:</strong> {{ accommodation?.minGuests }} - {{ accommodation?.maxGuests }}</p>
+    <p><strong>Status:</strong> {{ accommodation?.status }}</p>
     <!--<p><strong>Rating:</strong> {{accommodation.rating}}</p>-->
     <p><strong>Assets:</strong></p>
     <div class="options-container">
-      <div class="custom-chip">Free Wi-Fi</div>
-      <div class="custom-chip">Free Parking</div>
-      <div class="custom-chip">Air conditioner</div>
-      <div class="custom-chip">Kitchen</div>
-  </div>
+      <div *ngFor="let asset of accommodation?.assets" class="custom-chip">{{ asset }}</div>
+    </div>
+
+  <p><strong>Additional Images:</strong></p>
+    <!-- Iterate over all images starting from index 1 -->
+    <div class="image-container" *ngIf="accommodation && accommodation?.images && accommodation.images.length > 1">
+      <div *ngFor="let image of accommodation.images.slice(1); let i = index" class="image-thumbnail" [style.backgroundImage]="'url(' + image + ')'" [attr.alt]="accommodation?.name + ' Image ' + (i + 1)"></div>
+    </div>
+
+    
+    
     <button (click)="goBack()" style="margin-top: 3%;margin-left: 80%;"><mat-icon>arrow_back</mat-icon></button>
     </div>
+    
   </div>
+  <br>
+  <p style="padding-left:25px;"><strong>Reviews:</strong></p>
+    <div *ngFor="let review of accommodation?.reviews">
+      <div class="review">
+        <p><strong>User ID:</strong> {{ review.userId }}</p>
+        <p><strong>Reviewing </strong> {{ review.type }}</p>
+        <p><strong>Comment:</strong> {{ review.comment }}</p>
+        <p><strong>Grade:</strong> {{ review.grade }}</p>
+        <p><strong>Date:</strong> {{ review.dateTime | date:'medium' }}</p>
+      </div>
+    </div>
+
+    <p style="margin-left: 10px;"><strong>Available Dates for Reservation:</strong></p>
+  <div class="calendar">
+    <div *ngFor="let date of availableDates" class="calendar-day" [class.available]="isDateAvailable(date)">
+      {{ date | date:'shortDate' }}
+    </div>
+  </div>
+  <app-map></app-map>
+  <app-reservation></app-reservation>

@@ -1,9 +1,10 @@
 <mat-card class="custom-card">
   <mat-card-content>
     <h2>{{accommodation.name}}</h2>
-    <p>{{accommodation.location}}</p>
-    <p>Price:{{accommodation.prices}}$</p>
-    <img src="{{accommodation.images}}">
+    <p>{{accommodation.location.country}}, {{accommodation.location.city}}</p>
+    <div *ngIf="accommodation && accommodation.images && accommodation.images.length > 0">
+      <img [src]="accommodation?.images?.[0]" alt="{{ accommodation?.name }} Image">
+    </div>
     <br>
     <button [routerLink]="['/accommodations', accommodation.id]">Show details</button>
   </mat-card-content>

@@ -13,11 +13,11 @@ export interface Accommodation{
     minGuests: number;
     maxGuests: number;
     status: string;
-    images:String[];
+    images:string[];
     prices:PriceCard[];
     cancellationDeadline:number;
     reservationConfirmation:ReservationConfirmationEnum;
-    assets:String[];
+    assets:string[];
     ownerId:String;
     reviews :Review[];
 }

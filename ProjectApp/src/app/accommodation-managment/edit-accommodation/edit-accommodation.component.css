@@ -72,3 +72,9 @@ margin-left: 16px;
     display: block;
     margin-bottom: 5px;
 }
+
+.selected-option {
+  background-color: #ff5733; /* Postavite željenu boju pozadine */
+  color: #ffffff; /* Postavite željenu boju teksta */
+}
+

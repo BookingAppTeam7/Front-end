@@ -31,6 +31,7 @@ import { PriceCardService } from 'src/app/accommodation/priceCard.service';
 import { Reservation } from 'src/app/models/reservation/reservation.model';
 import { ReservationService } from 'src/app/models/reservation/reservation.service';
 import { PriceCardPostDTO } from 'src/app/models/dtos/priceCardPostDTO.model';
+import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnum';
 @Component({
   selector: 'app-edit-accommodation',
   templateUrl: './edit-accommodation.component.html',
@@ -46,11 +47,12 @@ export class EditAccommodationComponent  implements OnInit{
   editedItem: PriceCard;
   selectedElement: PriceCard; 
 
+  result:boolean=true;
   priceCards: PriceCard[];
   reservations:Reservation[]|undefined;
-  accommodationId:number=53;    //accommodation id 
+  accommodationId:number=70;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
-  ownerId :String= "username"   //ownerId
+  ownerId :String= "tamara@gmail.com"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type','actions'];
 
@@ -82,8 +84,8 @@ export class EditAccommodationComponent  implements OnInit{
     price:new FormControl(),
     priceType:new FormControl(),
     amenities:new FormControl(),
-    type: new FormControl(null, Validators.required),
-    reservationConfirmation:new FormControl(null,Validators.required),
+    type: new FormControl(),
+    reservationConfirmation:new FormControl(),
     startDateEdit:new FormControl(),
     endDateEdit:new FormControl(),
     priceEdit:new FormControl(),
@@ -100,18 +102,21 @@ export class EditAccommodationComponent  implements OnInit{
         this.editAccommodationFormGroup.get('address')?.setValue(this.accommodation?.location?.address || '');
         this.editAccommodationFormGroup.get('country')?.setValue(this.accommodation?.location?.country || '');
         this.editAccommodationFormGroup.get('city')?.setValue(this.accommodation?.location?.city || '');
-        this.editAccommodationFormGroup.get('xCoordinate')?.setValue(this.accommodation?.location?.x || '');
+       //this.editAccommodationFormGroup.get('xCoordinate')?.setValue(this.accommodation?.location?.x || '');
         this.editAccommodationFormGroup.get('cancellationDeadline')?.setValue(this.accommodation?.cancellationDeadline || 0,{ emitEvent: false });
-        this.editAccommodationFormGroup.get('yCoordinate')?.setValue(this.accommodation?.location?.y || '');
+        //this.editAccommodationFormGroup.get('yCoordinate')?.setValue(this.accommodation?.location?.y || '');
         this.editAccommodationFormGroup.get('description')?.setValue(this.accommodation?.description || '');
         this.editAccommodationFormGroup.get('minGuests')?.setValue(this.accommodation?.minGuests || 0,{ emitEvent: false });
         this.editAccommodationFormGroup.get('maxGuests')?.setValue(this.accommodation?.maxGuests|| 0,{ emitEvent: false });
 
         this.setAmenitiesSelection();
+        this.setReservationConfirmation();
+        this.setType();
         this.priceCards=this.accommodation.prices;
         this.dataSource = new MatTableDataSource<PriceCard>(this.accommodation.prices);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
 
         this.reservationService.getByAccommodationId(this.accommodationId).subscribe(
           (reservations: Reservation[]|undefined) => {
@@ -136,6 +141,18 @@ export class EditAccommodationComponent  implements OnInit{
     const amenitiesControl = this.editAccommodationFormGroup.get('amenities');
     if (amenitiesControl && this.accommodation?.assets) {
       amenitiesControl.setValue(this.accommodation.assets);
+      }
+  }
+  setReservationConfirmation() {
+    const reservationConfirmationControl = this.editAccommodationFormGroup.get('reservationConfirmation');
+    if (reservationConfirmationControl && this.accommodation?.reservationConfirmation) {
+      reservationConfirmationControl.setValue(this.accommodation.reservationConfirmation);
+      }
+  }
+  setType() {
+    const typeControl = this.editAccommodationFormGroup.get('type');
+    if (typeControl && this.accommodation?.type) {
+      typeControl.setValue(this.accommodation.type);
       }
   }
 
@@ -360,6 +377,7 @@ updatePriceCard(updatedElement: PriceCard): void {
         this.priceCards[index] = updatedElement;
       }
       this.dataSource.data=this.priceCards;
+      this.openSnackBar('Price card is updated...');
       
     },
     error => {
@@ -384,7 +402,8 @@ updatePriceCard(updatedElement: PriceCard): void {
       this.openSnackBar('Accommodation name is required.');
       return false;
     }
-    if (this.editAccommodationFormGroup.get('type')?.value === null) {
+    
+    if (this.editAccommodationFormGroup.get('type')?.value === null || this.editAccommodationFormGroup.get('type')?.value === undefined) {
       console.error('Please select a type of accommodation.');
       this.openSnackBar('Please select a type of accommodation.');
       return false;
@@ -393,7 +412,24 @@ updatePriceCard(updatedElement: PriceCard): void {
       console.error('Description is required.');
       this.openSnackBar('Description is required.');
       return false;
-      }
+    }
+
+    if (this.editAccommodationFormGroup.get('country')?.value === '') {
+      console.error('Country is required.');
+      this.openSnackBar('Country is required.');
+      return false;
+    }
+    if (this.editAccommodationFormGroup.get('city')?.value === '') {
+      console.error('City is required.');
+      this.openSnackBar('City is required.');
+      return false;
+    }
+    if (this.editAccommodationFormGroup.get('address')?.value === '') {
+      console.error('Address is required.');
+      this.openSnackBar('Adress is required.');
+      return false;
+    }
+
     const minGuestsValue = this.editAccommodationFormGroup.get('minGuests')?.value;
     const maxGuestsValue = this.editAccommodationFormGroup.get('maxGuests')?.value;
     const cancellationDeadlineValue = this.editAccommodationFormGroup.get('cancellationDeadline')?.value;
@@ -411,12 +447,44 @@ updatePriceCard(updatedElement: PriceCard): void {
       }
     }
 
-    if (this.editAccommodationFormGroup.get('reservationConfirmtion')?.value === null) {
+    console.log(this.editAccommodationFormGroup.get('reservationConfirmation')?.value)
+
+    if (this.editAccommodationFormGroup.get('reservationConfirmation')?.value === null || this.editAccommodationFormGroup.get('reservationConfirmation')?.value == undefined) {
       console.error('Please select a type of reservation confirmation.');
       this.openSnackBar('Please select a type of reservation confirmation.');
       return false;
     }
+
+    this.reservationService
+  .getByAccommodationId(this.accommodationId)
+  .subscribe((reservations) => {
+    this.reservations = reservations;
+    
+    if (this.reservations) {
+      for (let i = 0; i < this.reservations.length; i++) {
+        const reservation = this.reservations[i];
+        
+        if (
+          reservation.status === ReservationStatusEnum.APPROVED ||
+          reservation.status === ReservationStatusEnum.INPROCESS ||
+          reservation.status === ReservationStatusEnum.PENDING
+        ) {
+          if (this.isFutureDate(reservation.timeSlot.startDate)) {
+            this.openSnackBar("Can't update accommodation data - there are existing reservations...");
+            this.result = false;
+            break; // Izlazimo iz petlje
+          }
+        }
+      }
+    }
+  });
+
     return true;
+  }
+
+  isFutureDate(date:Date): boolean {
+    const today = new Date();
+    return date > today;
   }
 
   saveChanges(){
@@ -430,20 +498,23 @@ updatePriceCard(updatedElement: PriceCard): void {
           address: this.editAccommodationFormGroup.value.address,
           city: this.editAccommodationFormGroup.value.city,
           country: this.editAccommodationFormGroup.value.country,
-          x: this.editAccommodationFormGroup.value.xCoordinate,
-          y: this.editAccommodationFormGroup.value.yCoordinate
+          x: this.accommodation.location.x,
+          y: this.accommodation.location.y
         },
         minGuests: this.editAccommodationFormGroup.value.minGuests,
         maxGuests: this.editAccommodationFormGroup.value.maxGuests,
-        type: (this.editAccommodationFormGroup.value.type !== null && this.editAccommodationFormGroup.value.type !== undefined) ? this.editAccommodationFormGroup.value.type as AccommodationTypeEnum : null,
+        type:this.editAccommodationFormGroup.get('type')?.value,
+       // type: (this.editAccommodationFormGroup.value.type !== null && this.editAccommodationFormGroup.value.type !== undefined) ? this.editAccommodationFormGroup.value.type as AccommodationTypeEnum : null,
         assets: this.editAccommodationFormGroup.get('amenities')?.value,
         //prices: this.priceCards,
         ownerId:this.ownerId,
-        reservationConfirmation:(this.editAccommodationFormGroup.value.reservationConfirmation !== null && this.editAccommodationFormGroup.value.reservationConfirmation !== undefined) ? this.editAccommodationFormGroup.value.reservationConfirmation as ReservationConfirmationEnum : null,
+        reservationConfirmation:this.editAccommodationFormGroup.get('reservationConfirmation')?.value,
+        // reservationConfirmation:(this.editAccommodationFormGroup.value.reservationConfirmation !== null && this.editAccommodationFormGroup.value.reservationConfirmation !== undefined) ? this.editAccommodationFormGroup.value.reservationConfirmation as ReservationConfirmationEnum : null,
         cancellationDeadline: this.editAccommodationFormGroup.value.cancellationDeadline,
         images: []
       };
       this.accommodationService.update(updatedAccommodation,this.accommodationId).subscribe({ });
+      this.openSnackBar('Sucessfully created request for change!');
       } 
 
   delete() {

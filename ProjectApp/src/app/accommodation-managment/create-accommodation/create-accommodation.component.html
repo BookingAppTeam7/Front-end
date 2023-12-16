@@ -35,7 +35,7 @@
         </mat-form-field>
       </div>
     
-<div class="location-data-container">
+<!-- <div class="location-data-container">
         <mat-form-field appearance="outline">
           <mat-label>X coordinate</mat-label>
           <input matInput placeholder="X coordinate" formControlName="xCoordinate">
@@ -44,8 +44,8 @@
           <mat-label>Y coordinate</mat-label>
           <input matInput placeholder="Y coordinate" formControlName="yCoordinate">
         </mat-form-field>
-      </div>
-    </div>
+      </div>-->
+    </div> 
       
       <div class="guests-container">
         <p style="margin-right: 10px;">
@@ -93,7 +93,50 @@
         </mat-chip-listbox>
     </div>
   </div>
-    <div class="data-container">
+  <div class="mat-elevation-z8">
+      <h2>Prices and availability intervals</h2>
+      <table mat-table [dataSource]="dataSource" matSort>
+        
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="Start Date">
+          <th mat-header-cell *matHeaderCellDef> Start Date</th>
+          <td mat-cell *matCellDef="let element"> 
+            {{element.timeSlot.startDate | date: 'shortDate'}}
+          </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="End Date">
+          <th mat-header-cell *matHeaderCellDef> End Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.timeSlot.endDate | date: 'shortDate'}}</td>
+        </ng-container>
+    
+        <ng-container matColumnDef="Price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+          <td mat-cell *matCellDef="let element"> 
+            {{element.price}}
+            </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Type </th>
+          <td mat-cell *matCellDef="let element">  {{ getTypeString(element.type) }}</td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+  </div>
+
+    <div class="data-container" style="margin-bottom: 50px;">
     <h2>Select Dates and Price</h2>
     <div class="date-picker-container">
       <mat-form-field>
@@ -133,7 +176,11 @@
     <div class="button-container">
       <div class="buttons">
       </div>
-      <button mat-button style="background-color: rgb(163, 161, 161);margin-top: 1%;margin-right: 15px;">+ Add images</button>
+      <mat-form-field appearance="outline" style="margin-right: 50px;">
+        <mat-label>Image path</mat-label>
+        <input matInput placeholder="Image path" formControlName="image">
+      </mat-form-field>
+      <button mat-button style="background-color: rgb(163, 161, 161);margin-right: 15px;" (click)="addImage()">+ Add image</button>
       </div>
       <button (click)="register()" mat-button style="background-color: #1e88e5; color: white;margin-top: 4%;">Register accommodation</button>
     </div>

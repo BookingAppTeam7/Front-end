@@ -16,11 +16,15 @@ import { Interceptor } from './auth/interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthModule } from './auth/auth.module';
 import { LoginFormComponent } from './login/login-form/login-form.component';
+import { MaterialModule } from './infrastructure/material/material.module';
+import { ReservationComponent } from './reservation/reservation.component';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -33,6 +37,9 @@ import { LoginFormComponent } from './login/login-form/login-form.component';
     MatDialogModule,
     MatNativeDateModule,
     AuthModule
+    MaterialModule,
+    ReservationComponent
+
   ],
   providers: [ {
     provide: HTTP_INTERCEPTORS,

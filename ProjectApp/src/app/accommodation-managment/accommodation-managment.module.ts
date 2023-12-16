@@ -13,6 +13,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AccommodationRequestsComponent } from './accommodation-requests/accommodation-requests.component';
 import { AccommodationReviewDialogComponent } from './accommodation-review-dialog/accommodation-review-dialog.component';
+import { SearchedAccommodationComponent } from './searched-accommodation/searched-accommodation.component';
+import { SearchedAccommodationCardsComponent } from './searched-accommodation-cards/searched-accommodation-cards.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MaterialModule } from '../infrastructure/material/material.module';
 
 
 @NgModule({
@@ -22,6 +28,8 @@ import { AccommodationReviewDialogComponent } from './accommodation-review-dialo
    EditPriceCardDialogComponent,
    AccommodationRequestsComponent,
    AccommodationReviewDialogComponent,
+   SearchedAccommodationComponent,
+   SearchedAccommodationCardsComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +39,11 @@ import { AccommodationReviewDialogComponent } from './accommodation-review-dialo
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MaterialModule
   ]
 })
 export class AccommodationManagmentModule { }

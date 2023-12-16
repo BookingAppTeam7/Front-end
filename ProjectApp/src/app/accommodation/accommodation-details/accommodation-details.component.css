@@ -7,6 +7,7 @@
     display: flex;
   }
   .heading{
+    margin-right: 20px;
     flex:1;
   }
   .content {
@@ -50,4 +51,63 @@
   
   button:hover {
     background-color: #0056b3;
+  }
+
+  .image-container {
+    display: flex;
+    flex-wrap: nowrap; /* Ensure images stay in a single row */
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    margin-top: 15px;
+  }
+  
+  .image-thumbnail {
+    width: 200px; /* Adjust the width of each thumbnail as needed */
+    height: 200px; /* Adjust the height of each thumbnail as needed */
+    background-size: cover;
+    background-position: center;
+    margin-right: 10px; /* Adjust the margin between thumbnails as needed */
+    border: 1px solid #ddd; /* Add a border for better visibility */
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+  
+  .image-thumbnail:hover {
+    border-color: #007bff; /* Highlight border color on hover */
+  }
+
+  .review {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .review p {
+    margin: 5px 0;
+  }
+  
+  .review strong {
+    padding: 20px;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .calendar {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .calendar-day {
+    width: 50px; /* Adjust the width as per your preference */
+    height: 50px; /* Adjust the height as per your preference */
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px; /* Increase the margin for more spacing */
+    cursor: pointer;
+  }
+  
+  .calendar-day.available {
+    background-color: lightgreen; /* Change this color to your preference */
   }

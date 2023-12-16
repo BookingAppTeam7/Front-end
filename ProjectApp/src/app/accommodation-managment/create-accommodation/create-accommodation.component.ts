@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -19,22 +19,35 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PriceCardService } from 'src/app/accommodation/priceCard.service';
 import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
-
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-create-accommodation',
   templateUrl: './create-accommodation.component.html',
   styleUrls: ['./create-accommodation.component.css'],
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatChipsModule,MatRadioModule,LayoutModule,ReactiveFormsModule,MatDatepickerModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,MatButtonModule,MatSnackBarModule],
+  imports: [CommonModule,MatTableModule,MatPaginatorModule,MatFormFieldModule, MatInputModule, MatIconModule,MatButtonModule,MatChipsModule,MatRadioModule,LayoutModule,ReactiveFormsModule,MatDatepickerModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,MatButtonModule,MatSnackBarModule],
 })
 export class CreateAccommodationComponent {
 
   prices:PriceCard[]
+  images:String[]
   accommodationTypeEnum = AccommodationTypeEnum;
+
+  dataSource = new MatTableDataSource<PriceCard>([]);
+  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(private accommodationService:AccommodationService,private snackBar:MatSnackBar,private priceCardService:PriceCardService) {}
 
   ngOnInit() {
      this.prices = [];
+     this.dataSource = new MatTableDataSource<PriceCard>(this.prices);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
   }
 
   createAccommodationForm=new FormGroup({
@@ -54,7 +67,8 @@ export class CreateAccommodationComponent {
     startDate:new FormControl(),
     endDate:new FormControl(),
     price:new FormControl(),
-    priceType:new FormControl()
+    priceType:new FormControl(),
+    image:new FormControl(),
   })
 
   validatePriceCardForm():boolean{
@@ -142,6 +156,7 @@ export class CreateAccommodationComponent {
         };
         if (this.validatePriceCard(newPriceCard)) {
           this.prices.push(newPriceCard);
+          this.dataSource.data=this.prices;
         } else {
           this.openSnackBar("Price for this timeslot is already defined!")
         }
@@ -153,6 +168,15 @@ export class CreateAccommodationComponent {
     this.snackBar.open(message, 'OK', {
       duration: 3000,
     });
+  }
+
+  getTypeString(type: number): string {
+    switch (type) {
+      case 0:
+        return 'PERGUEST';
+      default:
+        return 'PERUNIT';
+    }
   }
 
   formValidation():boolean{
@@ -181,6 +205,24 @@ export class CreateAccommodationComponent {
       return false;
     }
 
+    if (this.createAccommodationForm.get('address')?.value === '') {
+      console.error('Address is required.');
+      this.openSnackBar('Address is required.');
+      return false;
+      }
+    
+    if (this.createAccommodationForm.get('country')?.value === '') {
+      console.error('Country is required.');
+      this.openSnackBar('Country is required.');
+      return false;
+    }
+
+    if (this.createAccommodationForm.get('city')?.value === '') {
+      console.error('City is required.');
+      this.openSnackBar('City is required.');
+      return false;
+    }
+
     if ((minGuestsValue!=undefined && !isNaN(minGuestsValue)) || (maxGuestsValue!=undefined && !isNaN(maxGuestsValue))) {
       if(minGuestsValue!=null && maxGuestsValue!=null && minGuestsValue>maxGuestsValue){
         this.openSnackBar('Max num of guests must be above min number of guests.');
@@ -189,6 +231,15 @@ export class CreateAccommodationComponent {
     }
     return true;
   }
+
+addImage(){
+  let imagePath=this.createAccommodationForm.value.image
+  if(imagePath==null){
+    this.openSnackBar('Image path is empty!');
+    return;
+  }
+  this.images.push(imagePath)
+}
 
 
 register(){
@@ -202,17 +253,17 @@ register(){
         address: this.createAccommodationForm.value.address,
         city: this.createAccommodationForm.value.city,
         country: this.createAccommodationForm.value.country,
-        x: this.createAccommodationForm.value.xCoordinate,
-        y: this.createAccommodationForm.value.yCoordinate
+        x: 0.0,
+        y: 0.0
       },
       minGuests: this.createAccommodationForm.value.minGuests,
       maxGuests: this.createAccommodationForm.value.maxGuests,
       type: (this.createAccommodationForm.value.type !== null && this.createAccommodationForm.value.type !== undefined) ? this.createAccommodationForm.value.type as AccommodationTypeEnum : null,
       assets: this.createAccommodationForm.get('amenities')?.value,
       //prices: this.prices,
-      ownerId: this.createAccommodationForm.value.ownerId,
+      ownerId: "tamara@gmail.com",//this.createAccommodationForm.value.ownerId,
       cancellationDeadline: this.createAccommodationForm.value.cancellationDeadline,
-      images: []
+      images: this.images
     };
     
     this.accommodationService.create(accommodation).subscribe(
@@ -225,6 +276,7 @@ register(){
             accommodationId:createdAccommodation.id
         };
         this.priceCardService.create(newPriceCard).subscribe({})
+        this.openSnackBar('Sucessfully created request! Wait for admin to approve!');
         });  
       },
       (error) => {
