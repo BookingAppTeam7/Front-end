@@ -83,7 +83,7 @@ export class EditAccountComponent implements OnInit {
     //   );
     // });
    
-    const accessToken: any = localStorage.getItem('user');
+  const accessToken: any = localStorage.getItem('user');
 const helper = new JwtHelperService();
 const decodedToken = helper.decodeToken(accessToken);
 

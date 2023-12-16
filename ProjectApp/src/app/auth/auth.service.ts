@@ -6,6 +6,7 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 import { environment } from 'src/env/env';
 import { UserService } from '../user.service';
 import { UserGetDTO } from '../models/userGetDTO.model';
+import { RoleEnum } from '../models/userEnums.model';
 
 @Injectable({
   providedIn: 'root'
@@ -85,6 +86,7 @@ export class AuthService {
     }).subscribe({
       next:()=>{
         localStorage.removeItem('user');
+        this.user$.next(null);
       }
     });
     localStorage.removeItem('user');
@@ -100,10 +102,9 @@ export class AuthService {
       const user=this.userService.getById(decodedToken.sub);
       console.log("AUTHORITY -> ",helper.decodeToken(accessToken).authority );
       return helper.decodeToken(accessToken).authority;
-      
     //  return this.userGet.role;
     }
-    return null;
+  
   }
 
   isLoggedIn(): boolean {
@@ -111,8 +112,25 @@ export class AuthService {
   }
 
   setUser(): void {
-    this.user$.next(this.getRole());
-  }
 
-  
+    const accessToken: any = localStorage.getItem('user');
+    const helper = new JwtHelperService();
+    const decodedToken = helper.decodeToken(accessToken);
+
+    if (decodedToken) {
+      this.userService.getById(decodedToken.sub).subscribe(
+        (user: UserGetDTO) => {
+          if (user) {
+            this.user$.next(user);
+          }
+        },
+        (error) => {
+          console.error('Error fetching user details:', error);
+        }
+      );
+    } else {
+      console.error('Error decoding JWT token');
+    }
+    
+  }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from 'src/app/auth/auth.service';
 import { RoleEnum } from 'src/app/models/userEnums.model';
@@ -15,14 +15,19 @@ export class NavBarComponent {
   constructor(private authService: AuthService) {}
   user:UserGetDTO;
   role: RoleEnum ;
+  private cdr: ChangeDetectorRef;
+  
   
   ngOnInit(): void {
+ 
   
     this.authService.userState.subscribe((result) => {
       if(result != null){
         this.role = result.role;
+      }else{
+       this.role=RoleEnum.UNAUTHENTICATED;
       }
-    
+      this.cdr.detectChanges();
     })
   }
 
