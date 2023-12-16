@@ -33,6 +33,7 @@ import { ReservationService } from 'src/app/models/reservation/reservation.servi
 import { PriceCardPostDTO } from 'src/app/models/dtos/priceCardPostDTO.model';
 import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnum';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-owners-accommodations',
   templateUrl: './owners-accommodations.component.html',
@@ -42,7 +43,16 @@ import { Router } from '@angular/router';
 
 })
 export class OwnersAccommodationsComponent {
- ownerId:string="tamara@gmail.com";
+
+  accessToken: any = localStorage.getItem('user');
+  helper = new JwtHelperService();
+  decodedToken = this.helper.decodeToken(this.accessToken);
+  ownerId:string=""
+
+// if (this.decodedToken) {
+//   console.log("USERNAMEEE 899 " , decodedToken.sub)
+//   this.ownerId=decodedToken.sub;
+//   }
 
  dataSource = new MatTableDataSource<Accommodation>([]);
   displayedColumns: string[] = ['Id', 'Name', 'Owner','Type','actions'];
@@ -52,6 +62,7 @@ export class OwnersAccommodationsComponent {
    constructor(private service: AccommodationService, private snackBar:MatSnackBar,private router: Router) {
   }
   ngOnInit(): void {
+    this.ownerId=this.decodedToken.sub;
     this.service.getByOwnerId(this.ownerId)
     .subscribe(
       (response) => {

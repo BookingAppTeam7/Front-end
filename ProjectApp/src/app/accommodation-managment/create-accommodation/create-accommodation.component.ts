@@ -23,6 +23,7 @@ import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { CommonModule } from '@angular/common';
+import { JwtHelperService } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-create-accommodation',
   templateUrl: './create-accommodation.component.html',
@@ -39,11 +40,17 @@ export class CreateAccommodationComponent {
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
 
+  accessToken: any = localStorage.getItem('user');
+  helper = new JwtHelperService();
+  decodedToken = this.helper.decodeToken(this.accessToken);
+  ownerId:string=""
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(private accommodationService:AccommodationService,private snackBar:MatSnackBar,private priceCardService:PriceCardService) {}
 
   ngOnInit() {
+    this.ownerId=this.decodedToken.sub;
      this.prices = [];
      this.dataSource = new MatTableDataSource<PriceCard>(this.prices);
       this.dataSource.paginator = this.paginator;
@@ -261,7 +268,7 @@ register(){
       type: (this.createAccommodationForm.value.type !== null && this.createAccommodationForm.value.type !== undefined) ? this.createAccommodationForm.value.type as AccommodationTypeEnum : null,
       assets: this.createAccommodationForm.get('amenities')?.value,
       //prices: this.prices,
-      ownerId: "tamara@gmail.com",//this.createAccommodationForm.value.ownerId,
+      ownerId:this.ownerId,//this.createAccommodationForm.value.ownerId,
       cancellationDeadline: this.createAccommodationForm.value.cancellationDeadline,
       images: this.images
     };
