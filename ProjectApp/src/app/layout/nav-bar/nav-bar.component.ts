@@ -15,7 +15,7 @@ export class NavBarComponent {
   constructor(private authService: AuthService) {}
   user:UserGetDTO;
   role: RoleEnum ;
-  private cdr: ChangeDetectorRef;
+ // private cdr: ChangeDetectorRef;
   
   
   ngOnInit(): void {
@@ -27,7 +27,7 @@ export class NavBarComponent {
       }else{
        this.role=RoleEnum.UNAUTHENTICATED;
       }
-      this.cdr.detectChanges();
+     // this.cdr.detectChanges();
     })
   }
 

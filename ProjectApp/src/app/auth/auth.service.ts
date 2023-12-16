@@ -112,15 +112,17 @@ export class AuthService {
   }
 
   setUser(): void {
-
     const accessToken: any = localStorage.getItem('user');
     const helper = new JwtHelperService();
     const decodedToken = helper.decodeToken(accessToken);
 
     if (decodedToken) {
+      console.log("USERNAAAME --> ", decodedToken.sub)
       this.userService.getById(decodedToken.sub).subscribe(
+        
         (user: UserGetDTO) => {
           if (user) {
+            console.log("IF USER --> ", decodedToken.sub)
             this.user$.next(user);
           }
         },

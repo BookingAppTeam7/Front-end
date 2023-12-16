@@ -1,7 +1,7 @@
 import { RoleEnum, StatusEnum } from "./userEnums.model";
 
 export interface UserGetDTO {
-    id?:number,
+   // id?:number,
     firstName: string;
     lastName: string;
     username: string;

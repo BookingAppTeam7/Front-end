@@ -33,7 +33,7 @@ export class UserService {
   }
 
   getById(username: string): Observable<UserGetDTO> {
-    return this.httpClient.get<UserGetDTO>(environment.apiHost + 'users/' + username)
+    return this.httpClient.get<UserGetDTO>(environment.apiHost + 'users/username/' + username)
   }
   getByToken(token: string): Observable<User>{
     return this.httpClient.get<User>(environment.apiHost+'users/token/'+token)
