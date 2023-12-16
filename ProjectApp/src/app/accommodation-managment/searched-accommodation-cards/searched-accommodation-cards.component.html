@@ -5,7 +5,9 @@
         <mat-card-content>
           <h2>{{accommodation.accommodation.name}}</h2>
           <p>{{accommodation.accommodation.location.country}}, {{accommodation.accommodation.location.city}}</p>
-          <img src="{{accommodation.accommodation.images}}">
+          <div *ngIf="accommodation.accommodation && accommodation.accommodation.images && accommodation.accommodation.images.length > 0">
+            <img [src]="accommodation?.accommodation?.images?.[0]" alt="{{ accommodation?.accommodation?.name }} Image">
+          </div>
           <br>
           <p>Total price:{{accommodation.totalPrice}}</p>
           <p>Unit price:{{accommodation.unitPrice}}</p>
