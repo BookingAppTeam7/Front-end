@@ -15,6 +15,8 @@ import { UserGetDTO } from 'src/app/models/userGetDTO.model';
 import {MatSlideToggleChange, MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ThemePalette } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-account',
@@ -34,6 +36,7 @@ export class EditAccountComponent implements OnInit {
   ownerRatingNotification:boolean=false;
   accommodationRatingNotification:boolean=false;
   ownerRepliedToRequestNotification:boolean=false;
+  jwt: string = "";
 
   editAccountDataForm=new FormGroup({
     name: new FormControl('', Validators.required),
@@ -63,22 +66,83 @@ export class EditAccountComponent implements OnInit {
 //  email = new FormControl('', [Validators.required, Validators.email]);
   
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      const username = params['username'];
+    // this.route.params.subscribe(params => {
+    //   const username = params['username'];
 
-      this.userService.getById(username).subscribe(
-        (user: UserGetDTO) => {
-          this.user = user;
-          this.editAccountDataForm.get('name')?.setValue(user.firstName);
-          this.editAccountDataForm.get('surname')?.setValue(user.lastName);
-          this.editAccountDataForm.get('username')?.setValue(user.username);
-          // ... dodati za sve ostale labele
-        },
-        error => {
-          console.error('Error fetching user:', error);
-        }
-      );
-    });
+    //   this.userService.getById(username).subscribe(
+    //     (user: UserGetDTO) => {
+    //       this.user = user;
+    //       this.editAccountDataForm.get('name')?.setValue(user.firstName);
+    //       this.editAccountDataForm.get('surname')?.setValue(user.lastName);
+    //       this.editAccountDataForm.get('username')?.setValue(user.username);
+    //       // ... dodati za sve ostale labele
+    //     },
+    //     error => {
+    //       console.error('Error fetching user:', error);
+    //     }
+    //   );
+    // });
+   
+  const accessToken: any = localStorage.getItem('user');
+const helper = new JwtHelperService();
+const decodedToken = helper.decodeToken(accessToken);
+
+if (decodedToken) {
+  console.log("USERNAMEEE 899 " , decodedToken.sub)
+  // Subscribe to the observable to get the actual UserGetDTO
+  this.userService.getById(decodedToken.sub).subscribe(
+    (user: UserGetDTO) => {
+      if (user) {
+        // Now 'user' is the actual UserGetDTO
+        console.log('User:', user);
+
+        // You can use 'user' as needed, such as updating the form
+        this.editAccountDataForm.get('name')?.setValue(user.firstName);
+        this.editAccountDataForm.get('surname')?.setValue(user.lastName);
+        this.editAccountDataForm.get('phoneNumber')?.setValue(user.phoneNumber);
+        this.editAccountDataForm.get('address')?.setValue(user.address);
+        this.editAccountDataForm.get('username')?.setValue(user.username);
+        this.editAccountDataForm.get('password')?.setValue(''); // You may want to consider whether you should prepopulate the password field
+        this.editAccountDataForm.get('confirmPassword')?.setValue(''); // You may want to consider whether you should prepopulate the confirmPassword field
+        this.editAccountDataForm.get('status')?.setValue(user.status);
+        this.editAccountDataForm.get('role')?.setValue(user.role);
+
+        // Enable/disable notification controls based on user role
+        this.setNotificationControls(user.role);
+      } else {
+        console.error('User not found');
+      }
+    },
+    error => {
+      console.error('Error fetching user:', error);
+    }
+  );
+} else {
+  console.error('Error decoding JWT token');
+}
+    
+  }
+
+  setNotificationControls(role: RoleEnum): void {
+    if (role === RoleEnum.ADMIN) {
+      this.editAccountDataForm.get('requestNotification')?.disable();
+      this.editAccountDataForm.get('cancellationNotification')?.disable();
+      this.editAccountDataForm.get('ownerRatingNotification')?.disable();
+      this.editAccountDataForm.get('accommodationRatingNotification')?.disable();
+      this.editAccountDataForm.get('ownerRepliedNotification')?.disable();
+    } else if (role === RoleEnum.GUEST) {
+      this.editAccountDataForm.get('requestNotification')?.disable();
+      this.editAccountDataForm.get('cancellationNotification')?.disable();
+      this.editAccountDataForm.get('ownerRatingNotification')?.disable();
+      this.editAccountDataForm.get('accommodationRatingNotification')?.disable();
+      this.editAccountDataForm.get('ownerRepliedNotification')?.enable();
+    } else if (role === RoleEnum.OWNER) {
+      this.editAccountDataForm.get('requestNotification')?.enable();
+      this.editAccountDataForm.get('cancellationNotification')?.enable();
+      this.editAccountDataForm.get('ownerRatingNotification')?.enable();
+      this.editAccountDataForm.get('accommodationRatingNotification')?.enable();
+      this.editAccountDataForm.get('ownerRepliedNotification')?.disable();
+    }
   }
 
 
@@ -89,11 +153,22 @@ export class EditAccountComponent implements OnInit {
         
     const userRoleValue: string | undefined= this.editAccountDataForm.get('role')?.value ?? undefined;
     const userStatusValue: string | undefined= this.editAccountDataForm.get('status')?.value;
+    const userGet =this.userService.getById(this.editAccountDataForm.value.username?? '');
+   
+    // userGet.pipe(
+    //   tap((user: UserGetDTO) => {
+    //     // Extract the JWT token from the user and set it in another property
+    //     const jwtToken = user.jwt;
+    //     console.log("U EDIT ACCCOUNT ----> jwt jeee: " ,  user.jwt);
+    //     // Assuming you have a property named jwt in your component, set it like this
+    //     this.jwt = jwtToken;
+    //   }))
 
     if(userRoleValue!==undefined && userStatusValue!==undefined){
 
       const userRoleEnum: RoleEnum = RoleEnum[userRoleValue as keyof typeof RoleEnum];
       const userStatusEnum: StatusEnum = StatusEnum[userStatusValue as keyof typeof StatusEnum];
+      
       console.log("USERNAME--> ",this.editAccountDataForm.value.username )
       const changedUser: UserPutDTO = {
         firstName: this.editAccountDataForm.value.name ?? '',
@@ -112,6 +187,7 @@ export class EditAccountComponent implements OnInit {
         ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
         deleted:false,
         token:'',
+        //jwt:this.jwt
       }
 
       this.userService.update(changedUser,changedUser.username).subscribe(

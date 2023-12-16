@@ -7,7 +7,7 @@ import {RouterModule} from "@angular/router";
 import { LoginFormComponent } from './login-form/login-form.component';
 import { HomeComponent } from '../layout/home/home.component';
 import { Router } from '@angular/router';
-
+import { FormGroup } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,8 @@ import { Router } from '@angular/router';
     MaterialModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    FormGroup
   ],
   exports: [
     LoginFormComponent,
