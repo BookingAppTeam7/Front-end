@@ -18,6 +18,9 @@ import { ReservationPostDTO } from '../models/dtos/reservationPostDTO.model';
 import { Reservation } from '../models/reservation/reservation.model';
 import { UserService } from '../user.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { PriceCard } from '../accommodation/accommodation/model/priceCard.model';
+import { TimeSlot } from '../accommodation/accommodation/model/timeSlot.model';
+import { PriceTypeEnum } from '../models/enums/priceTypeEnum';
 
 @Component({
   selector: 'app-reservation',
@@ -60,12 +63,12 @@ export class ReservationComponent {
         const decodedToken = helper.decodeToken(accessToken);
   
         if (decodedToken) {
-        console.log("USERNAMEEE 899 " , decodedToken.sub)
-        // Subscribe to the observable to get the actual UserGetDTO
+        
+        
         this.userService.getById(decodedToken.sub).subscribe(
           (user: UserGetDTO) => {
             if (user) {
-              // Now 'user' is the actual UserGetDTO
+              
               this.user=user;
               console.log(this.user)
             }
@@ -157,12 +160,11 @@ export class ReservationComponent {
       this.reservationService.create(this.reservationToSend)
     .subscribe(
       (reservation) => {
-        // Store the reservation in the component property
         this.reservation = reservation;
         this.reservation.userId=this.user.username;
         console.log(this.reservation);
-        //const totalPrice = this.calculateTotalPrice(reservation); // Replace this with your calculation logic
-        //console.log('Total Price:', totalPrice);
+        const totalPrice=this.calculateTotalPrice(this.reservation);
+        this.openSnackBar('Reservation request sent successfully. Total price would be '+totalPrice+'$');
       },
       (error) => {
         console.error('Error creating reservation:', error);
@@ -175,5 +177,45 @@ export class ReservationComponent {
       }
     );
     }
+  }
+  calculateTotalPrice(reservation:Reservation):number{
+    if (!this.accommodation?.prices) {
+      return 0;
+    }
+    for(const p of this.accommodation?.prices){
+      if(this.isWithinTimeSlot(reservation.timeSlot.startDate,reservation.timeSlot.endDate,p.timeSlot)){
+        const days=this.daysBetween(reservation.timeSlot.startDate,reservation.timeSlot.endDate);
+        if(p.type==PriceTypeEnum.PERUNIT){
+          return days*p.price;
+        }
+        else{
+          return days*p.price*reservation.numberOfGuests;
+        }
+      }
+    }
+    return 0;
+  }
+  daysBetween(arrival:Date, checkout:Date):number{
+    const oneDayMilliseconds = 24 * 60 * 60 * 1000;
+    const arrivalTime = new Date(arrival).getTime();
+    const checkoutTime = new Date(checkout).getTime();
+
+    const timeDifference = checkoutTime - arrivalTime;
+    const daysDifference = Math.round(timeDifference / oneDayMilliseconds);
+
+    return daysDifference;
+  }
+  isWithinTimeSlot(arrival:Date, checkout:Date, timeSlot:TimeSlot):boolean{
+    const arrivalTime = new Date(arrival).getTime();
+    const checkoutTime = new Date(checkout).getTime();
+    // Convert the string dates to Date objects
+    const timeSlotStart = new Date(timeSlot.startDate).getTime();
+    const timeSlotEnd = new Date(timeSlot.endDate).getTime();
+
+    if (isNaN(timeSlotStart) || isNaN(timeSlotEnd)) {
+      return false;
+    }
+
+    return !(arrivalTime < timeSlotStart || checkoutTime > timeSlotEnd);
   }
 }
