@@ -6,7 +6,7 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 import { environment } from 'src/env/env';
 import { UserService } from '../user.service';
 import { UserGetDTO } from '../models/userGetDTO.model';
-import { RoleEnum } from '../models/userEnums.model';
+import { RoleEnum, StatusEnum } from '../models/userEnums.model';
 
 @Injectable({
   providedIn: 'root'
@@ -121,17 +121,21 @@ export class AuthService {
       this.userService.getById(decodedToken.sub).subscribe(
         
         (user: UserGetDTO) => {
-          if (user) {
+          if (user && user.status===StatusEnum.ACTIVE) {
             console.log("IF USER --> ", decodedToken.sub)
             this.user$.next(user);
+          }else{
+            this.logout();
           }
         },
         (error) => {
           console.error('Error fetching user details:', error);
+          this.logout();
         }
       );
     } else {
       console.error('Error decoding JWT token');
+      this.logout();
     }
     
   }
