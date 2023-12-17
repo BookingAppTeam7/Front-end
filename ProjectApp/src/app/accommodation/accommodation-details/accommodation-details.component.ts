@@ -11,6 +11,9 @@ import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { LayoutModule } from "../../layout/layout.module";
 import { ReservationComponent } from "../../reservation/reservation.component";
+import { UserGetDTO } from 'src/app/models/userGetDTO.model';
+import { RoleEnum } from 'src/app/models/userEnums.model';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
     selector: 'app-accommodation-details',
@@ -22,13 +25,25 @@ import { ReservationComponent } from "../../reservation/reservation.component";
 export class AccommodationDetailsComponent implements OnInit{
   accommodation: Accommodation | undefined;
   availableDates: Date[] = [];
+  user:UserGetDTO;
+  role: RoleEnum ;
   constructor(
     private route:ActivatedRoute,
     private router:Router,
-    private accommodationService:AccommodationService
+    private accommodationService:AccommodationService,
+    private authService: AuthService
   ){}
   
   ngOnInit() {
+    this.authService.userState.subscribe((result) => {
+      if(result != null){
+        this.role = result.role;
+      }else{
+       this.role=RoleEnum.UNAUTHENTICATED;
+      }
+     // this.cdr.detectChanges();
+    })
+
     this.route.paramMap.subscribe((params: ParamMap) => {
       const accommodationId = +params.get('id')!;
       this.accommodationService.getById(accommodationId).subscribe(
@@ -61,9 +76,10 @@ export class AccommodationDetailsComponent implements OnInit{
           const startDate = new Date(priceCard.timeSlot.startDate);
           const endDate = new Date(priceCard.timeSlot.endDate);
           startDate.setDate(startDate.getDate()-1);
-          endDate.setDate(endDate.getDate()-1);
+          endDate.setDate(endDate.getDate());
           while (startDate <= endDate) {
-            dates.push(new Date(startDate));
+            if(startDate>new Date())
+              dates.push(new Date(startDate));
             startDate.setDate(startDate.getDate() + 1);
           }
         }

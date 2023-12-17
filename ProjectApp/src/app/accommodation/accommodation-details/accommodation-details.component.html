@@ -48,4 +48,4 @@
     </div>
   </div>
   <app-map></app-map>
-  <app-reservation></app-reservation>
+  <app-reservation *ngIf="role == 'GUEST'"></app-reservation>

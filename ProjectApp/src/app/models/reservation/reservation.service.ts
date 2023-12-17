@@ -14,9 +14,9 @@ export class ReservationService{
 
     }
 
-    create(reservation: ReservationPostDTO): Observable<ReservationPostDTO>{
+    create(reservation: ReservationPostDTO): Observable<Reservation>{
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.httpClient.post<ReservationPostDTO>(
+        return this.httpClient.post<Reservation>(
             environment.apiHost+'reservations',
             JSON.stringify(reservation),
             {headers: headers}
