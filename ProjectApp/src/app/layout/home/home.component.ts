@@ -71,11 +71,6 @@ export class HomeComponent {
   }
 
   formValidation():boolean{
-    //if (this.searchAccommodationForm.get('city')?.value === '') {
-    //  console.error('City is required.');
-    //  this.openSnackBar('Accommodation name is required.');
-    //  return false;
-    //}
     
     const guestsValue = this.searchAccommodationForm.get('guests')?.value;
     console.log(guestsValue);
@@ -83,8 +78,20 @@ export class HomeComponent {
       console.error('Please enter valid number for guests');
       this.openSnackBar('Please enter valid number for guests');
       return false;
-    }else if(guestsValue!=undefined && guestsValue<=0)
+    }else if(guestsValue!=undefined && guestsValue<=0){
+      this.openSnackBar('Please enter valid number for guests');
       return false;
+    }
+      
+
+      const startDate = new Date(this.searchAccommodationForm.get('startDate')?.value);
+    const endDate = new Date(this.searchAccommodationForm.get('endDate')?.value);
+    console.log(startDate)
+    console.log(endDate)
+    if(startDate>=endDate){
+      this.openSnackBar('Dates are incorrect!');
+      return false;
+    }
 
     return true;
   }
