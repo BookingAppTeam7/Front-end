@@ -30,6 +30,9 @@ export class AccommodationService {
   getAll():Observable<Accommodation[]>{
     return this.httpClient.get<Accommodation[]>(environment.apiHost+'accommodations');
   }
+  getAllApproved():Observable<Accommodation[]>{
+    return this.httpClient.get<Accommodation[]>(environment.apiHost+'accommodations/approved');
+  }
   getById(id: number): Observable<Accommodation | undefined> {
     return this.httpClient.get<Accommodation>(environment.apiHost + 'accommodations/' + id);
   }

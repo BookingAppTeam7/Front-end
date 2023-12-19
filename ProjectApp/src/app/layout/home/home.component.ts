@@ -26,7 +26,7 @@ export class HomeComponent {
     private dataService: AccommodationDataService,private router: Router) {
   }
   ngOnInit(): void {
-    this.service.getAll().subscribe({
+    this.service.getAllApproved().subscribe({
        next: (data: Accommodation[]) => {
         this.accommodationList = data
        },
