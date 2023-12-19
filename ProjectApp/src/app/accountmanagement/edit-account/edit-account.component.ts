@@ -17,6 +17,7 @@ import { ThemePalette } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { tap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-account',
@@ -56,7 +57,7 @@ export class EditAccountComponent implements OnInit {
   },{ validators: this.passwordMatchValidator })
   hide=true;
   constructor(private route:ActivatedRoute,
-    private userService:UserService,private router: Router) {
+    private userService:UserService,private router: Router, private snackBar:MatSnackBar) {
       this.editAccountDataForm.get('requestNotification')?.disable();
       this.editAccountDataForm.get('cancellationNotification')?.disable();
       this.editAccountDataForm.get('ownerRatingNotification')?.disable();
@@ -200,17 +201,42 @@ if (decodedToken) {
     } 
     }
 
+    openSnackBar(message: string) {
+      this.snackBar.open(message, 'OK', {
+        duration: 3000,
+      });
+    }
+    
+
     delete(){
       const username=this.editAccountDataForm.value.username ?? ''
       this.userService.deleteUser(username).subscribe(
-        {
-          next: () => {
+        
+          (response:any) => {
             this.router.navigate(['home'])
+            this.openSnackBar("USER SUCCESSFULLY DELETED");
           },
-        } 
-      );
-
-    }
+          
+        
+        (error: { error: { error: string; }; }) => {
+          console.error('Error deleting user:', error);
+          console.log("CEO ERROR --> ",error )
+          if (error.error.error) {
+            this.openSnackBar(error.error.error);
+          } else {
+            this.openSnackBar('An error occurred while creating the reservation. Check the number of guests and dates of your reservations');
+          }
+        
+          
+        }
+      
+        
+       
+       
+      )
+      
+      }
+    
 
     onSlideToggleChangeRequestNotification(event: MatSlideToggleChange) {
       const reservationRequestNotificationChecked = event.checked;
