@@ -153,6 +153,7 @@ export class ReservationComponent {
     }
     this.reservationToSend.numberOfGuests=this.reservationForm.get('guests')?.value;
     this.reservationToSend.userId=this.user.username;
+    console.log("USERNAME RES",this.user.username)
     this.reservationToSend.timeSlot.startDate=this.reservationForm.get('startDate')?.value;
     this.reservationToSend.timeSlot.endDate=this.reservationForm.get('endDate')?.value;
     console.log(this.reservationToSend);

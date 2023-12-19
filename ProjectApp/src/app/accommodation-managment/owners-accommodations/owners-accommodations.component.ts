@@ -55,7 +55,7 @@ export class OwnersAccommodationsComponent {
 //   }
 
  dataSource = new MatTableDataSource<Accommodation>([]);
-  displayedColumns: string[] = ['Id', 'Name', 'Owner','Type','actions'];
+  displayedColumns: string[] = ['Id', 'Name', 'Owner','Type','Status','actions'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

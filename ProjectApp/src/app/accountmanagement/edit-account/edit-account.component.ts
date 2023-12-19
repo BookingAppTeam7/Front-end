@@ -193,7 +193,7 @@ if (decodedToken) {
       this.userService.update(changedUser,changedUser.username).subscribe(
         {
           next: (data: User) => {
-            this.router.navigate(['users-view'])
+            this.router.navigate(['home'])
           },
         } 
       );
@@ -205,7 +205,7 @@ if (decodedToken) {
       this.userService.deleteUser(username).subscribe(
         {
           next: () => {
-            this.router.navigate(['users-view'])
+            this.router.navigate(['home'])
           },
         } 
       );
