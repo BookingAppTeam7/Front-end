@@ -179,7 +179,7 @@ if (decodedToken) {
         password:this.editAccountDataForm.value.password ?? '',
         passwordConfirmation:this.editAccountDataForm.value.confirmPassword ?? '',
         status:userStatusEnum,
-        role: userRoleEnum,
+        //role: userRoleEnum,
         reservationRequestNotification:this.reservationRequestNotification,
         reservationCancellationNotification:this.reservationCancellationNotification,
         ownerRatingNotification:this.ownerRatingNotification,

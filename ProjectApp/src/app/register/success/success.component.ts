@@ -41,7 +41,7 @@ export class SuccessComponent{
             password: user.password,
             passwordConfirmation: user.password, 
             status: StatusEnum.ACTIVE,
-            role: user.role,
+            //role: user.role,
             address: user.address,
             phoneNumber: user.phoneNumber,
             reservationRequestNotification: user.reservationRequestNotification, 

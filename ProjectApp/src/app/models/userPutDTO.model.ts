@@ -7,7 +7,7 @@ export interface UserPutDTO {
     password:string;
     passwordConfirmation:string;
     status:StatusEnum;
-    role: RoleEnum;
+   // role: RoleEnum;
     address: string;
     phoneNumber: string;
     reservationRequestNotification:boolean,
