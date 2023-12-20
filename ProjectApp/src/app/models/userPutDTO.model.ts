@@ -3,7 +3,7 @@ import { RoleEnum, StatusEnum } from "./userEnums.model";
 export interface UserPutDTO {
     firstName: string;
     lastName: string;
-    username: string;
+    //username: string;
     password:string;
     passwordConfirmation:string;
     status:StatusEnum;

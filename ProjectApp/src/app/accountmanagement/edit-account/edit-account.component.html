@@ -18,7 +18,7 @@
   </p>
   <p>
     <mat-form-field appearance="outline">
-      <input matInput placeholder="pat@example.com" formControlName="username" name="username" required>
+      <input matInput placeholder="pat@example.com" formControlName="username" name="username" readonly>
       <mat-error *ngIf="editAccountDataForm.get('username')?.hasError('required')">Email is required</mat-error>
       <mat-error *ngIf="editAccountDataForm.get('username')?.hasError('pattern')">Invalid email format</mat-error>
       <mat-icon matSuffix>edit_note</mat-icon>

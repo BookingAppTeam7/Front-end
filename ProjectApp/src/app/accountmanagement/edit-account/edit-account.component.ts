@@ -176,7 +176,7 @@ if (decodedToken) {
         lastName:this.editAccountDataForm.value.surname ?? '',
         phoneNumber: this.editAccountDataForm.value.phoneNumber ?? '',
         address: this.editAccountDataForm.value.address ?? '',
-        username:this.editAccountDataForm.value.username ?? '',
+       // username:this.editAccountDataForm.value.username ?? '',
         password:this.editAccountDataForm.value.password ?? '',
         passwordConfirmation:this.editAccountDataForm.value.confirmPassword ?? '',
         status:userStatusEnum,
@@ -191,7 +191,11 @@ if (decodedToken) {
         //jwt:this.jwt
       }
 
-      this.userService.update(changedUser,changedUser.username).subscribe(
+      const accessToken: any = localStorage.getItem('user');
+      const helper = new JwtHelperService();
+      const decodedToken = helper.decodeToken(accessToken);
+
+      this.userService.update(changedUser,decodedToken.sub).subscribe(
         {
           next: (data: User) => {
             this.router.navigate(['home'])
