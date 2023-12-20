@@ -41,11 +41,49 @@
       </div>
     </div>
 
-    <p style="margin-left: 10px;"><strong>Available Dates for Reservation:</strong></p>
-  <div class="calendar">
-    <div *ngFor="let date of availableDates" class="calendar-day" [class.available]="isDateAvailable(date)">
-      {{ date | date:'shortDate' }}
+    <div class="mat-elevation-z8">
+      <h2 style="margin-left: 10px;">Prices and availability intervals</h2>
+      <table mat-table [dataSource]="dataSource" matSort>
+        
+      
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="Start Date">
+          <th mat-header-cell *matHeaderCellDef> Start Date</th>
+          <td mat-cell *matCellDef="let element"> 
+            {{element.timeSlot.startDate | date: 'shortDate'}}
+          </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="End Date">
+          <th mat-header-cell *matHeaderCellDef> End Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.timeSlot.endDate | date: 'shortDate'}}</td>
+        </ng-container>
+    
+        <ng-container matColumnDef="Price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+          <td mat-cell *matCellDef="let element"> 
+            {{element.price}}
+            </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="Type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
     </div>
-  </div>
+    
   <app-map></app-map>
   <app-reservation *ngIf="role == 'GUEST'"></app-reservation>

@@ -91,23 +91,31 @@
     font-weight: bold;
     margin-right: 5px;
   }
+  .mat-elevation-z8{
+    margin:auto;
+    text-align:center;
+    width: 80%;
+    margin-top: 2%;
+    padding:1%;
+    box-shadow: none;
+}
+  .data-container {
+    max-width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
 
-  .calendar {
+  .date-picker-container {
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;  
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1%; 
+    margin-bottom: 2%;
   }
   
-  .calendar-day {
-    width: 50px; /* Adjust the width as per your preference */
-    height: 50px; /* Adjust the height as per your preference */
-    border: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 15px; /* Increase the margin for more spacing */
-    cursor: pointer;
-  }
   
-  .calendar-day.available {
-    background-color: lightgreen; /* Change this color to your preference */
-  }
