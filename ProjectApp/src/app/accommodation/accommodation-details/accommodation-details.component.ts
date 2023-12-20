@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Accommodation } from '../accommodation/model/accommodation.model';
 import { ActivatedRoute, ParamMap, Route, Router } from '@angular/router';
 import { AccommodationService } from '../accommodation.service';
@@ -14,19 +14,28 @@ import { ReservationComponent } from "../../reservation/reservation.component";
 import { UserGetDTO } from 'src/app/models/userGetDTO.model';
 import { RoleEnum } from 'src/app/models/userEnums.model';
 import { AuthService } from 'src/app/auth/auth.service';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { PriceCard } from '../accommodation/model/priceCard.model';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
     selector: 'app-accommodation-details',
     templateUrl: './accommodation-details.component.html',
     styleUrls: ['./accommodation-details.component.css'],
     standalone: true,
-    imports: [MatChipsModule, MatIconModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatListModule, CommonModule, LayoutModule, ReservationComponent]
+    imports: [MatChipsModule,MatPaginatorModule, MatIconModule,MatTableModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatListModule, CommonModule, LayoutModule, ReservationComponent]
 })
 export class AccommodationDetailsComponent implements OnInit{
   accommodation: Accommodation | undefined;
   availableDates: Date[] = [];
   user:UserGetDTO;
   role: RoleEnum ;
+  dataSource = new MatTableDataSource<PriceCard>([]);
+  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(
     private route:ActivatedRoute,
     private router:Router,
@@ -50,7 +59,10 @@ export class AccommodationDetailsComponent implements OnInit{
         (foundAccommodation) => {
           if (foundAccommodation) {
             this.accommodation = foundAccommodation;
-            this.availableDates = this.extractAvailableDates();
+            console.log(this.accommodation);
+            this.dataSource=new MatTableDataSource<PriceCard>(this.accommodation.prices);
+            this.dataSource.paginator=this.paginator;
+            this.dataSource.sort=this.sort;
           } else {
             console.error(`Accommodation with ID ${accommodationId} not found`);
           }
@@ -67,25 +79,6 @@ export class AccommodationDetailsComponent implements OnInit{
   // Add a getter to explicitly check for non-null images
   get accommodationImages(): string[] | undefined {
     return this.accommodation?.images;
-  }
-  private extractAvailableDates(): Date[] {
-    let dates: Date[] = [];
-    if (this.accommodation && this.accommodation.prices) {
-      for (const priceCard of this.accommodation.prices) {
-        if (priceCard.timeSlot && priceCard.timeSlot.startDate && priceCard.timeSlot.endDate) {
-          const startDate = new Date(priceCard.timeSlot.startDate);
-          const endDate = new Date(priceCard.timeSlot.endDate);
-          startDate.setDate(startDate.getDate()-1);
-          endDate.setDate(endDate.getDate());
-          while (startDate <= endDate) {
-            if(startDate>new Date())
-              dates.push(new Date(startDate));
-            startDate.setDate(startDate.getDate() + 1);
-          }
-        }
-      }
-    }
-    return dates;
   }
 
   isDateAvailable(date: Date): boolean {
