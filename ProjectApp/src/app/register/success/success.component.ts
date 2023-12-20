@@ -37,7 +37,7 @@ export class SuccessComponent{
           const updateUser: UserPutDTO = {
             firstName: user.firstName,
             lastName: user.lastName,
-            username: user.username,
+            //username: user.username,
             password: user.password,
             passwordConfirmation: user.password, 
             status: StatusEnum.ACTIVE,
