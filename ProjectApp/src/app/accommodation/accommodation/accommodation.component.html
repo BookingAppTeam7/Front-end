@@ -3,7 +3,7 @@
     <h2>{{accommodation.name}}</h2>
     <p>{{accommodation.location.country}}, {{accommodation.location.city}}</p>
     <div *ngIf="accommodation && accommodation.images && accommodation.images.length > 0">
-      <img [src]="accommodation?.images?.[0]" alt="{{ accommodation?.name }} Image">
+      <img [src]="accommodation?.images?.[0]" alt="{{ accommodation?.name }} Image" style="width: 400px; height: 200px;">
     </div>
     <br>
     <button [routerLink]="['/accommodations', accommodation.id]">Show details</button>

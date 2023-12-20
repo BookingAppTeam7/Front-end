@@ -47,6 +47,8 @@ export class AccommodationReviewDialogComponent implements OnInit{
 
   requestId:number;
   element:Accommodation;
+  originalAccommodation:Accommodation|undefined;
+  originalAccommodationId:number|undefined;
   form:FormGroup;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -66,13 +68,73 @@ export class AccommodationReviewDialogComponent implements OnInit{
     this.form = this.fb.group({
       amenities: [null]
     });
+
     this.requestId=this.data.requestId;
-    this.element = this.data.element;
-    console.log(this.requestId);
-    this.setAmenitiesSelection();
-    if (this.element && this.element.prices != null) {
-      this.dataSource = new MatTableDataSource<PriceCard>(this.element.prices);
-    }
+
+    this.requestsService.getById(this.requestId).subscribe(
+      (response) => {
+        console.log(response)
+        if(response?.originalAccommodationId==null){
+          console.log("udjee u 78jeste null")
+          this.originalAccommodationId=response?.unapprovedAccommodationId;
+        }
+        else{
+          console.log("udjee u 82 nije null")
+        this.originalAccommodationId=response?.originalAccommodationId;
+        console.log(this.originalAccommodationId)
+        }
+
+        if(this.originalAccommodationId!=undefined){
+          console.log("usaoooooo")
+        this.accommodationService.getById(this.originalAccommodationId).subscribe(
+          (response) => {
+            this.originalAccommodation=response;
+             
+            this.element = this.data.element;
+            console.log(this.requestId);
+            console.log(this.originalAccommodation)
+            this.setAmenitiesSelection();
+            if (this.element && this.originalAccommodation?.prices != null) {
+              console.log("usaoooooo")
+              this.dataSource = new MatTableDataSource<PriceCard>(this.originalAccommodation.prices);
+            }
+          },
+          (error) => {
+            // Obrada greške
+            console.error(error);
+          }
+        );
+        }
+
+      },
+      (error) => {
+        // Obrada greške
+        console.error(error);
+      }
+    );
+    
+    // if(this.originalAccommodationId!=undefined){
+    //   console.log("usaoooooo")
+    // this.accommodationService.getById(this.originalAccommodationId).subscribe(
+    //   (response) => {
+    //     this.originalAccommodation=response;
+    //   },
+    //   (error) => {
+    //     // Obrada greške
+    //     console.error(error);
+    //   }
+    // );
+    
+
+    
+    // this.element = this.data.element;
+    // console.log(this.requestId);
+    // console.log(this.originalAccommodation)
+    // this.setAmenitiesSelection();
+    // if (this.element && this.originalAccommodation?.prices != null) {
+    //   console.log("usaoooooo")
+    //   this.dataSource = new MatTableDataSource<PriceCard>(this.originalAccommodation.prices);
+    // }
 
   }
 

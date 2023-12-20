@@ -34,6 +34,7 @@ import { PriceCardPostDTO } from 'src/app/models/dtos/priceCardPostDTO.model';
 import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnum';
 import { Router} from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 @Component({
   selector: 'app-edit-accommodation',
   templateUrl: './edit-accommodation.component.html',
@@ -54,9 +55,13 @@ export class EditAccommodationComponent  implements OnInit{
   reservations:Reservation[]|undefined;
   accommodationId:number;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
-  ownerId :String= "tamara@gmail.com"   //ownerId
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type','actions'];
+
+  accessToken: any = localStorage.getItem('user');
+  helper = new JwtHelperService();
+  decodedToken = this.helper.decodeToken(this.accessToken);
+  ownerId:string=""
 
   editForm: FormGroup;
 
@@ -100,6 +105,8 @@ export class EditAccommodationComponent  implements OnInit{
     this.route.paramMap.subscribe((params) => {
       this.accommodationId = +params.get('id')!;
     });
+
+    this.ownerId=this.decodedToken.sub;
 
     this.accommodationService.getById(this.accommodationId)
     .subscribe(

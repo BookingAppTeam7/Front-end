@@ -67,7 +67,9 @@ export class OwnersAccommodationsComponent {
     .subscribe(
       (response) => {
         if (Array.isArray(response)) {
-          this.dataSource = new MatTableDataSource<Accommodation>(response);
+          const filteredList = response.filter((accommodation) => accommodation.status === 'APPROVED');
+          
+          this.dataSource = new MatTableDataSource<Accommodation>(filteredList);
         }
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
