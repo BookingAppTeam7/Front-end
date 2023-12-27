@@ -107,8 +107,8 @@ export class HomeComponent {
     const endDate = this.searchAccommodationForm.get('endDate')?.value;
 
     let params = new HttpParams()
-      .set('arrival', formatDate(startDate, 'yyyy-MM-dd', 'en-US'))
-      .set('checkout', formatDate(endDate, 'yyyy-MM-dd', 'en-US'))
+      .set('arrivalString', formatDate(startDate, 'yyyy-MM-dd HH:mm:ss', 'en-US'))
+      .set('checkoutString', formatDate(endDate, 'yyyy-MM-dd HH:mm:ss', 'en-US'))
       .set('guests', guests.toString());
 
     if (city) {
