@@ -83,4 +83,7 @@ export class OwnersAccommodationsComponent {
   openEditComponent(element:Accommodation){
     this.router.navigate(['/editAccommodation', element.id]);
   }
+  openReservationsComponent(element:Accommodation){
+    this.router.navigate(['/accommodationsReservations', element.id]);
+  }
 }
