@@ -41,4 +41,22 @@ export class ReservationService{
             {headers: headers}
         );
     }
+
+    confirmReservation(reservationId: number|undefined): Observable<void> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+        return this.httpClient.put<void>(
+            environment.apiHost +'reservations/confirm/' + reservationId,
+            { headers: headers }
+        );
+    }
+
+    rejectReservation(reservationId: number|undefined): Observable<void> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+        return this.httpClient.put<void>(
+            environment.apiHost +'reservations/reject/' + reservationId,
+            { headers: headers }
+        );
+    }
 }

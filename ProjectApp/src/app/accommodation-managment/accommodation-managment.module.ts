@@ -20,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MaterialModule } from '../infrastructure/material/material.module';
 import { OwnersAccommodationsComponent } from './owners-accommodations/owners-accommodations.component';
+import { AccommodationsReservationsComponent } from './accommodations-reservations/accommodations-reservations.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { OwnersAccommodationsComponent } from './owners-accommodations/owners-ac
    SearchedAccommodationComponent,
    SearchedAccommodationCardsComponent,
    OwnersAccommodationsComponent,
+   AccommodationsReservationsComponent,
   ],
   imports: [
     CommonModule,
