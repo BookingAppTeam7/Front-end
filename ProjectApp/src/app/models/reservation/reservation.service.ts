@@ -59,4 +59,9 @@ export class ReservationService{
             { headers: headers }
         );
     }
+
+    getByGuestId(username: String): Observable<Reservation[] | undefined>{
+        return this.httpClient.get<Reservation[]>(
+            environment.apiHost+'reservations/user/'+username);
+    }
 }

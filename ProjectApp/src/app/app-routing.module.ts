@@ -18,6 +18,7 @@ import { SearchedAccommodationCardsComponent } from './accommodation-managment/s
 import { SearchedAccommodationComponent } from './accommodation-managment/searched-accommodation/searched-accommodation.component';
 import { OwnersAccommodationsComponent } from './accommodation-managment/owners-accommodations/owners-accommodations.component';
 import { AccommodationsReservationsComponent } from './accommodation-managment/accommodations-reservations/accommodations-reservations.component';
+import { GuestsReservationsComponent } from './reservation-managment/guests-reservations/guests-reservations.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -36,7 +37,8 @@ const routes: Routes = [
   {component:SearchedAccommodationCardsComponent,path:'searched-accommodation-cards'},
   {component:SearchedAccommodationComponent,path:'searched-accommodation'},
   {component:OwnersAccommodationsComponent,path:'ownersAccommodations'},
-  {component:AccommodationsReservationsComponent,path:'accommodationsReservations/:id'}
+  {component:AccommodationsReservationsComponent,path:'accommodationsReservations/:id'},
+  {component:GuestsReservationsComponent,path:'guestsReservations'}
 ];
 
 @NgModule({
