@@ -73,11 +73,9 @@ export class GuestsReservationsComponent {
         this.rejectedReservations = this.reservations?.filter(r => r.status === 'REJECTED');
         this.cancelledReservations=this.reservations?.filter(r => r.status === 'CANCELLED');
         console.log('All Reservations:', this.reservations);
-      console.log('Pending Reservations:', this.pendingReservations);
-      console.log('Approved Reservations:', this.approvedReservations);
-      console.log('Rejected Reservations:', this.rejectedReservations);
-
-
+        console.log('Pending Reservations:', this.pendingReservations);
+        console.log('Approved Reservations:', this.approvedReservations);
+        console.log('Rejected Reservations:', this.rejectedReservations);
 
         this.dataSourcePending=new MatTableDataSource<Reservation>(this.pendingReservations);
         this.dataSourceApproved=new MatTableDataSource<Reservation>(this.approvedReservations);
@@ -114,7 +112,17 @@ export class GuestsReservationsComponent {
             this.openSnackBar("Reservation can not be cancelled because of cancellation deadline.")
           }
           else{
+              //ovde treba promeniti status rezervacije i kreirati novi pricecard
+              this.reservationService.cancelReservation(reservation.id).subscribe(
+                () => {
+                  
+                },
+                (error) => {
+                  console.error('ERROR:', error);
+                }
+              );
 
+              this.openSnackBar("Reservation is successfully CANCELLED!")
           }
           
         
