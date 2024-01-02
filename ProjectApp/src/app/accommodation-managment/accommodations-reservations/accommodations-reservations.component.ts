@@ -18,6 +18,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AccommodationService } from 'src/app/accommodation/accommodation.service';
 import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
 import { PriceCardService } from 'src/app/accommodation/priceCard.service';
+import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnum';
 import { Reservation } from 'src/app/models/reservation/reservation.model';
 import { ReservationService } from 'src/app/models/reservation/reservation.service';
 import { ReservationComponent } from 'src/app/reservation/reservation.component';
@@ -31,7 +32,7 @@ import { ReservationComponent } from 'src/app/reservation/reservation.component'
 })
 export class AccommodationsReservationsComponent {
 
-  reservations:Reservation[]|undefined;
+  reservations:Reservation[]=[];
   accommodationId:number;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
 
@@ -40,16 +41,16 @@ export class AccommodationsReservationsComponent {
   decodedToken = this.helper.decodeToken(this.accessToken);
   ownerId:string=""
 
-  pendingReservations:Reservation[]|undefined;
-  approvedReservations:Reservation[]|undefined;
-  rejectedReservations:Reservation[]|undefined;
+  pendingReservations:Reservation[]=[];
+  approvedReservations:Reservation[]=[];
+  rejectedReservations:Reservation[]=[];
 
 
   dataSourcePending = new MatTableDataSource<Reservation>([]);
   dataSourceApproved = new MatTableDataSource<Reservation>([]);
   dataSourceRejected = new MatTableDataSource<Reservation>([]);
+  displayedColumnsPending: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status','actions'];
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status'];
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -68,25 +69,28 @@ export class AccommodationsReservationsComponent {
 
     this.reservationService.getByAccommodationId(this.accommodationId).subscribe(
       (reservations: Reservation[]|undefined) => {
+        if(reservations){
         this.reservations = reservations;
-        this.pendingReservations = this.reservations?.filter(r => r.status === 'PENDING');
+        this.pendingReservations = this.reservations.filter(r => r.status === 'PENDING');
         this.approvedReservations = this.reservations?.filter(r => r.status === 'APPROVED');
         this.rejectedReservations = this.reservations?.filter(r => r.status === 'REJECTED');
   
+        console.log('All Reservations:', this.reservations);
+      console.log('Pending Reservations:', this.pendingReservations);
+      console.log('Approved Reservations:', this.approvedReservations);
+      console.log('Rejected Reservations:', this.rejectedReservations);
+
+
+
         this.dataSourcePending=new MatTableDataSource<Reservation>(this.pendingReservations);
         this.dataSourceApproved=new MatTableDataSource<Reservation>(this.approvedReservations);
         this.dataSourceRejected=new MatTableDataSource<Reservation>(this.rejectedReservations);
 
         this.dataSourcePending.paginator=this.paginator;
         this.dataSourcePending.sort=this.sort;
-
-        this.dataSourceApproved.paginator=this.paginator;
-        this.dataSourceApproved.sort=this.sort;
-
-        this.dataSourceRejected.paginator=this.paginator;
-        this.dataSourceRejected.sort=this.sort;
         
         console.log(this.reservations);
+        }
       },
       (error) => {
         console.error('Error getting reservations for accommodation:', error);
@@ -96,5 +100,95 @@ export class AccommodationsReservationsComponent {
     this.cdr.detectChanges();
 
   }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 4000,
+    });
+  }
+
+  approveRequest(reservation:Reservation){
+
+      this.reservationService.confirmReservation(reservation.id).subscribe(
+          () => {
+              console.log('Reservation confirmed successfully.');
+          },
+          error => {
+          }
+      );
+
+      this.openSnackBar('Sucessfully approved reservation request!');
+
+      this.rejectOverlappingRequests(reservation.timeSlot.startDate,reservation.timeSlot.endDate,reservation.id);
+      this.pendingReservations = this.pendingReservations?.filter(r => r.id !== reservation.id);
+      reservation.status=ReservationStatusEnum.APPROVED;
+      this.approvedReservations?.push(reservation);
+      this.dataSourcePending.data = this.pendingReservations;
+      this.dataSourceApproved.data = this.approvedReservations;
+  }
+
+  rejectRequest(reservation:Reservation){
+    this.reservationService.rejectReservation(reservation.id).subscribe(
+      () => {
+          console.log('Reservation rejected successfully.');
+          
+      },
+      error => {
+      }
+  );
+  this.openSnackBar('Sucessfully rejected reservation request!');
+
+  this.pendingReservations = this.pendingReservations.filter(r => r.id !== reservation.id);
+  reservation.status=ReservationStatusEnum.REJECTED;
+  this.rejectedReservations.push(reservation);
+
+  this.dataSourcePending.data = this.pendingReservations;
+  this.dataSourceRejected.data = this.rejectedReservations;
+    
+  }
+
+  rejectOverlappingRequests(startDate:Date,endDate:Date,reservationId:number|undefined){
+    const overlappingReservations: Reservation[] = [];
+    for (const reservation of this.pendingReservations) {
+      if (reservation.id!=reservationId && !this.checkOverlap(reservation)) {
+        overlappingReservations.push(reservation);
+      }
+    }
+    console.log(overlappingReservations)
+    for (const reservation of overlappingReservations) {
+      this.rejectRequest(reservation);
+    }
+  }
+  checkOverlap(reservation:Reservation): boolean { 
+
+    const newStartDate = new Date(reservation.timeSlot.startDate);
+    const newEndDate = new Date(reservation.timeSlot.endDate);
+  
+    newStartDate.setHours(0, 0, 0, 0);
+    newEndDate.setHours(0, 0, 0, 0);
+  
+    const overlap = this.pendingReservations.some(existingReservation => {
+      const existingStartDate = new Date(existingReservation.timeSlot.startDate);
+      const existingEndDate = new Date(existingReservation.timeSlot.endDate);
+  
+      existingStartDate.setHours(0, 0, 0, 0);
+      existingEndDate.setHours(0, 0, 0, 0);
+  
+      console.log('Existing Reservation Start Date:', existingStartDate);
+      console.log('Existing Reservation End Date:', existingEndDate);
+  
+      const overlapStartDate = existingStartDate <= newEndDate && existingEndDate >= newStartDate;
+      const overlapEndDate = existingEndDate >= newStartDate && existingStartDate <= newEndDate;
+  
+      console.log('Overlap Start Date:', overlapStartDate);
+      console.log('Overlap End Date:', overlapEndDate);
+  
+      return overlapStartDate && overlapEndDate;
+    });
+
+    console.log('Overlap:', overlap);
+    return !overlap;
+  }
+
 
 }
