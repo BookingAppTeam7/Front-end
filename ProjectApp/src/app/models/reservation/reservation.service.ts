@@ -59,4 +59,18 @@ export class ReservationService{
             { headers: headers }
         );
     }
+
+    getByGuestId(username: String): Observable<Reservation[] | undefined>{
+        return this.httpClient.get<Reservation[]>(
+            environment.apiHost+'reservations/user/'+username);
+    }
+
+    cancelReservation(reservationId: number|undefined): Observable<void> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+        return this.httpClient.put<void>(
+            environment.apiHost +'reservations/cancel/' + reservationId,
+            { headers: headers }
+        );
+    }
 }
