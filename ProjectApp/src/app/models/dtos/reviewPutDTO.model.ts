@@ -1,7 +1,6 @@
 import { ReviewEnum } from "src/app/models/enums/reviewEnum";
 import { ReviewStatusEnum } from "src/app/models/enums/reviewStatusEnum";
-export interface Review{
-    id?:number;
+export interface ReviewPutDTO{
     userId:String;
     type:ReviewEnum;  //OWNER or ACCOMMODATION
     comment:String;
