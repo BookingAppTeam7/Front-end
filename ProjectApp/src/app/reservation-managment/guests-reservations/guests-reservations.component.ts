@@ -149,8 +149,9 @@ export class GuestsReservationsComponent {
     this.router.navigate(['ownerRating',accommodationId]);
     
   }
-  rateAccommodation(accommodationId:number){
-    this.router.navigate(['accommodationRating',accommodationId]);
+  rateAccommodation(accommodationId:number,reservationId:number){
+    // this.router.navigate(['accommodationRating',accommodationId]);
+    this.router.navigate(['accommodationRating', accommodationId, reservationId]);
     
   }
 }

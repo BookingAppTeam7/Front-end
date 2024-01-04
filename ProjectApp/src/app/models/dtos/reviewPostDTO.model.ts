@@ -11,4 +11,5 @@ export interface ReviewPostDTO{
     deleted:boolean;
     reported:boolean;
     status: ReviewStatusEnum;
+    reservationId:number;
 }

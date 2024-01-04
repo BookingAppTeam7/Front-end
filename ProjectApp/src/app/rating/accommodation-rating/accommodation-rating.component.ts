@@ -16,6 +16,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+
 
 @Component({
   selector: 'app-accommodation-rating',
@@ -27,8 +31,9 @@ import { MatRadioModule } from '@angular/material/radio';
 })
 export class AccommodationRatingComponent {
   createAccommodationRatingForm: FormGroup;
-  reservationId: number;
+
   accommodationId:number|undefined;
+  reservationId:number;
   
 
   constructor(
@@ -37,7 +42,8 @@ export class AccommodationRatingComponent {
     private reservationService: ReservationService,
     private accomodationService:AccommodationService,
     private reviewService:ReviewService,
-    private router: Router
+    private router: Router,
+    private snackBar:MatSnackBar
 
   ) { }
   
@@ -50,12 +56,15 @@ export class AccommodationRatingComponent {
     });
     this.route.paramMap.subscribe((params: ParamMap) => {
       const accommodationId = +params.get('id')!;
+      const reservationId= +params.get('reservationId')!;
+     
       this.accomodationService.getById(accommodationId).subscribe(
         (foundAccomodation) => {
           const ownerUsernameControl = this.createAccommodationRatingForm.get('accommodationName');
           if (foundAccomodation !== null && foundAccomodation !== undefined && ownerUsernameControl) {
             ownerUsernameControl.setValue(foundAccomodation.name);
             this.accommodationId=foundAccomodation.id;
+            this.reservationId=reservationId;
           } else {
             console.error(`Owner ID ${foundAccomodation?.ownerId} not found or ownerId control is not defined`);
           }
@@ -91,19 +100,43 @@ export class AccommodationRatingComponent {
         dateTime:new Date(),
         deleted:false,
         reported:false,
-        status: ReviewStatusEnum.PENDING
+        status: ReviewStatusEnum.PENDING,
+        reservationId:this.reservationId
     
       }
-      
-    this.reviewService.create(review).subscribe(
-      {
+     
+      this.reviewService.create(review).pipe(
+        catchError((error) => {
+          console.error('Greška prilikom kreiranja recenzije:', error);
+    
+          // Provera da li je greška tipa Bad Request (HTTP 400)
+          if (error.status === 400) {
+            // Prikazivanje Snackbar-a sa porukom o grešci
+            this.snackBar.open('Cannot create review. The review deadline has expired, or it is not yet possible to create a review because it has not been 7 days since the end of the reservation.', 'Close', {
+              duration: 5000, // Trajanje snackbar-a u milisekundama
+            });
+          } else {
+            // Ako greška nije tipa Bad Request, možete dodati drugu logiku ili prikazati drugu poruku
+            // Primer: Ako nije Bad Request, prikaži generičku poruku
+            this.snackBar.open('Došlo je do greške. Molimo pokušajte ponovo.', 'Zatvori', {
+              duration: 5000,
+            });
+          }
+    
+          // Vraćamo observable sa greškom pomoću throwError
+          return throwError(error);
+        })
+      ).subscribe({
         next: (data: ReviewPostDTO) => {
-          this.router.navigate(['home'])
+          // Ovaj blok će se izvršiti kada operacija bude uspešna
+          if (data) {
+            this.router.navigate(['home']);
+          } else {
+            // Ako se vrati null, možete dodati logiku za obaveštenje korisnika ili druge radnje
+          }
         },
-      }
-    );
-  }
+      });
     }
-
+  }
   
 }

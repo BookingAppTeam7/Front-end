@@ -42,7 +42,7 @@ const routes: Routes = [
   {component:AccommodationsReservationsComponent,path:'accommodationsReservations/:id'},
   {component:GuestsReservationsComponent,path:'guestsReservations'},
   {component:OwnerRatingComponent,path:'ownerRating/:id'},
-  {component:AccommodationRatingComponent,path:'accommodationRating/:id'}
+  {component:AccommodationRatingComponent,path:'accommodationRating/:id/:reservationId'}
 ];
 
 @NgModule({
