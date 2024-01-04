@@ -142,5 +142,14 @@ export class GuestsReservationsComponent {
       duration: 4000,
     });
   }
-
+  rateOwner(accommodationId:number){
+   // this.router.navigate(['ownerRating']);
+   
+      // Navigacija ka komponenti 'ownerRating' sa ID-om kao parametrom
+    this.router.navigate(['ownerRating',accommodationId]);
+    
+  }
+  rateAccommodation(){
+    this.router.navigate(['ownerRating']);
+  }
 }

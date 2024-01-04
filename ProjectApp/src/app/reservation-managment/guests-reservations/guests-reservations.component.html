@@ -83,11 +83,11 @@
           <button mat-raised-button color="warn"(click)="cancelReservation(element)" style="margin-right: 20px;">
             Cancel 
           </button>
-          <button mat-raised-button color="primary" style="margin-right: 20px;">
+          <button mat-raised-button color="primary" (click)="rateOwner(element.accommodationId)" style="margin-right: 20px;">
             <mat-icon>feedback</mat-icon>
             Rate owner 
           </button>
-          <button mat-raised-button color="primary" style="margin-right: 20px;">
+          <button mat-raised-button color="primary" (click)="rateAccommodation()" style="margin-right: 20px;">
             <mat-icon>feedback</mat-icon>
             Rate accommodation
           </button>
