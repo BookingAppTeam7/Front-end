@@ -6,6 +6,7 @@ import {Observable} from "rxjs";
 import { UserPostDTO } from './models/userPostDTO.model';
 import { UserGetDTO } from './models/userGetDTO.model';
 import { UserPutDTO } from './models/userPutDTO.model';
+import { RoleEnum } from './models/userEnums.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,4 +39,10 @@ export class UserService {
   getByToken(token: string): Observable<User>{
     return this.httpClient.get<User>(environment.apiHost+'users/token/'+token)
   }
+
+  findByRole(role: RoleEnum): Observable<User[]> {
+    return this.httpClient.get<User[]>(environment.apiHost + 'users/role/' + role);
+  }
+
+
 }
