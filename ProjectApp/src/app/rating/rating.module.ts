@@ -9,13 +9,15 @@ import {RouterModule} from "@angular/router";
 import { HomeComponent } from '../layout/home/home.component';
 import { Router } from '@angular/router';
 import {MatRadioModule} from '@angular/material/radio';
+import { AccommodationRatingComponent } from './accommodation-rating/accommodation-rating.component';
 
 
 
 
 @NgModule({
   declarations: [
-    OwnerRatingComponent
+    OwnerRatingComponent,
+    AccommodationRatingComponent
   ],
   imports: [
     CommonModule,
