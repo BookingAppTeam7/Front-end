@@ -1,3 +1,3 @@
 export enum ReviewEnum{
-    OWNER,ACCOMMODATION
+    ACCOMMODATION,OWNER
 }
