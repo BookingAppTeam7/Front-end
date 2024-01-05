@@ -36,6 +36,11 @@ export class ReviewService {
   findByAccommodationId(accommodationId: number): Observable<Review[]> {
     return this.httpClient.get<Review[]>(environment.apiHost + 'reviews/accommodation/' + accommodationId);
   }
+  delete(id:number) {
+    return this.httpClient.delete(environment.apiHost + 'reviews/' + id)
+  }
+
+
   
   
 }
