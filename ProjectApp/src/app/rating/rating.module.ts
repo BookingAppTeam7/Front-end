@@ -10,6 +10,7 @@ import { HomeComponent } from '../layout/home/home.component';
 import { Router } from '@angular/router';
 import {MatRadioModule} from '@angular/material/radio';
 import { AccommodationRatingComponent } from './accommodation-rating/accommodation-rating.component';
+import { AdminRatingRequestsComponent } from './admin-rating-requests/admin-rating-requests.component';
 
 
 
@@ -17,7 +18,8 @@ import { AccommodationRatingComponent } from './accommodation-rating/accommodati
 @NgModule({
   declarations: [
     OwnerRatingComponent,
-    AccommodationRatingComponent
+    AccommodationRatingComponent,
+    AdminRatingRequestsComponent
   ],
   imports: [
     CommonModule,

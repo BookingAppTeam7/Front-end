@@ -29,4 +29,13 @@ export class ReviewService {
     return this.httpClient.put<Review>(environment.apiHost + 'reviews/' + id,review)
   }
 
+  findByOwnerId(ownerId: string): Observable<Review[]> {
+    return this.httpClient.get<Review[]>(environment.apiHost + 'reviews/owner/' + ownerId);
+  }
+
+  findByAccommodationId(accommodationId: number): Observable<Review[]> {
+    return this.httpClient.get<Review[]>(environment.apiHost + 'reviews/accommodation/' + accommodationId);
+  }
+  
+  
 }
