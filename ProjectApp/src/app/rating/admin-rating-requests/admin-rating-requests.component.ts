@@ -23,6 +23,12 @@ import { Reservation } from 'src/app/models/reservation/reservation.model';
 import { ReservationService } from 'src/app/models/reservation/reservation.service';
 import { ReservationComponent } from 'src/app/reservation/reservation.component';
 import { ReviewTableDTO } from '../ReviewTableDTO';
+import { User } from 'src/app/models/user.model';
+import { UserService } from 'src/app/user.service';
+import { RoleEnum } from 'src/app/models/userEnums.model';
+import { ReviewService } from '../review.service';
+import { Review } from 'src/app/accommodation/accommodation/model/review.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin-rating-requests',
@@ -35,6 +41,7 @@ export class AdminRatingRequestsComponent {
 
   pendingOwnersReview:ReviewTableDTO[]=[];
   pendingAccommodationsReview:ReviewTableDTO[]=[];
+  owners:User[];
   
 
   dataSourceOwners = new MatTableDataSource<ReviewTableDTO>([]);
@@ -45,13 +52,55 @@ export class AdminRatingRequestsComponent {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private route: ActivatedRoute,
-    private router: Router,private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private priceCardService:PriceCardService,private reservationService:ReservationService,private dialog:MatDialog) {
+    private router: Router,private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private userService:UserService,private reviewService:ReviewService,private dialog:MatDialog) {
   }
 
   ngOnInit(){
-    
+
+    this.userService.findByRole(RoleEnum.OWNER).subscribe(users => {
+      this.owners=users;
+    });
+
+    for (let i = 0; i < this.owners.length; i++) {
+      const owner = this.owners[i];
+      const ownersReviews = this.getOwnersReviews(owner.username);
+      if(ownersReviews && ownersReviews!=null){
+        const numOfReviews = ownersReviews.length;
+        const reviewTableDTO: ReviewTableDTO = {
+          ownerId: owner.username,
+          accommodationId: -1,
+          numOfReviews: numOfReviews,
+          reviews: ownersReviews
+        };
+        this.pendingOwnersReview.push(reviewTableDTO);
+      }
   }
 
+  this.dataSourceOwners=new MatTableDataSource<ReviewTableDTO>(this.pendingOwnersReview);
 
+  
+
+
+
+
+
+  }
+
+  getOwnersReviews(ownerId:string) :Review[]|null {
+
+    this.reviewService.findByOwnerId(ownerId).subscribe(reviews => {
+      return reviews;
+    });
+    return null;
+  }
+
+  getAccommodationsReviews(accommodationId:number) :Review[]|null {
+
+    this.reviewService.findByAccommodationId(accommodationId).subscribe(reviews => {
+      return reviews;
+    });
+    return null;
+  }
 
 }
+
