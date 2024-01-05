@@ -100,7 +100,9 @@ export class OwnerRatingComponent implements OnInit {
       dateTime:new Date(),
       deleted:false,
       reported:false,
-      status: ReviewStatusEnum.PENDING
+      status: ReviewStatusEnum.PENDING,
+      reservationId:0
+
   
     }
     this.reviewService.create(review).subscribe(

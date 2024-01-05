@@ -40,8 +40,11 @@ export class CreateReservationComponent {
         startDate:this.createReservationForm.value.startDate,
         endDate:this.createReservationForm.value.endDate,
       },
-      numberOfGuests:this.createReservationForm.value.numberOfGuests
+      numberOfGuests:this.createReservationForm.value.numberOfGuests,
+      price:0,
+      priceType:0
     };
+    
     console.log(reservation);
     this.reservationService.create(reservation).subscribe({});
   }

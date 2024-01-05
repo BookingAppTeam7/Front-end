@@ -44,7 +44,8 @@ const routes: Routes = [
   {component:GuestsReservationsComponent,path:'guestsReservations'},
   {component:OwnerRatingComponent,path:'ownerRating/:id'},
   {component:AccommodationRatingComponent,path:'accommodationRating/:id'},
-  {component:AdminRatingRequestsComponent,path:'adminRatingRequests'}
+  {component:AdminRatingRequestsComponent,path:'adminRatingRequests'},
+  {component:AccommodationRatingComponent,path:'accommodationRating/:id/:reservationId'}
 ];
 
 @NgModule({
