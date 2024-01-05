@@ -18,6 +18,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PriceCard } from '../accommodation/model/priceCard.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { Review } from '../accommodation/model/review.model';
+import { ReviewService } from 'src/app/rating/review.service';
 
 @Component({
     selector: 'app-accommodation-details',
@@ -33,14 +35,15 @@ export class AccommodationDetailsComponent implements OnInit{
   role: RoleEnum ;
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
-
+  accommodationReviews:Review[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(
     private route:ActivatedRoute,
     private router:Router,
     private accommodationService:AccommodationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private reviewService:ReviewService
   ){}
   
   ngOnInit() {
@@ -63,6 +66,9 @@ export class AccommodationDetailsComponent implements OnInit{
             this.dataSource=new MatTableDataSource<PriceCard>(this.accommodation.prices);
             this.dataSource.paginator=this.paginator;
             this.dataSource.sort=this.sort;
+
+            
+            this.fetchAccommodationReviews(accommodationId);
           } else {
             console.error(`Accommodation with ID ${accommodationId} not found`);
           }
@@ -73,6 +79,21 @@ export class AccommodationDetailsComponent implements OnInit{
       );
     });
   }
+
+  fetchAccommodationReviews(accommodationId: number) {
+    this.reviewService.findByAccommodationId(accommodationId).subscribe(
+      (reviews) => {
+        this.accommodationReviews = reviews;
+        console.log('Accommodation reviews:', this.accommodationReviews);
+      },
+      (error) => {
+        console.error('Error fetching reviews:', error);
+      }
+    );
+  }
+
+  
+
   goBack() {
     this.router.navigate(['/home']);
   }

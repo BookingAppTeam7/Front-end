@@ -18,6 +18,6 @@ export interface Accommodation{
     cancellationDeadline:number;
     reservationConfirmation:ReservationConfirmationEnum;
     assets:string[];
-    ownerId:String;
+    ownerId:string;
     reviews :Review[];
 }
