@@ -21,6 +21,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { PriceCard } from '../accommodation/accommodation/model/priceCard.model';
 import { TimeSlot } from '../accommodation/accommodation/model/timeSlot.model';
 import { PriceTypeEnum } from '../models/enums/priceTypeEnum';
+import { ReservationConfirmationEnum } from '../models/enums/reservationConfirmationEnum';
 
 @Component({
   selector: 'app-reservation',
@@ -42,6 +43,8 @@ export class ReservationComponent {
       endDate: new Date()
     },
     numberOfGuests: 0,
+    price:0,
+    priceType:0
   };
 
   constructor(private userService:UserService, private authService: AuthService,private accommodationService: AccommodationService, private snackBar:MatSnackBar, private fb: FormBuilder,
@@ -156,6 +159,16 @@ export class ReservationComponent {
     console.log("USERNAME RES",this.user.username)
     this.reservationToSend.timeSlot.startDate=this.reservationForm.get('startDate')?.value;
     this.reservationToSend.timeSlot.endDate=this.reservationForm.get('endDate')?.value;
+
+    if(this.accommodation)
+      for(const p of this.accommodation?.prices){
+        if(this.isWithinTimeSlot(this.reservationToSend.timeSlot.startDate,this.reservationToSend.timeSlot.endDate,p.timeSlot)){
+          this.reservationToSend.price=p.price;
+          this.reservationToSend.priceType=p.type;
+        }
+      }
+
+
     console.log(this.reservationToSend);
     if(this.reservationToSend){
       this.reservationService.create(this.reservationToSend)
@@ -166,6 +179,10 @@ export class ReservationComponent {
         console.log(this.reservation);
         const totalPrice=this.calculateTotalPrice(this.reservation);
         this.openSnackBar('Reservation request sent successfully. Total price would be '+totalPrice+'$');
+        if(this.accommodation?.reservationConfirmation==ReservationConfirmationEnum.AUTOMATIC){
+          // Confirm the reservation after creating it
+          this.confirmReservation(reservation.id);
+        }
       },
       (error) => {
         console.error('Error creating reservation:', error);
@@ -179,6 +196,19 @@ export class ReservationComponent {
     );
     }
   }
+
+  confirmReservation(reservationId: number|undefined) {
+    this.reservationService.confirmReservation(reservationId)
+      .subscribe(
+        () => {
+          console.log('Reservation confirmed successfully.');
+        },
+        (error) => {
+          console.error('Error confirming reservation:', error);
+        }
+      );
+  }
+
   calculateTotalPrice(reservation:Reservation):number{
     if (!this.accommodation?.prices) {
       return 0;
