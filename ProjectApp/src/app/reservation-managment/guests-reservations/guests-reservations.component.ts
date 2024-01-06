@@ -203,7 +203,8 @@ export class GuestsReservationsComponent {
   }
   cancelReservation(reservation:Reservation){
     console.log(reservation);
-    this.accommodationService.getById(reservation.accommodationId).subscribe(
+    if(reservation.accommodation.id)
+    this.accommodationService.getById(reservation.accommodation.id).subscribe(
       (accommodation: Accommodation | undefined) => {
         if (accommodation) {
           const currentDate = new Date();

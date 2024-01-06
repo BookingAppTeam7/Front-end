@@ -22,6 +22,7 @@ import { PriceCard } from '../accommodation/accommodation/model/priceCard.model'
 import { TimeSlot } from '../accommodation/accommodation/model/timeSlot.model';
 import { PriceTypeEnum } from '../models/enums/priceTypeEnum';
 import { ReservationConfirmationEnum } from '../models/enums/reservationConfirmationEnum';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-reservation',
@@ -32,12 +33,10 @@ import { ReservationConfirmationEnum } from '../models/enums/reservationConfirma
 })
 export class ReservationComponent {
   accommodation: Accommodation | undefined;
-  user:UserGetDTO;
+  user:User;
   role: RoleEnum ;
   reservation:Reservation | undefined;
   reservationToSend: ReservationPostDTO = {
-    accommodationId: 0,
-    userId: '',
     timeSlot: {
       startDate: new Date(),
       endDate: new Date()
@@ -68,8 +67,8 @@ export class ReservationComponent {
         if (decodedToken) {
         
         
-        this.userService.getById(decodedToken.sub).subscribe(
-          (user: UserGetDTO) => {
+        this.userService.getUserById(decodedToken.sub).subscribe(
+          (user: User) => {
             if (user) {
               
               this.user=user;
@@ -152,10 +151,10 @@ export class ReservationComponent {
     }
     console.log(this.accommodation?.id);
     if(this.accommodation?.id){
-      this.reservationToSend.accommodationId=this.accommodation?.id;
+      this.reservationToSend.accommodation=this.accommodation;
     }
     this.reservationToSend.numberOfGuests=this.reservationForm.get('guests')?.value;
-    this.reservationToSend.userId=this.user.username;
+    this.reservationToSend.user=this.user;
     console.log("USERNAME RES",this.user.username)
     this.reservationToSend.timeSlot.startDate=this.reservationForm.get('startDate')?.value;
     this.reservationToSend.timeSlot.endDate=this.reservationForm.get('endDate')?.value;
@@ -175,7 +174,7 @@ export class ReservationComponent {
     .subscribe(
       (reservation) => {
         this.reservation = reservation;
-        this.reservation.userId=this.user.username;
+        this.reservation.user=this.user;
         console.log(this.reservation);
         const totalPrice=this.calculateTotalPrice(this.reservation);
         this.openSnackBar('Reservation request sent successfully. Total price would be '+totalPrice+'$');

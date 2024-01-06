@@ -34,8 +34,6 @@ export class CreateReservationComponent {
 
   register(){
     const reservation: ReservationPostDTO={
-      accommodationId: Number(this.createReservationForm.value.accommodationId),
-      userId: this.createReservationForm.value.userId,
       timeSlot:{
         startDate:this.createReservationForm.value.startDate,
         endDate:this.createReservationForm.value.endDate,

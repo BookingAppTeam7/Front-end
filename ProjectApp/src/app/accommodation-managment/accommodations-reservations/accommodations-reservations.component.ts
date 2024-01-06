@@ -51,8 +51,8 @@ export class AccommodationsReservationsComponent {
   dataSourcePending = new MatTableDataSource<Reservation>([]);
   dataSourceApproved = new MatTableDataSource<Reservation>([]);
   dataSourceRejected = new MatTableDataSource<Reservation>([]);
-  displayedColumnsPending: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status','actions'];
-  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status'];
+  displayedColumnsPending: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status','Guest name','actions'];
+  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status','Guest name'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
