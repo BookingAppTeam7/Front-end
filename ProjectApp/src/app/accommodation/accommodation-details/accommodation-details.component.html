@@ -38,7 +38,7 @@
         <p><strong>Comment:</strong> {{ review.comment }}</p>
         <p><strong>Grade:</strong> {{ review.grade }}</p>
         <p><strong>Date:</strong> {{ review.dateTime | date:'medium' }}</p>
-        <button>Delete</button>
+        <button class="dugme-delete" *ngIf="review?.userId == loggedInUserId" (click)="deleteReview(review.id)" >Delete</button>
       </div>
     </div>
     <div class="mat-elevation-z8">

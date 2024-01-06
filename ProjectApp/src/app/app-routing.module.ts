@@ -22,6 +22,7 @@ import { GuestsReservationsComponent } from './reservation-managment/guests-rese
 import { OwnerRatingComponent } from './rating/owner-rating/owner-rating.component';
 import { AccommodationRatingComponent } from './rating/accommodation-rating/accommodation-rating.component';
 import { AdminRatingRequestsComponent } from './rating/admin-rating-requests/admin-rating-requests.component';
+import { OwnerShowReviewsComponent } from './rating/owner-show-reviews/owner-show-reviews.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -45,7 +46,8 @@ const routes: Routes = [
   {component:OwnerRatingComponent,path:'ownerRating/:id'},
   {component:AccommodationRatingComponent,path:'accommodationRating/:id'},
   {component:AdminRatingRequestsComponent,path:'adminRatingRequests'},
-  {component:AccommodationRatingComponent,path:'accommodationRating/:id/:reservationId'}
+  {component:AccommodationRatingComponent,path:'accommodationRating/:id/:reservationId'},
+  {component:OwnerShowReviewsComponent,path:'ownerRatings'}
 ];
 
 @NgModule({
