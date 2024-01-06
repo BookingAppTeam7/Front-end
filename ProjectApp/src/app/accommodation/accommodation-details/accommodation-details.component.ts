@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Accommodation } from '../accommodation/model/accommodation.model';
 import { ActivatedRoute, ParamMap, Route, Router } from '@angular/router';
 import { AccommodationService } from '../accommodation.service';
@@ -18,6 +18,9 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PriceCard } from '../accommodation/model/priceCard.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { Review } from '../accommodation/model/review.model';
+import { ReviewService } from 'src/app/rating/review.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
     selector: 'app-accommodation-details',
@@ -26,31 +29,44 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     standalone: true,
     imports: [MatChipsModule,MatPaginatorModule, MatIconModule,MatTableModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatListModule, CommonModule, LayoutModule, ReservationComponent]
 })
-export class AccommodationDetailsComponent implements OnInit{
+export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   accommodation: Accommodation | undefined;
+ 
+  accessToken: any = localStorage.getItem('user');
+  helper = new JwtHelperService();
+  decodedToken = this.helper.decodeToken(this.accessToken);
+  loggedInUserId=this.decodedToken.sub;
+  
   availableDates: Date[] = [];
   user:UserGetDTO;
   role: RoleEnum ;
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
-
+  accommodationReviews:Review[];
+  ownerReviews:Review[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(
     private route:ActivatedRoute,
     private router:Router,
     private accommodationService:AccommodationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private reviewService:ReviewService,
+    private cdr: ChangeDetectorRef
   ){}
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+  }
   
   ngOnInit() {
+    
     this.authService.userState.subscribe((result) => {
       if(result != null){
         this.role = result.role;
       }else{
        this.role=RoleEnum.UNAUTHENTICATED;
       }
-     // this.cdr.detectChanges();
+     this.cdr.detectChanges();
     })
 
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -63,6 +79,10 @@ export class AccommodationDetailsComponent implements OnInit{
             this.dataSource=new MatTableDataSource<PriceCard>(this.accommodation.prices);
             this.dataSource.paginator=this.paginator;
             this.dataSource.sort=this.sort;
+
+            
+            this.fetchAccommodationReviews(accommodationId);
+            this.fetchOwnerReviews(this.accommodation.ownerId);
           } else {
             console.error(`Accommodation with ID ${accommodationId} not found`);
           }
@@ -73,6 +93,30 @@ export class AccommodationDetailsComponent implements OnInit{
       );
     });
   }
+
+  fetchAccommodationReviews(accommodationId: number) {
+    this.reviewService.findByAccommodationId(accommodationId).subscribe(
+      (reviews) => {
+        this.accommodationReviews = reviews;
+        console.log('Accommodation reviews:', this.accommodationReviews);
+      },
+      (error) => {
+        console.error('Error fetching reviews:', error);
+      }
+    );
+  }
+  fetchOwnerReviews(ownerId: string) {
+    this.reviewService.findByOwnerId(ownerId).subscribe(
+      (reviews) => {
+        this.ownerReviews = reviews;
+        console.log('Owner reviews:', this.ownerReviews);
+      },
+      (error) => {
+        console.error('Error fetching reviews:', error);
+      }
+    );
+  }
+
   goBack() {
     this.router.navigate(['/home']);
   }
@@ -90,7 +134,28 @@ export class AccommodationDetailsComponent implements OnInit{
       date1.getMonth() === date2.getMonth() &&
       date1.getDate() === date2.getDate();
   }
+   deleteReview(id:number|undefined):void{
+   if(id!=undefined){
+    this.reviewService.delete(id).subscribe(
+      () => {
+        console.log(`Review with ID ${id} deleted successfully`);
+        
+        // Optionally, you can fetch the updated reviews after deletion
+        const accommodationId = this.accommodation?.id || 0;
+        this.fetchAccommodationReviews(accommodationId);
+      },
+      (error) => {
+        console.error(`Error deleting review with ID ${id}:`, error);
+      }
+    );
+   }
+    
+  }
+
+ 
 
 }
+
+
 
 

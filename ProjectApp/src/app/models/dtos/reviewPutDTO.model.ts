@@ -4,11 +4,13 @@ export interface ReviewPutDTO{
     userId:String;
     type:ReviewEnum;  //OWNER or ACCOMMODATION
     comment:String;
-    accommodationId:number;
-    ownerId:String;
     grade:number;
+    
     dateTime:Date;
     deleted:boolean;
     reported:boolean;
+    accommodationId:number;
+    ownerId:String;
+   
     status: ReviewStatusEnum;
 }

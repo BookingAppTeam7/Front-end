@@ -12,8 +12,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { AccommodationRatingComponent } from './accommodation-rating/accommodation-rating.component';
 import { AdminRatingRequestsComponent } from './admin-rating-requests/admin-rating-requests.component';
 import { AccommodationsReviewsDialogComponent } from './admin-rating-requests/accommodations-reviews-dialog/accommodations-reviews-dialog.component';
-
-
+import { OwnerShowReviewsComponent } from './owner-show-reviews/owner-show-reviews.component';
 
 
 @NgModule({
@@ -21,7 +20,8 @@ import { AccommodationsReviewsDialogComponent } from './admin-rating-requests/ac
     OwnerRatingComponent,
     AccommodationRatingComponent,
     AdminRatingRequestsComponent,
-    AccommodationsReviewsDialogComponent
+    AccommodationsReviewsDialogComponent,
+    OwnerShowReviewsComponent
   ],
   imports: [
     CommonModule,

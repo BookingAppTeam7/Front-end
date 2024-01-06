@@ -1,4 +1,44 @@
-.details-container {
+.example-container mat-form-field + mat-form-field {
+    margin-left: 8px;
+  }
+
+  .example-container {
+    display: flex;
+    margin-top: 30px;
+    flex-direction: column;
+    align-items: center;
+  }
+ 
+  
+  .register-header {
+    color: #007bff; 
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .error-message {
+    color: red;
+    margin-top: 15px;
+  }
+
+  .example-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .form-field label {
+    margin-right: 10px;
+  }
+  .other-fields{
+    width: 250px;
+  }
+
+  .details-container {
     max-width: 100%;
     margin: auto;
     padding: 25px;
@@ -75,12 +115,7 @@
     border-color: #007bff; /* Highlight border color on hover */
   }
 
-  .review {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
+ 
   
   .review p {
     margin: 5px 0;
@@ -117,6 +152,22 @@
     gap: 1%; 
     margin-bottom: 2%;
   }
+.dugme-report{
+    margin-top: 10px; /* Adjust as needed for spacing between the content and the button */
+    margin-left: auto;
+  }
+
+  .review {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 700px;
+    display: flex;
+  flex-direction: column;
+  }
+  
+  
 
   
   

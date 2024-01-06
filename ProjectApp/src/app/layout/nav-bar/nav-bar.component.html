@@ -14,5 +14,6 @@
     <button *ngIf="!isLoggedIn()" [routerLink]="['login']" style="float: right" mat-raised-button color="">Log in</button>
     <button [routerLink]="['home']"  style="float: right" mat-raised-button color="">Home</button>
     <button  *ngIf="isLoggedIn()" [routerLink]="['home']" (click)="logout()" style="float: right" mat-raised-button color="">Log out</button>
+    <button  *ngIf="role == 'OWNER'"  [routerLink]="['ownerRatings']" style="float: right" mat-raised-button color="">My reviews</button>
   </div>
 </mat-toolbar>

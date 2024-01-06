@@ -26,6 +26,7 @@ export class ReviewService {
     return this.httpClient.post<ReviewPostDTO>(environment.apiHost + 'reviews', review)
   }
   update(review: ReviewPutDTO,id:number): Observable<Review> {
+   
     return this.httpClient.put<Review>(environment.apiHost + 'reviews/' + id,review)
   }
 
@@ -36,6 +37,11 @@ export class ReviewService {
   findByAccommodationId(accommodationId: number): Observable<Review[]> {
     return this.httpClient.get<Review[]>(environment.apiHost + 'reviews/accommodation/' + accommodationId);
   }
+  delete(id:number) {
+    return this.httpClient.delete(environment.apiHost + 'reviews/' + id)
+  }
+
+
   
   
 }
