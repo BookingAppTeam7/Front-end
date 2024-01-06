@@ -43,6 +43,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
   accommodationReviews:Review[];
+  ownerReviews:Review[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(
@@ -81,6 +82,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
 
             
             this.fetchAccommodationReviews(accommodationId);
+            this.fetchOwnerReviews(this.accommodation.ownerId);
           } else {
             console.error(`Accommodation with ID ${accommodationId} not found`);
           }
@@ -103,7 +105,17 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
       }
     );
   }
-
+  fetchOwnerReviews(ownerId: string) {
+    this.reviewService.findByOwnerId(ownerId).subscribe(
+      (reviews) => {
+        this.ownerReviews = reviews;
+        console.log('Owner reviews:', this.ownerReviews);
+      },
+      (error) => {
+        console.error('Error fetching reviews:', error);
+      }
+    );
+  }
 
   goBack() {
     this.router.navigate(['/home']);
