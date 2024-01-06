@@ -23,6 +23,8 @@ import { OwnerRatingComponent } from './rating/owner-rating/owner-rating.compone
 import { AccommodationRatingComponent } from './rating/accommodation-rating/accommodation-rating.component';
 import { AdminRatingRequestsComponent } from './rating/admin-rating-requests/admin-rating-requests.component';
 import { OwnerShowReviewsComponent } from './rating/owner-show-reviews/owner-show-reviews.component';
+import { OwnerRatingsReviewComponent } from './rating/owner-ratings-review/owner-ratings-review.component';
+import { AccommodationRatingsReviewComponent } from './rating/accommodation-ratings-review/accommodation-ratings-review.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -47,7 +49,9 @@ const routes: Routes = [
   {component:AccommodationRatingComponent,path:'accommodationRating/:id'},
   {component:AdminRatingRequestsComponent,path:'adminRatingRequests'},
   {component:AccommodationRatingComponent,path:'accommodationRating/:id/:reservationId'},
-  {component:OwnerShowReviewsComponent,path:'ownerRatings'}
+  {component:OwnerShowReviewsComponent,path:'ownerRatings'},
+  {component:OwnerRatingsReviewComponent,path:'ownersRatingReviews'},
+  {component:AccommodationRatingsReviewComponent,path:'accommodationsRatingReviews'}
 ];
 
 @NgModule({

@@ -29,7 +29,7 @@ import { RoleEnum } from 'src/app/models/userEnums.model';
 import { ReviewService } from '../review.service';
 import { Review } from 'src/app/accommodation/accommodation/model/review.model';
 import { Observable } from 'rxjs';
-import { AccommodationsReviewsDialogComponent } from './accommodations-reviews-dialog/accommodations-reviews-dialog.component';
+import { ReviewStatusEnum } from 'src/app/models/enums/reviewStatusEnum';
 
 
 @Component({
@@ -61,37 +61,39 @@ export class AdminRatingRequestsComponent {
   }
 
  
-  ngOnInit() {
+ ngOnInit() {
     this.userService.findByRole(RoleEnum.OWNER).subscribe(users => {
       this.owners = users;
       this.owners.forEach(owner => {
-        this.getOwnersReviews(owner.username).subscribe(ownersReviews => {
-          const numOfReviews = ownersReviews ? ownersReviews.length : 0;
+        this.getPendingOwnersReviews(owner.username).subscribe(pendingOwnersReviews => {
+          const numOfReviews = pendingOwnersReviews ? pendingOwnersReviews.length : 0;
           const reviewTableDTO: ReviewTableDTO = {
             ownerId: owner.username,
             accommodationId: -1,
             numOfReviews: numOfReviews,
-            reviews: ownersReviews || []
+            reviews: pendingOwnersReviews || []
           };
           this.pendingOwnersReview.push(reviewTableDTO);
           this.dataSourceOwners.data = this.pendingOwnersReview;
+        
         });
+      
       });
     });
-
 
 
     this.accommodationService.getAll().subscribe(accommodations => {
       this.accommodations = accommodations;
       this.accommodations.forEach(a => {
         if (a.id !== undefined) { 
-        this.getAccommodationsReviews(a?.id).subscribe(accommodationsReviews => {
-          const numOfReviews = accommodationsReviews ? accommodationsReviews.length : 0;
+        this.getPendingAccommodationsReviews(a?.id).subscribe(pendingAccommodationsReviews => {
+          //const pendingAccommodationsReviews = accommodationsReviews ? accommodationsReviews.filter(review => review.status === ReviewStatusEnum.PENDING) : [];
+          const numOfReviews = pendingAccommodationsReviews ? pendingAccommodationsReviews.length : 0;
           const reviewTableDTO: ReviewTableDTO = {
             ownerId: "",
             accommodationId: a?.id || -1,
             numOfReviews: numOfReviews,
-            reviews: accommodationsReviews || []
+            reviews: pendingAccommodationsReviews || []
           };
           this.pendingAccommodationsReview.push(reviewTableDTO);
           
@@ -111,29 +113,22 @@ export class AdminRatingRequestsComponent {
     });
   }
 
-  getOwnersReviews(ownerId:string) :Observable<Review[] | null> {
-
-    return this.reviewService.findByOwnerId(ownerId);
+  getPendingOwnersReviews(ownerId:string) :Observable<Review[] | null> {
+    return this.reviewService.findPendingByOwnerId(ownerId);
   }
 
-  getAccommodationsReviews(accommodationId:number) :Observable<Review[] | null> {
+  getPendingAccommodationsReviews(accommodationId:number) :Observable<Review[] | null> {
 
-    return this.reviewService.findByAccommodationId(accommodationId);
+    return this.reviewService.findPendingByAccommodationId(accommodationId);
   }
 
-  viewOwnersReviews(reviews:Review[],ownerId:string){
-
-
+  viewOwnersReviews(ownerId: string) {
+    this.router.navigate(['/ownersRatingReviews'], { queryParams: { ownerId: ownerId } });
   }
+  
 
-  viewAccommodationsReviews(reviews:Review[],accommodationId:number){
-
-    this.dialog.open(AccommodationsReviewsDialogComponent, {
-      data: { reviews },
-      width: '600px' // Set the width as per your requirements
-    });
-    
-    
+  viewAccommodationsReviews(accommodationId:number){
+    this.router.navigate(['/accommodationsRatingReviews'], { queryParams: { accommodationId: accommodationId } });
   }
 
 }
