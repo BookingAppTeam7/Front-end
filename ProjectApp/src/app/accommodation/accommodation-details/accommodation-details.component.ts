@@ -21,6 +21,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { Review } from '../accommodation/model/review.model';
 import { ReviewService } from 'src/app/rating/review.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ReviewStatusEnum } from 'src/app/models/enums/reviewStatusEnum';
 
 @Component({
     selector: 'app-accommodation-details',
@@ -97,7 +98,16 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   fetchAccommodationReviews(accommodationId: number) {
     this.reviewService.findByAccommodationId(accommodationId).subscribe(
       (reviews) => {
-        this.accommodationReviews = reviews;
+        const approvedReviews = [];
+      
+        for (const review of reviews) {
+          if (review.status.toString()=="APPROVED") {
+            approvedReviews.push(review);
+          }
+        }
+        
+        this.accommodationReviews = approvedReviews;
+        console.log(approvedReviews)
         console.log('Accommodation reviews:', this.accommodationReviews);
       },
       (error) => {
@@ -108,8 +118,17 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   fetchOwnerReviews(ownerId: string) {
     this.reviewService.findByOwnerId(ownerId).subscribe(
       (reviews) => {
-        this.ownerReviews = reviews;
+        const approvedReviews = [];
+        for (const review of reviews) {
+   
+          if (review.status.toString()=="APPROVED") {
+            approvedReviews.push(review);
+          }
+        }
+        
+        this.ownerReviews = approvedReviews;
         console.log('Owner reviews:', this.ownerReviews);
+        console.log(approvedReviews)
       },
       (error) => {
         console.error('Error fetching reviews:', error);
