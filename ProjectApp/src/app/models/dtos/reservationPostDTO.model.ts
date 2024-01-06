@@ -4,8 +4,8 @@ import { Accommodation } from "src/app/accommodation/accommodation/model/accommo
 import { User } from "../user.model";
 
 export interface ReservationPostDTO{
-    accommodation?: Accommodation;
-    user?: User;
+    accommodationId: number;
+    userId: string;
     timeSlot: TimeSlot;
     numberOfGuests: number;
     price:number;

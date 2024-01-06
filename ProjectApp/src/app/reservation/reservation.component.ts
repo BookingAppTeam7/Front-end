@@ -37,6 +37,8 @@ export class ReservationComponent {
   role: RoleEnum ;
   reservation:Reservation | undefined;
   reservationToSend: ReservationPostDTO = {
+    accommodationId:0,
+    userId:"",
     timeSlot: {
       startDate: new Date(),
       endDate: new Date()
@@ -151,10 +153,10 @@ export class ReservationComponent {
     }
     console.log(this.accommodation?.id);
     if(this.accommodation?.id){
-      this.reservationToSend.accommodation=this.accommodation;
+      this.reservationToSend.accommodationId=this.accommodation.id;
     }
     this.reservationToSend.numberOfGuests=this.reservationForm.get('guests')?.value;
-    this.reservationToSend.user=this.user;
+    this.reservationToSend.userId=this.user.username;
     console.log("USERNAME RES",this.user.username)
     this.reservationToSend.timeSlot.startDate=this.reservationForm.get('startDate')?.value;
     this.reservationToSend.timeSlot.endDate=this.reservationForm.get('endDate')?.value;
