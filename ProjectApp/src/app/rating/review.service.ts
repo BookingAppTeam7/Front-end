@@ -7,6 +7,7 @@ import {Observable} from "rxjs";
 import { ReviewPutDTO } from '../models/dtos/reviewPutDTO.model';
 import { ReviewPostDTO } from '../models/dtos/reviewPostDTO.model';
 import { Review } from '../accommodation/accommodation/model/review.model';
+import { ReviewStatusEnum } from '../models/enums/reviewStatusEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,22 @@ export class ReviewService {
   }
   delete(id:number) {
     return this.httpClient.delete(environment.apiHost + 'reviews/' + id)
+  }
+
+  findPendingByOwnerId(ownerId: string): Observable<Review[]> {
+    return this.httpClient.get<Review[]>(environment.apiHost + 'reviews/owner/pending/' + ownerId);
+  }
+
+  findPendingByAccommodationId(accommodationId: number): Observable<Review[]> {
+    return this.httpClient.get<Review[]>(environment.apiHost + 'reviews/accommodation/pending/' + accommodationId);
+  }
+
+  approveReview(reviewId: number|undefined): Observable<void> {
+    return this.httpClient.put<void>(environment.apiHost + 'reviews/' + reviewId + '/update-status/approve', null);
+  }
+
+  rejectReview(reviewId: number|undefined): Observable<void> {
+    return this.httpClient.put<void>(environment.apiHost + 'reviews/' + reviewId + '/update-status/reject', null);
   }
 
 

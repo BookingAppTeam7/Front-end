@@ -13,6 +13,8 @@ import { AccommodationRatingComponent } from './accommodation-rating/accommodati
 import { AdminRatingRequestsComponent } from './admin-rating-requests/admin-rating-requests.component';
 import { AccommodationsReviewsDialogComponent } from './admin-rating-requests/accommodations-reviews-dialog/accommodations-reviews-dialog.component';
 import { OwnerShowReviewsComponent } from './owner-show-reviews/owner-show-reviews.component';
+import { OwnerRatingsReviewComponent } from './owner-ratings-review/owner-ratings-review.component';
+import { AccommodationRatingsReviewComponent } from './accommodation-ratings-review/accommodation-ratings-review.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { OwnerShowReviewsComponent } from './owner-show-reviews/owner-show-revie
     AccommodationRatingComponent,
     AdminRatingRequestsComponent,
     AccommodationsReviewsDialogComponent,
-    OwnerShowReviewsComponent
+    OwnerShowReviewsComponent,
+    OwnerRatingsReviewComponent,
+    AccommodationRatingsReviewComponent
   ],
   imports: [
     CommonModule,
