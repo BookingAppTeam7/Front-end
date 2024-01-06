@@ -203,46 +203,52 @@ export class GuestsReservationsComponent {
   }
   cancelReservation(reservation:Reservation){
     console.log(reservation);
-    if(reservation.accommodation.id)
-    this.accommodationService.getById(reservation.accommodation.id).subscribe(
-      (accommodation: Accommodation | undefined) => {
-        if (accommodation) {
-          const currentDate = new Date();
-          const reservationStartDate = new Date(reservation.timeSlot.startDate);
-          const cancellationDeadline = accommodation.cancellationDeadline;
-          const cancellationDate = new Date(reservationStartDate);
-          cancellationDate.setDate(cancellationDate.getDate() - cancellationDeadline);
-
-          if (currentDate > cancellationDate) {
-            this.openSnackBar("Reservation can not be cancelled because of cancellation deadline.")
-          }
-          else{
-              //ovde treba promeniti status rezervacije i kreirati novi pricecard
-              this.reservationService.cancelReservation(reservation.id).subscribe(
-                () => {
-                  
-                },
-                (error) => {
-                  console.error('ERROR:', error);
-                }
-              );
-              this.approvedReservations = this.approvedReservations.filter(r => r.id !== reservation.id);
-              reservation.status=ReservationStatusEnum.CANCELLED;
-              this.cancelledReservations.push(reservation);
-
-              this.dataSourceCancelled.data = this.cancelledReservations;
-              this.dataSourceApproved.data = this.approvedReservations;
-
-              this.openSnackBar("Reservation is successfully CANCELLED!")
-          }
+    if(reservation.accommodation.id){
+      this.accommodationService.getById(reservation.accommodation.id).subscribe(
+        (accommodation: Accommodation | undefined) => {
+          if (accommodation) {
+            const currentDate = new Date();
+            const reservationStartDate = new Date(reservation.timeSlot.startDate);
+            const cancellationDeadline = accommodation.cancellationDeadline;
+            const cancellationDate = new Date(reservationStartDate);
+            cancellationDate.setDate(cancellationDate.getDate() - cancellationDeadline);
+            console.log(accommodation)
+            if (currentDate > cancellationDate) {
+              this.openSnackBar("Reservation can not be cancelled because of cancellation deadline.")
+            }
+            else{
+                //ovde treba promeniti status rezervacije i kreirati novi pricecard
+                this.reservationService.cancelReservation(reservation.id).subscribe(
+                  () => {
+                    
+                  },
+                  (error) => {
+                    console.error('ERROR:', error);
+                  }
+                );
+                this.approvedReservations = this.approvedReservations.filter(r => r.id !== reservation.id);
+                reservation.status=ReservationStatusEnum.CANCELLED;
+                this.cancelledReservations.push(reservation);
+  
+                this.dataSourceCancelled.data = this.cancelledReservations;
+                this.dataSourceApproved.data = this.approvedReservations;
+  
+                this.openSnackBar("Reservation is successfully CANCELLED!")
+            }
+            
           
-        
+          }else{
+            console.log("ERROR!!")
+          }
+        },
+        (error) => {
+          console.error('ERROR:', error);
         }
-      },
-      (error) => {
-        console.error('ERROR:', error);
-      }
-    );
+      );
+    }else{
+      console.log("ERROR!")
+    }
+    
 
     
 
