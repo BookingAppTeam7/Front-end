@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/env/env";
@@ -32,7 +32,10 @@ export class ReservationService{
         return this.httpClient.get<Reservation[]>(
             environment.apiHost+'reservations/accommodation/'+id);
     }
-
+    searchFilter(params:HttpParams):Observable<Reservation[]>{
+        console.log(params)
+        return this.httpClient.get<Reservation[]>(environment.apiHost+'reservations/searchFilter',{params});
+    }
     update(updatedReservation:ReservationPutDTO, id:number):Observable<ReservationPutDTO>{
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.httpClient.put<ReservationPutDTO>(
