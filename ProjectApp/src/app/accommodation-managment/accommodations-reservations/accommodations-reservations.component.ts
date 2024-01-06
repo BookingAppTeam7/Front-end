@@ -1,9 +1,11 @@
 import { LayoutModule } from '@angular/cdk/layout';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { ChangeDetectorRef, Component,ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,7 +30,7 @@ import { ReservationComponent } from 'src/app/reservation/reservation.component'
   templateUrl: './accommodations-reservations.component.html',
   styleUrls: ['./accommodations-reservations.component.css'],
   standalone: true,
-  imports: [MatChipsModule,MatPaginatorModule, MatIconModule,MatTableModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatListModule, CommonModule, LayoutModule, ReservationComponent]
+  imports: [ReactiveFormsModule,MatDatepickerModule,MatChipsModule,MatPaginatorModule, MatIconModule,MatTableModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatListModule, CommonModule, LayoutModule, ReservationComponent]
 })
 export class AccommodationsReservationsComponent {
 
@@ -80,8 +82,6 @@ export class AccommodationsReservationsComponent {
       console.log('Approved Reservations:', this.approvedReservations);
       console.log('Rejected Reservations:', this.rejectedReservations);
 
-
-
         this.dataSourcePending=new MatTableDataSource<Reservation>(this.pendingReservations);
         this.dataSourceApproved=new MatTableDataSource<Reservation>(this.approvedReservations);
         this.dataSourceRejected=new MatTableDataSource<Reservation>(this.rejectedReservations);
@@ -100,7 +100,116 @@ export class AccommodationsReservationsComponent {
     this.cdr.detectChanges();
 
   }
+  searchReservationsForm = this.fb.group({
+    accName: [''],
+    startDate: [null, Validators.required],
+    endDate: [null, Validators.required],
+  }, { validators: this.dateValidator });
 
+
+  dateValidator(formGroup: FormGroup) {
+    const startDate = formGroup.get('startDate')?.value;
+    const endDate = formGroup.get('endDate')?.value;
+
+    if (startDate && endDate && startDate >= endDate) {
+      formGroup.get('endDate')?.setErrors({ dateRange: true });
+    } else {
+      formGroup.get('endDate')?.setErrors(null);
+    }
+
+    if (startDate && endDate && startDate < new Date()) {
+      formGroup.get('startDate')?.setErrors({ pastDate: true });
+    } else {
+      formGroup.get('startDate')?.setErrors(null);
+    }
+
+    if (endDate && endDate < new Date()) {
+      formGroup.get('endDate')?.setErrors({ pastDate: true });
+    } else {
+      formGroup.get('endDate')?.setErrors(null);
+    }
+
+    return null;
+  }
+  formValidation():boolean{
+    const startDate = new Date(this.searchReservationsForm.get('startDate')?.value);
+    const endDate = new Date(this.searchReservationsForm.get('endDate')?.value);
+    console.log(startDate)
+    console.log(endDate)
+    if(startDate>=endDate){
+      this.openSnackBar('Dates are incorrect!');
+      return false;
+    }
+
+    return true;
+  }
+  searchReservations(){
+    if(!this.formValidation){
+      return;
+    }
+    const accNameValue=this.searchReservationsForm.get('accName')?.value;
+    console.log(accNameValue);
+    const startDate = this.searchReservationsForm.get('startDate')?.value;
+    const endDate = this.searchReservationsForm.get('endDate')?.value;
+    console.log(startDate);
+    console.log(endDate);
+
+    let params=new HttpParams()
+    .set('accName',accNameValue.toString())
+    .set('startDate',formatDate(startDate,'yyyy-MM-dd HH:mm:ss','en-US'))
+    .set('endDate',formatDate(endDate,'yyyy-MM-dd HH:mm:ss','en-US'))
+
+    this.reservationService.searchFilter(params).subscribe({
+      next:(reservations:Reservation[])=>{
+        this.reservations=reservations;
+        this.pendingReservations = this.reservations.filter(r => r.status === 'PENDING');
+        this.approvedReservations = this.reservations?.filter(r => r.status === 'APPROVED');
+        this.rejectedReservations = this.reservations?.filter(r => r.status === 'REJECTED');
+        //this.cancelledReservations=this.reservations?.filter(r => r.status === 'CANCELLED');
+
+        this.dataSourcePending=new MatTableDataSource<Reservation>(this.pendingReservations);
+        this.dataSourceApproved=new MatTableDataSource<Reservation>(this.approvedReservations);
+        this.dataSourceRejected=new MatTableDataSource<Reservation>(this.rejectedReservations);
+        //this.dataSourceCancelled=new MatTableDataSource<Reservation>(this.cancelledReservations);
+        this.dataSourcePending.paginator=this.paginator;
+        this.dataSourcePending.sort=this.sort;
+        console.log(reservations);
+      }
+    });
+  }
+  showAll(){
+    this.reservationService.getByAccommodationId(this.accommodationId).subscribe(
+      (reservations: Reservation[]|undefined) => {
+        if(reservations){
+        this.reservations = reservations;
+        this.pendingReservations = this.reservations.filter(r => r.status === 'PENDING');
+        this.approvedReservations = this.reservations?.filter(r => r.status === 'APPROVED');
+        this.rejectedReservations = this.reservations?.filter(r => r.status === 'REJECTED');
+  
+        console.log('All Reservations:', this.reservations);
+      console.log('Pending Reservations:', this.pendingReservations);
+      console.log('Approved Reservations:', this.approvedReservations);
+      console.log('Rejected Reservations:', this.rejectedReservations);
+
+
+
+        this.dataSourcePending=new MatTableDataSource<Reservation>(this.pendingReservations);
+        this.dataSourceApproved=new MatTableDataSource<Reservation>(this.approvedReservations);
+        this.dataSourceRejected=new MatTableDataSource<Reservation>(this.rejectedReservations);
+
+        this.dataSourcePending.paginator=this.paginator;
+        this.dataSourcePending.sort=this.sort;
+        
+        console.log(this.reservations);
+        }
+      },
+      (error) => {
+        console.error('Error getting reservations for accommodation:', error);
+      }
+    );
+
+    this.cdr.detectChanges();
+  }
   openSnackBar(message: string) {
     this.snackBar.open(message, 'OK', {
       duration: 4000,
