@@ -26,10 +26,7 @@ export class ReviewService {
     return this.httpClient.post<ReviewPostDTO>(environment.apiHost + 'reviews', review)
   }
   update(review: ReviewPutDTO,id:number): Observable<Review> {
-    console.log("POZVAO : ")
-    console.log(review)
-    console.log(id)
-    console.log(environment.apiHost + 'reviews/' + id)
+   
     return this.httpClient.put<Review>(environment.apiHost + 'reviews/' + id,review)
   }
 
