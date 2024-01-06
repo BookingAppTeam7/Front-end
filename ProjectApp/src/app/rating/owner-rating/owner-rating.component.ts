@@ -33,6 +33,7 @@ export class OwnerRatingComponent implements OnInit {
   createOwnerRatingForm: FormGroup;
   reservationId: number;
   ownerId:String;
+  accommodationId:number;
   
 
   constructor(
@@ -53,8 +54,8 @@ export class OwnerRatingComponent implements OnInit {
       comment: ['']
     });
     this.route.paramMap.subscribe((params: ParamMap) => {
-      const accommodationId = +params.get('id')!;
-      this.accomodationService.getById(accommodationId).subscribe(
+      this.accommodationId = +params.get('id')!;
+      this.accomodationService.getById(this.accommodationId).subscribe(
         (foundAccomodation) => {
           const ownerUsernameControl = this.createOwnerRatingForm.get('ownerId');
           if (foundAccomodation !== null && foundAccomodation !== undefined && ownerUsernameControl) {
@@ -94,7 +95,7 @@ export class OwnerRatingComponent implements OnInit {
       userId:decodedToken.sub,
       type:ReviewEnum.OWNER,//OWNER or ACCOMMODATION
       comment:comment,
-      accommodationId:-1,
+      accommodationId:this.accommodationId,
       ownerId:ownerUsername,
       grade:rating,
       dateTime:new Date(),
