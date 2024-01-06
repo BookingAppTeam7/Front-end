@@ -29,6 +29,8 @@ import { RoleEnum } from 'src/app/models/userEnums.model';
 import { ReviewService } from '../review.service';
 import { Review } from 'src/app/accommodation/accommodation/model/review.model';
 import { Observable } from 'rxjs';
+import { AccommodationsReviewsDialogComponent } from './accommodations-reviews-dialog/accommodations-reviews-dialog.component';
+
 
 @Component({
   selector: 'app-admin-rating-requests',
@@ -119,11 +121,18 @@ export class AdminRatingRequestsComponent {
     return this.reviewService.findByAccommodationId(accommodationId);
   }
 
-  viewOwnersReviews(reviews:Review[]){
+  viewOwnersReviews(reviews:Review[],ownerId:string){
+
 
   }
 
-  viewAccommodationsReviews(reviews:Review[]){
+  viewAccommodationsReviews(reviews:Review[],accommodationId:number){
+
+    this.dialog.open(AccommodationsReviewsDialogComponent, {
+      data: { reviews },
+      width: '600px' // Set the width as per your requirements
+    });
+    
     
   }
 

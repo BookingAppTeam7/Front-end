@@ -18,7 +18,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-raised-button color="primary" style="margin-right: 20px;">
+          <button mat-raised-button color="primary" style="margin-right: 20px;" (click)="viewOwnersReviews(element.reviews,element.ownerId)">
             View requests 
           </button>  
         </td>
@@ -49,7 +49,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-raised-button color="primary" style="margin-right: 20px;">
+          <button mat-raised-button color="primary" style="margin-right: 20px;" (click)="viewAccommodationsReviews(element.reviews,element.accommodationId)">
             View requests 
           </button>  
         </td>
