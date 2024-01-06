@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import {MatRadioModule} from '@angular/material/radio';
 import { AccommodationRatingComponent } from './accommodation-rating/accommodation-rating.component';
 import { AdminRatingRequestsComponent } from './admin-rating-requests/admin-rating-requests.component';
+import { OwnerShowReviewsComponent } from './owner-show-reviews/owner-show-reviews.component';
 
 
 
@@ -19,7 +20,8 @@ import { AdminRatingRequestsComponent } from './admin-rating-requests/admin-rati
   declarations: [
     OwnerRatingComponent,
     AccommodationRatingComponent,
-    AdminRatingRequestsComponent
+    AdminRatingRequestsComponent,
+    OwnerShowReviewsComponent
   ],
   imports: [
     CommonModule,
