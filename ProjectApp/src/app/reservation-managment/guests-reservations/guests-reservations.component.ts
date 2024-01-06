@@ -80,7 +80,7 @@ export class GuestsReservationsComponent {
         this.dataSourcePending=new MatTableDataSource<Reservation>(this.pendingReservations);
         this.dataSourceApproved=new MatTableDataSource<Reservation>(this.approvedReservations);
         this.dataSourceRejected=new MatTableDataSource<Reservation>(this.rejectedReservations);
-
+        this.dataSourceCancelled=new MatTableDataSource<Reservation>(this.cancelledReservations);
         this.dataSourcePending.paginator=this.paginator;
         this.dataSourcePending.sort=this.sort;
         
@@ -121,6 +121,12 @@ export class GuestsReservationsComponent {
                   console.error('ERROR:', error);
                 }
               );
+              this.approvedReservations = this.approvedReservations.filter(r => r.id !== reservation.id);
+              reservation.status=ReservationStatusEnum.CANCELLED;
+              this.cancelledReservations.push(reservation);
+
+              this.dataSourceCancelled.data = this.cancelledReservations;
+              this.dataSourceApproved.data = this.approvedReservations;
 
               this.openSnackBar("Reservation is successfully CANCELLED!")
           }

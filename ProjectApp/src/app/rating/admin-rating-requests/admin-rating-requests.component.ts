@@ -29,6 +29,8 @@ import { RoleEnum } from 'src/app/models/userEnums.model';
 import { ReviewService } from '../review.service';
 import { Review } from 'src/app/accommodation/accommodation/model/review.model';
 import { Observable } from 'rxjs';
+import { AccommodationsReviewsDialogComponent } from './accommodations-reviews-dialog/accommodations-reviews-dialog.component';
+
 
 @Component({
   selector: 'app-admin-rating-requests',
@@ -42,11 +44,14 @@ export class AdminRatingRequestsComponent {
   pendingOwnersReview:ReviewTableDTO[]=[];
   pendingAccommodationsReview:ReviewTableDTO[]=[];
   owners:User[];
+  accommodations:Accommodation[];
   
 
   dataSourceOwners = new MatTableDataSource<ReviewTableDTO>([]);
+  dataSourceAccommodations = new MatTableDataSource<ReviewTableDTO>([]);
  
   displayedColumnsOwner: string[] = ['ownerId', 'numOfReviews','actions'];
+  displayedColumnsAccommodation: string[] = ['accommodationId', 'numOfReviews','actions'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -55,51 +60,80 @@ export class AdminRatingRequestsComponent {
     private router: Router,private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private userService:UserService,private reviewService:ReviewService,private dialog:MatDialog) {
   }
 
-  ngOnInit(){
-
+ 
+  ngOnInit() {
     this.userService.findByRole(RoleEnum.OWNER).subscribe(users => {
-      this.owners=users;
+      this.owners = users;
+      this.owners.forEach(owner => {
+        this.getOwnersReviews(owner.username).subscribe(ownersReviews => {
+          const numOfReviews = ownersReviews ? ownersReviews.length : 0;
+          const reviewTableDTO: ReviewTableDTO = {
+            ownerId: owner.username,
+            accommodationId: -1,
+            numOfReviews: numOfReviews,
+            reviews: ownersReviews || []
+          };
+          this.pendingOwnersReview.push(reviewTableDTO);
+          this.dataSourceOwners.data = this.pendingOwnersReview;
+        });
+      });
     });
 
-    for (let i = 0; i < this.owners.length; i++) {
-      const owner = this.owners[i];
-      const ownersReviews = this.getOwnersReviews(owner.username);
-      if(ownersReviews && ownersReviews!=null){
-        const numOfReviews = ownersReviews.length;
-        const reviewTableDTO: ReviewTableDTO = {
-          ownerId: owner.username,
-          accommodationId: -1,
-          numOfReviews: numOfReviews,
-          reviews: ownersReviews
-        };
-        this.pendingOwnersReview.push(reviewTableDTO);
+
+
+    this.accommodationService.getAll().subscribe(accommodations => {
+      this.accommodations = accommodations;
+      this.accommodations.forEach(a => {
+        if (a.id !== undefined) { 
+        this.getAccommodationsReviews(a?.id).subscribe(accommodationsReviews => {
+          const numOfReviews = accommodationsReviews ? accommodationsReviews.length : 0;
+          const reviewTableDTO: ReviewTableDTO = {
+            ownerId: "",
+            accommodationId: a?.id || -1,
+            numOfReviews: numOfReviews,
+            reviews: accommodationsReviews || []
+          };
+          this.pendingAccommodationsReview.push(reviewTableDTO);
+          
+          this.dataSourceAccommodations.sort=this.sort;
+
+          this.pendingAccommodationsReview.sort((a, b) => {
+            return b.numOfReviews - a.numOfReviews;
+          });
+          
+          this.dataSourceAccommodations.data = this.pendingAccommodationsReview;
+          this.dataSourceAccommodations.paginator=this.paginator;
+      
+        });
       }
-  }
-
-  this.dataSourceOwners=new MatTableDataSource<ReviewTableDTO>(this.pendingOwnersReview);
-
-  
-
-
-
-
-
-  }
-
-  getOwnersReviews(ownerId:string) :Review[]|null {
-
-    this.reviewService.findByOwnerId(ownerId).subscribe(reviews => {
-      return reviews;
+      });
+    
     });
-    return null;
   }
 
-  getAccommodationsReviews(accommodationId:number) :Review[]|null {
+  getOwnersReviews(ownerId:string) :Observable<Review[] | null> {
 
-    this.reviewService.findByAccommodationId(accommodationId).subscribe(reviews => {
-      return reviews;
+    return this.reviewService.findByOwnerId(ownerId);
+  }
+
+  getAccommodationsReviews(accommodationId:number) :Observable<Review[] | null> {
+
+    return this.reviewService.findByAccommodationId(accommodationId);
+  }
+
+  viewOwnersReviews(reviews:Review[],ownerId:string){
+
+
+  }
+
+  viewAccommodationsReviews(reviews:Review[],accommodationId:number){
+
+    this.dialog.open(AccommodationsReviewsDialogComponent, {
+      data: { reviews },
+      width: '600px' // Set the width as per your requirements
     });
-    return null;
+    
+    
   }
 
 }
