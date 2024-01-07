@@ -22,7 +22,9 @@ export class ReservationService{
             {headers: headers}
         );
     }
-
+    getAll():Observable<Reservation[] | undefined>{
+        return this.httpClient.get<Reservation[]>(environment.apiHost+'reservations');
+    }
     getById(id: number): Observable<Reservation | undefined>{
         return this.httpClient.get<Reservation>(
             environment.apiHost+'reservations/'+id);

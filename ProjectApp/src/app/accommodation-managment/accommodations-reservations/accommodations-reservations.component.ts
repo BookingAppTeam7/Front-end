@@ -37,6 +37,7 @@ export class AccommodationsReservationsComponent {
   reservations:Reservation[]=[];
   accommodationId:number;    //accommodation id 
   accommodation:Accommodation;  //accommodation to be updated
+  allReservations:Reservation[]=[];
 
   accessToken: any = localStorage.getItem('user');
   helper = new JwtHelperService();
@@ -51,8 +52,8 @@ export class AccommodationsReservationsComponent {
   dataSourcePending = new MatTableDataSource<Reservation>([]);
   dataSourceApproved = new MatTableDataSource<Reservation>([]);
   dataSourceRejected = new MatTableDataSource<Reservation>([]);
-  displayedColumnsPending: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status','Guest name','actions'];
-  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status','Guest name'];
+  displayedColumnsPending: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status','Guest name','Num of cancellations','actions'];
+  displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Guests number','Status','Guest name','Num of cancellations'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -68,6 +69,20 @@ export class AccommodationsReservationsComponent {
     });
 
     this.ownerId=this.decodedToken.sub;
+
+    this.reservationService.getAll().subscribe(
+      (reservations: Reservation[]|undefined) => {
+        if(reservations){
+        this.allReservations = reservations;
+        
+        console.log(this.allReservations);
+        }
+      },
+      (error) => {
+        console.error('Error getting reservations for accommodation:', error);
+      }
+    );
+
 
     this.reservationService.getByAccommodationId(this.accommodationId).subscribe(
       (reservations: Reservation[]|undefined) => {
@@ -142,6 +157,11 @@ export class AccommodationsReservationsComponent {
     }
 
     return true;
+  }
+  numberOfCancelledReservations(username: string): number {
+    let ret = 0;
+    ret = this.allReservations.filter(r => r.user.username === username && r.status === ReservationStatusEnum.CANCELLED).length;
+    return ret;
   }
   searchReservations(){
     if(!this.formValidation){
