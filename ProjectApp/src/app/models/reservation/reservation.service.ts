@@ -46,7 +46,15 @@ export class ReservationService{
             {headers: headers}
         );
     }
-
+    delete(id: number): Observable<void> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    
+        return this.httpClient.delete<void>(
+          `${environment.apiHost}reservations/${id}`,
+          { headers: headers }
+        );
+      }
+      
     confirmReservation(reservationId: number|undefined): Observable<void> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
