@@ -15,5 +15,7 @@
     <button [routerLink]="['home']"  style="float: right" mat-raised-button color="">Home</button>
     <button  *ngIf="isLoggedIn()" [routerLink]="['home']" (click)="logout()" style="float: right" mat-raised-button color="">Log out</button>
     <button  *ngIf="role == 'OWNER'"  [routerLink]="['ownerRatings']" style="float: right" mat-raised-button color="">My reviews</button>
+    <button  *ngIf="role == 'OWNER'"  [routerLink]="['userReports']" style="float: right" mat-raised-button color="">Report guest</button>
+    <button  *ngIf="role == 'GUEST'"  [routerLink]="['userReports']" style="float: right" mat-raised-button color="">Report owner</button>
   </div>
 </mat-toolbar>

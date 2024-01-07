@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import {MatRadioModule} from '@angular/material/radio';
 import { AccommodationRatingComponent } from './accommodation-rating/accommodation-rating.component';
 import { AdminRatingRequestsComponent } from './admin-rating-requests/admin-rating-requests.component';
-import { AccommodationsReviewsDialogComponent } from './admin-rating-requests/accommodations-reviews-dialog/accommodations-reviews-dialog.component';
 import { OwnerShowReviewsComponent } from './owner-show-reviews/owner-show-reviews.component';
 import { OwnerRatingsReviewComponent } from './owner-ratings-review/owner-ratings-review.component';
 import { AccommodationRatingsReviewComponent } from './accommodation-ratings-review/accommodation-ratings-review.component';
