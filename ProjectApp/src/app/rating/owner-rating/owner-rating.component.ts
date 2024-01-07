@@ -102,9 +102,7 @@ export class OwnerRatingComponent implements OnInit {
       deleted:false,
       reported:false,
       status: ReviewStatusEnum.PENDING,
-      reservationId:0
-
-  
+      reservationId:0  
     }
     this.reviewService.create(review).subscribe(
       {
