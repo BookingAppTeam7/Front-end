@@ -29,6 +29,17 @@ export class UserReportsService {
 
     return this.httpClient.post<UserReportPostDTO>(environment.apiHost + 'userReports', report)
   }
+
+  getByUserId(userId:String): Observable<UserReport[]> {
+    return this.httpClient.get<UserReport[]>(environment.apiHost + 'userReports/user/'+userId)
+  }
   
+  deactivation(id: number): Observable<UserReport> {
+    return this.httpClient.put<UserReport>(`${environment.apiHost}userReports/report/${id}`, {});
+  }
+
+  ignoreReport(id: number): Observable<UserReport> {
+    return this.httpClient.put<UserReport>(`${environment.apiHost}userReports/ignore/${id}`, {});
+  }
   
 }
