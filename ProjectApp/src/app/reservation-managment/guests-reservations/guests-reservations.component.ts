@@ -201,6 +201,43 @@ export class GuestsReservationsComponent {
 
     this.cdr.detectChanges();
   }
+  refreshReservations() {
+    this.reservationService.getByGuestId(this.guestId).subscribe(
+      (reservations: Reservation[] | undefined) => {
+        if (reservations) {
+          this.reservations = reservations;
+          this.pendingReservations = this.reservations.filter(r => r.status === 'PENDING');
+          this.approvedReservations = this.reservations?.filter(r => r.status === 'APPROVED');
+          this.rejectedReservations = this.reservations?.filter(r => r.status === 'REJECTED');
+          this.cancelledReservations = this.reservations?.filter(r => r.status === 'CANCELLED');
+  
+          this.dataSourcePending.data = this.pendingReservations;
+          this.dataSourceApproved.data = this.approvedReservations;
+          this.dataSourceRejected.data = this.rejectedReservations;
+          this.dataSourceCancelled.data = this.cancelledReservations;
+  
+          // Trigger change detection
+          this.cdr.detectChanges();
+        }
+      },
+      (error) => {
+        console.error('Error getting reservations for user:', error);
+      }
+    );
+  }
+  deleteReservation(id:number){
+    console.log("Clicked on delete reservation "+id);
+    this.reservationService.delete(id).subscribe(
+      () => {
+        console.log('Reservation deleted successfully');
+        this.openSnackBar("Reservation deleted successfully");
+        this.refreshReservations()
+      },
+      (error) => {
+        console.error('Error deleting reservation:', error);
+      }
+    );
+  }
   cancelReservation(reservation:Reservation){
     console.log(reservation);
     if(reservation.accommodation.id){
