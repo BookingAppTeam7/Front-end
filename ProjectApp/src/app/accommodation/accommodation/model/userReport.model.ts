@@ -1,6 +1,6 @@
 export interface UserReport{
     id?:number;
-    userThatReportsId:String;
+    userThatReports:String;
     userThatIsReported:String; 
     reason:String;
 }
