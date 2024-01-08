@@ -1,6 +1,14 @@
 <div class="details-container">
   <div class="heading">
-    <h2>{{ accommodation?.name }}</h2>
+    <h2>
+      {{ accommodation?.name }}
+      <button *ngIf="role === 'GUEST' && isInGuestFavourites(accommodation?.id ?? 0)" class="favourites-button" (click)="removeFromFavourites()">
+          Remove from favourites
+      </button>
+      <button *ngIf="role === 'GUEST' && !isInGuestFavourites(accommodation?.id ?? 0)" class="favourites-button" (click)="addToFavourites()">
+          Add to favourites
+      </button>
+  </h2>
     <div *ngIf="accommodation && accommodation.images && accommodation.images.length > 0">
       <img [src]="accommodation?.images?.[0]" alt="{{ accommodation?.name }} Image">
     </div>

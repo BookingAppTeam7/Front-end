@@ -28,6 +28,7 @@ import { AccommodationRatingsReviewComponent } from './rating/accommodation-rati
 import { UserReportsService } from './reports/reports.service';
 import { GuestsReportingOwnersComponent } from './reports/guests-reporting-owners/guests-reporting-owners.component';
 import { UserReportsComponent } from './users/user-reports/user-reports.component';
+import { FavouriteAccommodationsComponent } from './accommodation-managment/favourite-accommodations/favourite-accommodations.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -56,7 +57,8 @@ const routes: Routes = [
   {component:OwnerRatingsReviewComponent,path:'ownersRatingReviews'},
   {component:AccommodationRatingsReviewComponent,path:'accommodationsRatingReviews'},
   {component:GuestsReportingOwnersComponent,path:'userReports'},
-  {component:UserReportsComponent,path:'usersReports'}
+  {component:UserReportsComponent,path:'usersReports'},
+  {component:FavouriteAccommodationsComponent,path:'favouriteAccommodations'}
 ];
 
 @NgModule({

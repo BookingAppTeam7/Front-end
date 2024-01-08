@@ -6,6 +6,9 @@
     background-color: #fff;
     display: flex;
   }
+  .favourites-button {
+    margin-left: 10px;
+  }
   .heading{
     margin-right: 20px;
     flex:1;

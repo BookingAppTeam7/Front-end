@@ -17,5 +17,6 @@ export interface User {
     ownerRepliedToRequestNotification:boolean,
     deleted:boolean;
     token:string;
-    jwt:string
+    jwt:string;
+    favouriteAccommodations:string;
   }

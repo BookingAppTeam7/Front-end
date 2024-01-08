@@ -47,5 +47,12 @@ export class UserService {
     return this.httpClient.get<User[]>(environment.apiHost + 'users/role/' + role);
   }
 
+  addFavourite(username: string, id: number): Observable<User> {
+    return this.httpClient.put<User>(environment.apiHost + 'users/addFavourite/' + username + '/' + id, {});
+  }
+
+  removeFavourite(username: string, id: number): Observable<User> {
+    return this.httpClient.put<User>(environment.apiHost + 'users/removeFavourite/' + username + '/' + id, {});
+  }
 
 }

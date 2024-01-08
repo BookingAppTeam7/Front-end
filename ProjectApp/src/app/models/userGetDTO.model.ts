@@ -17,4 +17,5 @@ export interface UserGetDTO {
     deleted:boolean,
     token:string;
     jwt:string;
+    favouriteAccommodations:string;
   }
