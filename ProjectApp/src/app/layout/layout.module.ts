@@ -25,8 +25,8 @@ import { MapComponent } from './map/map.component';
     HeaderComponent,
     NavBarComponent,
     FooterComponent,
-    AccommodationComponent,
-    MapComponent
+    MapComponent,
+    AccommodationComponent
   ],
   exports: [
     NavBarComponent,
@@ -35,6 +35,7 @@ import { MapComponent } from './map/map.component';
     MapComponent
   ],
   imports: [
+    
     CommonModule,
     MaterialModule,
     RouterModule,

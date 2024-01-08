@@ -16,6 +16,7 @@ export interface UserPutDTO {
     accommodationRatingNotification:boolean,
     ownerRepliedToRequestNotification:boolean,
     deleted:boolean,
-    token:string
+    token:string;
+    favouriteAccommodations:string;
    // jwt:string
   }

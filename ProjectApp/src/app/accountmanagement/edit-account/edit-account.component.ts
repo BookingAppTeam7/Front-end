@@ -188,6 +188,7 @@ if (decodedToken) {
         ownerRepliedToRequestNotification:this.ownerRepliedToRequestNotification,
         deleted:false,
         token:'',
+        favouriteAccommodations:this.user.favouriteAccommodations
         //jwt:this.jwt
       }
 

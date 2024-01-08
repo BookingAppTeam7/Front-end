@@ -22,6 +22,9 @@ import { Review } from '../accommodation/model/review.model';
 import { ReviewService } from 'src/app/rating/review.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ReviewStatusEnum } from 'src/app/models/enums/reviewStatusEnum';
+import { User } from 'src/app/models/user.model';
+import { UserService } from 'src/app/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-accommodation-details',
@@ -41,6 +44,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   availableDates: Date[] = [];
   user:UserGetDTO;
   role: RoleEnum ;
+  wholeUser:User;
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
   accommodationReviews:Review[];
@@ -53,12 +57,18 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     private accommodationService:AccommodationService,
     private authService: AuthService,
     private reviewService:ReviewService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private userService:UserService,
+    private snackBar:MatSnackBar
   ){}
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
   }
-  
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 4000,
+    });
+  }
   ngOnInit() {
     
     this.authService.userState.subscribe((result) => {
@@ -69,7 +79,14 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
       }
      this.cdr.detectChanges();
     })
-
+    console.log(this.loggedInUserId)
+    this.userService.getUserById(this.loggedInUserId).subscribe(
+      (foundUser) =>{
+        if(foundUser){
+          this.wholeUser=foundUser;
+        }
+      }
+    )
     this.route.paramMap.subscribe((params: ParamMap) => {
       const accommodationId = +params.get('id')!;
       this.accommodationService.getById(accommodationId).subscribe(
@@ -94,7 +111,36 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
       );
     });
   }
+  isInGuestFavourites(accommodationId:number):boolean{
+    const guestFavourites=this.wholeUser.favouriteAccommodations.split(",")
+    const accommodationIdString = accommodationId.toString();
+    return guestFavourites.includes(accommodationIdString);
+  }
+  addToFavourites() {
+    if(this.accommodation?.id)
+    this.userService.addFavourite(this.wholeUser.username, this.accommodation.id).subscribe(
+        () => {
+            this.openSnackBar("Added to favourites")
+            this.ngOnInit()
+        },
+        (error) => {
+            console.error('Failed to add to favourites', error);
+        }
+    );
+  }
 
+  removeFromFavourites() {
+    if(this.accommodation?.id)
+    this.userService.removeFavourite(this.wholeUser.username, this.accommodation.id).subscribe(
+        () => {
+            this.openSnackBar("Removed from favourites");
+            this.ngOnInit()
+        },
+        (error) => {
+            console.error('Failed to remove from favourites', error);
+        }
+    );
+  }
   fetchAccommodationReviews(accommodationId: number) {
     this.reviewService.findByAccommodationId(accommodationId).subscribe(
       (reviews) => {

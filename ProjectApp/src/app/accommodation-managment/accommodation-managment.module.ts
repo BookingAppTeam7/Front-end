@@ -21,6 +21,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MaterialModule } from '../infrastructure/material/material.module';
 import { OwnersAccommodationsComponent } from './owners-accommodations/owners-accommodations.component';
 import { AccommodationsReservationsComponent } from './accommodations-reservations/accommodations-reservations.component';
+import { FavouriteAccommodationsComponent } from './favourite-accommodations/favourite-accommodations.component';
+import { AccommodationComponent } from '../accommodation/accommodation/accommodation.component';
+import { LayoutModule } from '../layout/layout.module';
 
 
 @NgModule({
@@ -34,6 +37,7 @@ import { AccommodationsReservationsComponent } from './accommodations-reservatio
    SearchedAccommodationCardsComponent,
    OwnersAccommodationsComponent,
    AccommodationsReservationsComponent,
+   FavouriteAccommodationsComponent
   ],
   imports: [
     CommonModule,

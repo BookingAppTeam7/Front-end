@@ -51,6 +51,7 @@ export class SuccessComponent{
             ownerRepliedToRequestNotification: user.ownerRepliedToRequestNotification, 
             deleted: user.deleted,
             token: user.token,
+            favouriteAccommodations: user.favouriteAccommodations
           //  jwt:user.jwt
           };
 
