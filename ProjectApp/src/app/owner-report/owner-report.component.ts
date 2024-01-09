@@ -26,6 +26,8 @@ import { PriceTypeEnum } from '../models/enums/priceTypeEnum';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ProfitData } from './profitData.model';
 import { ProfitData2 } from './profitData2.model';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-owner-report',
@@ -297,5 +299,20 @@ export class OwnerReportComponent {
         console.error('Error getting reservations for accommodation:', error);
       }
     );
+  }
+  handleExport(){
+    const invoiceContentElement=document.getElementById('entire-page') as HTMLElement;
+    html2canvas(invoiceContentElement,{}).then(canvas=>{
+      const imgData=canvas.toDataURL('image/png');
+
+      const pageWidth=210;
+
+      const height=canvas.height*pageWidth/canvas.width;
+
+      const pdf=new jsPDF("p","mm","a4");
+      pdf.addImage(imgData,'PNG',0,0,pageWidth,height);
+
+      pdf.save('report.pdf');
+    })
   }
 }

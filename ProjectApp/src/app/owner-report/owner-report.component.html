@@ -1,4 +1,4 @@
-
+<div id="entire-page">
 <form [formGroup]="setDatesForm">
     <div class="data-container" style="text-align: center;">
       <h2 class="register-header">Start and end date for report</h2>
@@ -21,7 +21,9 @@
         </mat-form-field>
       </div>
   
-      <button (click)="generateReport1()" mat-button style="background-color: #1e88e5; color: white;margin-top: 4%;">Search</button>
+      <button (click)="generateReport1()" mat-button style="background-color: #1e88e5; color: white; margin-top: 4%;">Search</button>
+      <button (click)="handleExport()" mat-button style="background-color: #b11d12; color: white; margin-top: 4%; margin-left: 10px;">Download as pdf</button>
+
     </div>
   </form>
 
@@ -91,4 +93,5 @@
         <tr mat-header-row *matHeaderRowDef="profitColumns2"></tr>
         <tr mat-row *matRowDef="let row; columns: profitColumns2;"></tr>
       </table>
+    </div>
 </div>
