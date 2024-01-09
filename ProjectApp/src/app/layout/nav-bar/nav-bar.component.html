@@ -18,5 +18,6 @@
     <button  *ngIf="role == 'OWNER'"  [routerLink]="['userReports']" style="float: right" mat-raised-button color="">Report guest</button>
     <button  *ngIf="role == 'GUEST'"  [routerLink]="['userReports']" style="float: right" mat-raised-button color="">Report owner</button>
     <button *ngIf="role=='GUEST'" [routerLink]="['favouriteAccommodations']" style="float: right" mat-raised-button color="">Favourite accommodations</button>
+    <button *ngIf="role=='OWNER'" [routerLink]="['ownerReport']" style="float: right;" mat-raised-button color="">Owner reports</button>
   </div>
 </mat-toolbar>
