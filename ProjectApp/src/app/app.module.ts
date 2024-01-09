@@ -18,12 +18,14 @@ import { AuthModule } from './auth/auth.module';
 import { LoginFormComponent } from './login/login-form/login-form.component';
 import { MaterialModule } from './infrastructure/material/material.module';
 import { ReservationComponent } from './reservation/reservation.component';
+import { OwnerReportComponent } from './owner-report/owner-report.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    
     
   ],
   imports: [
@@ -38,8 +40,8 @@ import { ReservationComponent } from './reservation/reservation.component';
     MatNativeDateModule,
     AuthModule,
     MaterialModule,
-    ReservationComponent
-
+    ReservationComponent,
+    OwnerReportComponent
   ],
   providers: [ {
     provide: HTTP_INTERCEPTORS,
