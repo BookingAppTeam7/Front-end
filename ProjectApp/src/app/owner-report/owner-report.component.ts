@@ -25,6 +25,7 @@ import { ReservationStatusEnum } from '../models/enums/reservationStatusEnum';
 import { PriceTypeEnum } from '../models/enums/priceTypeEnum';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ProfitData } from './profitData.model';
+import { ProfitData2 } from './profitData2.model';
 
 @Component({
   selector: 'app-owner-report',
@@ -46,10 +47,19 @@ export class OwnerReportComponent {
   accommodationProfit: { [key: number]: number } = {};
   allReservations:Reservation[] = [];
 
+  accommodationReservations:Reservation[]=[]
+  numReservationsMonth: number[]=[0,0,0,0,0,0,0,0,0,0,0,0];
+  profitMonth: number[]=[0,0,0,0,0,0,0,0,0,0,0,0];
+
   profitData: ProfitData[]=[]
   profitColumns: string[] = ['accommodationId','accName' ,'profit'];
   profitDataSource=new MatTableDataSource<ProfitData>([])
 
+  profitData2: ProfitData2[]=[]
+  profitColumns2:string[] = ['month', 'numOfReservations','profit']
+  profitDataSource2=new MatTableDataSource<ProfitData2>([])
+
+  months:string[]=['January','February','March','April','May','June','July','August','September','October','November','December']
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -71,6 +81,10 @@ export class OwnerReportComponent {
        this.profitDataSource=new MatTableDataSource<ProfitData>(this.profitData)
        this.profitDataSource.paginator=this.paginator;
        this.profitDataSource.sort=this.sort;
+
+       this.profitDataSource2=new MatTableDataSource<ProfitData2>(this.profitData2)
+       this.profitDataSource2.paginator=this.paginator
+       this.profitDataSource2.sort=this.sort
       },
      error: (_) => {console.log("Greska!")}
     })
@@ -80,7 +94,18 @@ export class OwnerReportComponent {
     startDate: [null, Validators.required],
     endDate: [null, Validators.required]
   },{validators:this.dateValidator});
-
+  reportForm2 = this.fb.group({
+    accommodationId: [0, {
+      validators: [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0)],
+      asyncValidators: [],
+      updateOn: 'blur',
+    }],
+    year: [0, {
+      validators: [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(0)],
+      asyncValidators: [], 
+      updateOn: 'blur', 
+    }],
+  });
   openSnackBar(message: string) {
     this.snackBar.open(message, 'OK', {
       duration: 3000,
@@ -169,9 +194,6 @@ export class OwnerReportComponent {
       }
     });
     console.log(this.accommodationProfit)
-    //this.profitData = Object.entries(this.accommodationProfit).map(([accommodationId, profit]) => {
-     // return { accommodationId: +accommodationId, profit: profit } as ProfitData;
-    //});
     console.log(this.profitData)
     this.profitDataSource=new MatTableDataSource<ProfitData>(this.profitData)
     this.profitDataSource.paginator=this.paginator;
@@ -205,5 +227,75 @@ export class OwnerReportComponent {
         }
       }
     )
+  }
+  generateReport2() {
+    const accommodationId = this.reportForm2.get('accommodationId')?.value;
+    const year = this.reportForm2.get('year')?.value;
+    if (accommodationId !== null && year !== null && accommodationId!==undefined && year!==undefined) {
+      if (isNaN(accommodationId) || isNaN(year)) {
+        this.openSnackBar('Accommodation ID and Year must be numbers.');
+        return;
+      }
+      let a=false
+      for(const pd of this.profitData){
+        if(pd.accommodationId==accommodationId)
+          a=true
+      }
+      if(!a){
+        this.openSnackBar('Invalid accommodation!')
+        return
+      }
+      this.getAllReservationsByAccommodationId(accommodationId, () => {
+        this.profitMonth=[0,0,0,0,0,0,0,0,0,0,0,0]
+        this.numReservationsMonth=[0,0,0,0,0,0,0,0,0,0,0,0]
+        this.profitData2.splice(0,this.profitData2.length)
+        for (let i = 0; i < 12; i++) {
+          const profitDataInstance = new ProfitData2(i, 0, 0);
+          this.profitData2.push(profitDataInstance);
+      }
+        console.log(this.accommodationReservations);
+        for(const res of this.accommodationReservations){
+          const startDate=new Date(res.timeSlot.startDate)
+          console.log(startDate)
+          const startYear=startDate.getFullYear()
+          const startMonth=startDate.getMonth()
+          if(res.status===ReservationStatusEnum.APPROVED && startYear==year){
+            const totalPrice=this.calculateTotalPrice(res)
+            this.profitMonth[startMonth]+=totalPrice;
+            this.numReservationsMonth[startMonth]+=1;
+
+            this.profitData2[startMonth].numOfReservations+=1
+            this.profitData2[startMonth].profit+=totalPrice
+          }
+        }
+        console.log(this.profitMonth)
+        console.log(this.numReservationsMonth)
+        console.log(this.profitData2)
+        this.profitDataSource2=new MatTableDataSource<ProfitData2>(this.profitData2)
+        this.profitDataSource2.paginator=this.paginator
+        this.profitDataSource2.sort=this.sort
+      });
+
+      console.log('Accommodation ID:', accommodationId);
+      console.log('Year:', year);
+
+    } else {
+      this.openSnackBar('Accommodation ID and Year are required.');
+    }
+  }
+  getAllReservationsByAccommodationId(accommodationId:number,callback: () => void){
+    this.reservationService.getByAccommodationId(accommodationId).subscribe(
+      (reservations: Reservation[]|undefined) => {
+        if(reservations){
+        this.accommodationReservations = reservations;
+        
+        console.log(this.accommodationReservations);
+        callback()
+        }
+      },
+      (error) => {
+        console.error('Error getting reservations for accommodation:', error);
+      }
+    );
   }
 }
