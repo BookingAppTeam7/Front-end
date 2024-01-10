@@ -240,7 +240,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     let sum:number=0;
     this.averageGradeAccommodation=0.00;
 
-    this.reviewService.findPendingByAccommodationId(accommodationId).subscribe(
+    this.reviewService.findByAccommodationId(accommodationId).subscribe(
       (reviews: Review[]) => {
         // Handle the list of reviews here
         const numberOfReviews: number = reviews.length;
@@ -296,7 +296,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     this.averageGradeOwner=0.00;
 
 
-    this.reviewService.findPendingByOwnerId(ownerId).subscribe(
+    this.reviewService.findByOwnerId(ownerId).subscribe(
       (reviews: Review[]) => {
         // Handle the list of reviews here
         const numberOfReviews: number = reviews.length;
