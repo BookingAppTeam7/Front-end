@@ -41,7 +41,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   accessToken: any = localStorage.getItem('user');
   helper = new JwtHelperService();
   decodedToken = this.helper.decodeToken(this.accessToken);
-  loggedInUserId=this.decodedToken.sub;
+  loggedInUserId:string;
   ownerId:string;
 
   
