@@ -58,6 +58,18 @@ export class ReviewService {
     return this.httpClient.put<void>(environment.apiHost + 'reviews/' + reviewId + '/update-status/reject', null);
   }
 
+  findAverageGradeByOwnerId(ownerId: String): Observable<number> {
+    return this.httpClient.get<number>(environment.apiHost + 'reviews/averageGradesOwners/' + ownerId);
+  }
+
+  
+  findAverageGradeByAccommodationId(accommodationId: number): Observable<number> {
+    //console.log("A PUTANJA JE " + environment.apiHost + 'reviews/averageGradesAccommodations/' + accommodationId)
+    return this.httpClient.get<number>(environment.apiHost + 'reviews/averageGradesAccommodations/' + accommodationId);
+  }
+
+
+
 
   
   
