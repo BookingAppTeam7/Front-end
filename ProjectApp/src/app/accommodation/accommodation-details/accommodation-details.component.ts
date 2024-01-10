@@ -43,7 +43,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   decodedToken = this.helper.decodeToken(this.accessToken);
   loggedInUserId=this.decodedToken.sub;
   ownerId:string;
-  loggedInUserId:string;
+
   
   availableDates: Date[] = [];
   user:UserGetDTO;
