@@ -43,6 +43,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   decodedToken = this.helper.decodeToken(this.accessToken);
   loggedInUserId=this.decodedToken.sub;
   ownerId:string;
+  loggedInUserId:string;
   
   availableDates: Date[] = [];
   user:UserGetDTO;
@@ -73,26 +74,32 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     });
   }
   ngOnInit() {
+
    
     this.averageGradeAccommodation=0.00;
     this.averageGradeOwner=0.00;
-    this.authService.userState.subscribe((result) => {
-      if(result != null){
-        this.role = result.role;
-      }else{
-       this.role=RoleEnum.UNAUTHENTICATED;
-      }
-     this.cdr.detectChanges();
-    })
-    
-    console.log(this.loggedInUserId)
-    this.userService.getUserById(this.loggedInUserId).subscribe(
-      (foundUser) =>{
-        if(foundUser){
-          this.wholeUser=foundUser;
+
+    if(this.decodedToken){
+      this.loggedInUserId=this.decodedToken.sub;
+      this.authService.userState.subscribe((result) => {
+        if(result != null){
+          this.role = result.role;
+          console.log(this.loggedInUserId)
+      this.userService.getUserById(this.loggedInUserId).subscribe(
+        (foundUser) =>{
+          if(foundUser){
+            this.wholeUser=foundUser;
+          }
         }
-      }
-    )
+      )
+        }else{
+         this.role=RoleEnum.UNAUTHENTICATED;
+        }
+       this.cdr.detectChanges();
+      })
+    }
+    
+    
     this.route.paramMap.subscribe((params: ParamMap) => {
       const accommodationId = +params.get('id')!;
       this.averageGradeAccommodation=this.calculateAverageGradeAccommodation(accommodationId);
