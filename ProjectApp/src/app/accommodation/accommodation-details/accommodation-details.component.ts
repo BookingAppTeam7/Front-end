@@ -243,10 +243,14 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     this.reviewService.findByAccommodationId(accommodationId).subscribe(
       (reviews: Review[]) => {
         // Handle the list of reviews here
-        const numberOfReviews: number = reviews.length;
+        let numberOfReviews: number = 0;
         for (const review of reviews) {
+          if(review.status.toString()==="APPROVED"){
+            sum=sum+review.grade;
+            numberOfReviews=numberOfReviews+1
+          }
           // Do something with each review
-          sum=sum+review.grade;
+          
        
           // Add more properties or actions as needed
         }
@@ -299,10 +303,14 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     this.reviewService.findByOwnerId(ownerId).subscribe(
       (reviews: Review[]) => {
         // Handle the list of reviews here
-        const numberOfReviews: number = reviews.length;
+       let numberOfReviews: number =0;
         for (const review of reviews) {
+          if(review.status.toString()==="APPROVED"){
+            sum=sum+review.grade;
+            numberOfReviews=numberOfReviews+1
+          }
           // Do something with each review
-          sum=sum+review.grade;
+         
        
           // Add more properties or actions as needed
         }
