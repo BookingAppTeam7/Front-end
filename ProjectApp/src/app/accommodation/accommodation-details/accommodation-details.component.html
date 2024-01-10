@@ -19,6 +19,8 @@
     <p><strong>Location:</strong> {{ accommodation?.location?.country }}, {{accommodation?.location?.city}}, {{accommodation?.location?.address}}</p>
     <p><strong>Guests:</strong> {{ accommodation?.minGuests }} - {{ accommodation?.maxGuests }}</p>
     <p><strong>Status:</strong> {{ accommodation?.status }}</p>
+    <p><strong>Accommodation average grade: </strong>{{averageGradeAccommodation ?? 0.00   | number: '1.2-2'}}</p>
+    <p><strong>Owners Average grade: </strong>{{averageGradeOwner ?? 0.00   | number: '1.2-2'}}</p>
     <!--<p><strong>Rating:</strong> {{accommodation.rating}}</p>-->
     <p><strong>Assets:</strong></p>
     <div class="options-container">
@@ -46,6 +48,7 @@
         <p><strong>Comment:</strong> {{ review.comment }}</p>
         <p><strong>Grade:</strong> {{ review.grade }}</p>
         <p><strong>Date:</strong> {{ review.dateTime | date:'medium' }}</p>
+        <!-- <p><strong>Average grade: </strong>{{calculateAverageGradeAccommodation(review.accommodationId)}}</p> -->
         <button class="dugme-delete" *ngIf="review?.userId == loggedInUserId" (click)="deleteReview(review.id)" >Delete</button>
       </div>
     </div>
@@ -58,6 +61,8 @@
         <p><strong>Comment:</strong> {{ review.comment }}</p>
         <p><strong>Grade:</strong> {{ review.grade }}</p>
         <p><strong>Date:</strong> {{ review.dateTime | date:'medium' }}</p>
+        <!-- <p><strong>Average grade:</strong>{{ calculateAverageGradeOwner(review.ownerId) }}</p> -->
+
         <button class="dugme-delete" *ngIf="review?.userId == loggedInUserId" (click)="deleteReview(review.id)" >Delete</button>
       </div>
     </div>

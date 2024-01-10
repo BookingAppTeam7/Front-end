@@ -25,6 +25,7 @@ import { ReviewStatusEnum } from 'src/app/models/enums/reviewStatusEnum';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, map } from 'rxjs';
 
 @Component({
     selector: 'app-accommodation-details',
@@ -35,10 +36,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
   accommodation: Accommodation | undefined;
- 
+  averageGradeOwner: number | undefined=0.00;
+  averageGradeAccommodation: number | undefined=0.00;
   accessToken: any = localStorage.getItem('user');
   helper = new JwtHelperService();
   decodedToken = this.helper.decodeToken(this.accessToken);
+  loggedInUserId=this.decodedToken.sub;
+  ownerId:string;
   loggedInUserId:string;
   
   availableDates: Date[] = [];
@@ -70,6 +74,11 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     });
   }
   ngOnInit() {
+
+   
+    this.averageGradeAccommodation=0.00;
+    this.averageGradeOwner=0.00;
+
     if(this.decodedToken){
       this.loggedInUserId=this.decodedToken.sub;
       this.authService.userState.subscribe((result) => {
@@ -93,11 +102,15 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     
     this.route.paramMap.subscribe((params: ParamMap) => {
       const accommodationId = +params.get('id')!;
+      this.averageGradeAccommodation=this.calculateAverageGradeAccommodation(accommodationId);
+      console.log(this.averageGradeAccommodation)
       this.accommodationService.getById(accommodationId).subscribe(
         (foundAccommodation) => {
           if (foundAccommodation) {
             this.accommodation = foundAccommodation;
+            this.averageGradeOwner=this.calculateAverageGradeOwner(foundAccommodation.ownerId);
             console.log(this.accommodation);
+            
             this.dataSource=new MatTableDataSource<PriceCard>(this.accommodation.prices);
             this.dataSource.paginator=this.paginator;
             this.dataSource.sort=this.sort;
@@ -153,6 +166,7 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
         for (const review of reviews) {
           if (review.status.toString()=="APPROVED") {
             approvedReviews.push(review);
+          //  this.calculateAverageGradeAccommodation(review.accommodationId)
           }
         }
         
@@ -221,10 +235,106 @@ export class AccommodationDetailsComponent implements OnInit,AfterViewInit{
     
   }
 
+  calculateAverageGradeAccommodation(accommodationId: number): number {
+    let averageGrade: number = 0; // ili neka podrazumevana vrednost
+    let sum:number=0;
+    this.averageGradeAccommodation=0.00;
+
+    this.reviewService.findPendingByAccommodationId(accommodationId).subscribe(
+      (reviews: Review[]) => {
+        // Handle the list of reviews here
+        const numberOfReviews: number = reviews.length;
+        for (const review of reviews) {
+          // Do something with each review
+          sum=sum+review.grade;
+       
+          // Add more properties or actions as needed
+        }
+        console.log("num: ", numberOfReviews)
+        averageGrade=sum / numberOfReviews
+        console.log("AVERAGE  GRADE : ",averageGrade)
+        if(numberOfReviews!=0){
+          this.averageGradeAccommodation=averageGrade;
+        }else{
+          this.averageGradeAccommodation=0.00;
+        }
+      
+        return averageGrade;
+        // Do further processing or manipulation if needed
+      },
+      (error: any) => {
+        console.error('Error retrieving reviews:', error);
+        // Handle the error as needed
+      }
+    );
+
+   return averageGrade;
+  
+    
+    //   this.reviewService.findAverageGradeByAccommodationId(accommodationId).subscribe(
+    //     (grade: number) => {
+    //       averageGrade = grade;
+    //     },
+    //     (error: any) => {
+    //       console.error('Greška pri dobijanju prosečne ocene smestaja:', error);
+    //     }
+    //   );
+      
+    
+    // return averageGrade;
+    // return this.reviewService.findAverageGradeByOwnerId(ownerId);
+  }
+
+ 
+  
+
+
+  calculateAverageGradeOwner(ownerId: string): number {
+
+    let averageGrade: number = 0; // ili neka podrazumevana vrednost
+    let sum:number=0;
+    this.averageGradeOwner=0.00;
+
+
+    this.reviewService.findPendingByOwnerId(ownerId).subscribe(
+      (reviews: Review[]) => {
+        // Handle the list of reviews here
+        const numberOfReviews: number = reviews.length;
+        for (const review of reviews) {
+          // Do something with each review
+          sum=sum+review.grade;
+       
+          // Add more properties or actions as needed
+        }
+        console.log("num: ", numberOfReviews)
+        averageGrade=sum / numberOfReviews
+        console.log("AVERAGE  GRADE : ",averageGrade)
+       // this.averageGradeOwner=averageGrade;
+        if(numberOfReviews!=0){
+          this.averageGradeOwner=averageGrade;
+        }else{
+          this.averageGradeOwner=0.00;
+        }
+        return averageGrade;
+        // Do further processing or manipulation if needed
+      },
+      (error: any) => {
+        console.error('Error retrieving reviews:', error);
+        // Handle the error as needed
+      }
+    );
+
+   return averageGrade;
+  
+    
+    // return this.reviewService.findAverageGradeByOwnerId(ownerId);
+  }
+
  
 
+
+
+
+
+
 }
-
-
-
-
