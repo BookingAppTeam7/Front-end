@@ -49,5 +49,6 @@ import { OwnerReportComponent } from './owner-report/owner-report.component';
     multi: true,
   },],
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }

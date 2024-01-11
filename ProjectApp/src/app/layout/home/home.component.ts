@@ -8,8 +8,9 @@ import { AccommodationDataService } from 'src/app/accommodation/accommodation-da
 import { AccommodationService } from 'src/app/accommodation/accommodation.service';
 import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
 import { AccommodationDetails } from 'src/app/accommodation/accommodation/model/accommodationDetails.model';
-
-
+import { SocketApiService } from 'src/app/models/socketApiService.service';
+import { SocketService } from 'src/app/models/socket.service';
+import { Message } from 'src/app/models/message.model';
 
 @Component({
   selector: 'app-home',
@@ -23,9 +24,24 @@ export class HomeComponent {
 
    searchedAccommodations: AccommodationDetails[] | undefined
    constructor(private service: AccommodationService, private snackBar:MatSnackBar, private fb: FormBuilder,
-    private dataService: AccommodationDataService,private router: Router) {
+    private dataService: AccommodationDataService,private router: Router,private socketService:SocketApiService,private socketApiService:SocketApiService) {
   }
   ngOnInit(): void {
+
+    this.socketApiService.initializeWebSocketConnection();
+
+    // Create a sample message
+    const sampleMessage: Message = {
+      // Populate your message properties here
+      // For example:
+      fromId: 'OWNER@gmail.com',
+      toId: 'GOST@gmail.com',
+      message: 'Hello, this is a test message!',
+    };
+
+    // Call the sendMessageUsingRest method
+    this.socketApiService.sendMessageUsingRest(sampleMessage);
+
     this.service.getAllApproved().subscribe({
        next: (data: Accommodation[]) => {
         this.accommodationList = data

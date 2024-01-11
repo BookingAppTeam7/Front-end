@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Client } from 'stompjs';
 
 
 import * as Stomp from 'stompjs';
@@ -24,13 +25,18 @@ export class SocketApiService {
   constructor(private socketService: SocketService) {}
 
   initializeWebSocketConnection() {
+    console.log("usaooo 27")
     let ws = new SockJS(this.serverUrl);
+    console.log("usaooo 29")
     this.stompClient = Stomp.over(ws);
+    console.log("usaooo 31")
     let that = this;
-
+    console.log("usaooo 33")
     this.stompClient.connect({}, function () {
       that.isLoaded = true;
+      console.log("usaooo 36")
       that.openGlobalSocket();
+      console.log("usaooo 38")
     });
   }
 
