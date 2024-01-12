@@ -56,7 +56,7 @@ export class AuthService {
   const decodedToken = helper.decodeToken(accessToken);
   
   if (decodedToken) {
-    console.log("USERNAMEEE 899 " , decodedToken.sub)
+   // console.log("USERNAMEEE 899 " , decodedToken.sub)
     // Subscribe to the observable to get the actual UserGetDTO
     this.userService.getById(decodedToken.sub).subscribe(
       (user: UserGetDTO) => {
@@ -73,7 +73,7 @@ export class AuthService {
     }
 
   login(auth: any): Observable<AuthResponse> {
-    console.log("LOGG IN")
+    //console.log("LOGG IN")
     return this.http.post<AuthResponse>(environment.apiHost + 'login', auth, {
       headers: this.headers,
     });
@@ -100,7 +100,7 @@ export class AuthService {
       const helper = new JwtHelperService();
       const decodedToken = helper.decodeToken(accessToken);
       const user=this.userService.getById(decodedToken.sub);
-      console.log("AUTHORITY -> ",helper.decodeToken(accessToken).authority );
+      //console.log("AUTHORITY -> ",helper.decodeToken(accessToken).authority );
       return helper.decodeToken(accessToken).authority;
     //  return this.userGet.role;
     }
@@ -117,12 +117,12 @@ export class AuthService {
     const decodedToken = helper.decodeToken(accessToken);
 
     if (decodedToken) {
-      console.log("USERNAAAME --> ", decodedToken.sub)
+      //console.log("USERNAAAME --> ", decodedToken.sub)
       this.userService.getById(decodedToken.sub).subscribe(
         
         (user: UserGetDTO) => {
           if (user && user.status===StatusEnum.ACTIVE) {
-            console.log("IF USER --> ", decodedToken.sub)
+            //console.log("IF USER --> ", decodedToken.sub)
             this.user$.next(user);
           }else{
             this.logout();

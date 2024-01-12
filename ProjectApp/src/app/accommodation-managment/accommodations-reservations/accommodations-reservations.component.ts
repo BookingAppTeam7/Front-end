@@ -21,8 +21,10 @@ import { AccommodationService } from 'src/app/accommodation/accommodation.servic
 import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
 import { PriceCardService } from 'src/app/accommodation/priceCard.service';
 import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnum';
+import { Message } from 'src/app/models/message.model';
 import { Reservation } from 'src/app/models/reservation/reservation.model';
 import { ReservationService } from 'src/app/models/reservation/reservation.service';
+import { SocketApiService } from 'src/app/models/socketApiService.service';
 import { ReservationComponent } from 'src/app/reservation/reservation.component';
 
 @Component({
@@ -58,7 +60,7 @@ export class AccommodationsReservationsComponent {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private route: ActivatedRoute,
-    private router: Router,private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private priceCardService:PriceCardService,private reservationService:ReservationService,private dialog:MatDialog) {
+    private router: Router,private snackBar:MatSnackBar,private cdr: ChangeDetectorRef,private fb:FormBuilder,private accommodationService:AccommodationService,private priceCardService:PriceCardService,private reservationService:ReservationService,private dialog:MatDialog,private socketApiService:SocketApiService) {
   }
   
 
@@ -247,6 +249,14 @@ export class AccommodationsReservationsComponent {
       );
 
       this.openSnackBar('Sucessfully approved reservation request!');
+
+    // const sampleMessage: Message = {
+    //   fromId: this.ownerId,
+    //   toId: reservation.user.username,
+    //   message: 'Successfully approved reservation in '+reservation.accommodation.name+' accommodation!',
+    // };
+
+    // this.socketApiService.sendMessageUsingRest(sampleMessage);
 
       this.rejectOverlappingRequests(reservation.timeSlot.startDate,reservation.timeSlot.endDate,reservation.id);
       this.pendingReservations = this.pendingReservations?.filter(r => r.id !== reservation.id);

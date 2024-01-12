@@ -8,7 +8,7 @@ import { Message } from './message.model';
   providedIn: 'root',
 })
 export class SocketService {
-  url: string = environment.apiHost + "/socket";
+  url: string = environment.apiHost + "socket";
   restUrl:string = environment.apiHost + "/sendMessageRest";
 
   constructor(private http: HttpClient) { }
