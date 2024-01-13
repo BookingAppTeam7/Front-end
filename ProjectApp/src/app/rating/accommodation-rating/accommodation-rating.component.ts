@@ -34,6 +34,7 @@ export class AccommodationRatingComponent {
 
   accommodationId:number|undefined;
   reservationId:number;
+  ownerIdAccommodation:string |undefined;
   
 
   constructor(
@@ -60,6 +61,7 @@ export class AccommodationRatingComponent {
      
       this.accomodationService.getById(accommodationId).subscribe(
         (foundAccomodation) => {
+          this.ownerIdAccommodation=foundAccomodation?.ownerId;
           const ownerUsernameControl = this.createAccommodationRatingForm.get('accommodationName');
           if (foundAccomodation !== null && foundAccomodation !== undefined && ownerUsernameControl) {
             ownerUsernameControl.setValue(foundAccomodation.name);
@@ -95,7 +97,7 @@ export class AccommodationRatingComponent {
         type:ReviewEnum.ACCOMMODATION,//OWNER or ACCOMMODATION
         comment:comment,
         accommodationId:this.accommodationId,
-        ownerId:"",
+        ownerId:this.ownerIdAccommodation,
         grade:rating,
         dateTime:new Date(),
         deleted:false,

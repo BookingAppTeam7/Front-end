@@ -60,7 +60,7 @@ const routes: Routes = [
   {component:GuestsReportingOwnersComponent,path:'userReports'},
   {component:UserReportsComponent,path:'usersReports'},
   {component:FavouriteAccommodationsComponent,path:'favouriteAccommodations'},
-  {component:OwnerReportComponent,path:'ownerReport'}
+  {component:OwnerReportComponent,path:'ownerReport'},
 ];
 
 @NgModule({

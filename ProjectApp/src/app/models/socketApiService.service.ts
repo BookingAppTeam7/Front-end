@@ -108,12 +108,14 @@ export class SocketApiService {
     }
   }
 
-  handleResult(message: { body: string }) {
+  handleResult(message: { body: string; }) {
+    console.log("HANDLE RESULTT")
+    if (message.body) {
       let messageResult: Message = JSON.parse(message.body);
       this.messages.push(messageResult);
-      console.log("Recieved message : "+message)
-    
+    }
   }
+
 
 //   getStompClient(): any {
 //     return this.stompClient;
