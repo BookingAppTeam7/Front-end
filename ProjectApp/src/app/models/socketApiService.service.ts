@@ -8,6 +8,7 @@ import { Message } from './message.model';
 import { SocketService } from './socket.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -24,27 +25,11 @@ export class SocketApiService {
   isCustomSocketOpened = false;
   messages: Message[] = [];
 
-  constructor(private socketService: SocketService) {
-       
-  // const accessToken: any = localStorage.getItem('user');
-  // const helper = new JwtHelperService();
-  // const decodedToken = helper.decodeToken(accessToken);
-  //   this.username=decodedToken.sub;
+  constructor(private socketService: SocketService, private snackBar: MatSnackBar) {    
     this.initializeWebSocketConnection();
-
   }
 
-  // initializeWebSocketConnection() {
-  //   let ws = new SockJS(this.serverUrl);
-  //   this.stompClient = Stomp.over(ws);
-  //   let that = this;
-  //   this.stompClient.connect({}, function () {
-  //     that.isLoaded = true;
-  //     that.openGlobalSocket();
-  //     that.setStompClient(that.stompClient);
-  //     console.log("WebSocket connection state:", that.stompClient.connected);
-  //   });
-  // }
+
   initializeWebSocketConnection() {
     // serverUrl je vrednost koju smo definisali u registerStompEndpoints() metodi na serveru
     let ws = new SockJS(this.serverUrl);
@@ -81,28 +66,10 @@ export class SocketApiService {
       });
     }
   }
-
-  // openSocket(username:String) {
-  //     this.isCustomSocketOpened = true;
-  //     console.log("Pretplata na kanal:","/socket-publisher/" + "GOST@gmail.com");
-  //     if(this.stompClient){
-  //       console.log("RADI ")
-  //     }
-  //     console.log("Pre subscribe");
-  //     this.stompClient.subscribe("/socket-publisher/" +"GOST@gmail.com", (message: { body: string }) => {
-  //       console.log("U subscribe callback-u");
-  //       this.handleResult(message);
-  //     });
-  //     console.log("Posle subscribe");
-    
-  // }
   openSocket(username:String) {
-    console.log("USERNAMEEEE jeee "+username)
     if (this.isLoaded) {
       this.isCustomSocketOpened = true;
-      console.log("USERNAMEEEE "+username)
       this.stompClient.subscribe("/socket-publisher/" + username, (message: { body: string; }) => {
-        console.log("922222")
         this.handleResult(message);
       });
     }
@@ -112,24 +79,21 @@ export class SocketApiService {
     console.log("HANDLE RESULTT")
     if (message.body) {
       let messageResult: Message = JSON.parse(message.body);
+      console.log("MESSAGE : "+message)
       this.messages.push(messageResult);
+      this.openSnackBar('New message received : '+messageResult.content, 'Dismiss');
     }
   }
 
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 10000, 
+    });
+  }
 
-//   getStompClient(): any {
-//     return this.stompClient;
-// }
 
 getStompClient(): BehaviorSubject<any> {
   return this.stompClient;
 }
 
-  private setStompClient(client: any) {
-    this.stompClient = client;
-    this.stompSubject.next(client);
-  }
-  setUsername(username:string){
-
-  }
 }

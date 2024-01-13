@@ -1,5 +1,8 @@
 <mat-toolbar>
   <div>
+    <button *ngIf="isLoggedIn()" [routerLink]="['myNotifications']" style="float: right" mat-raised-button color="">
+      <mat-icon>notifications</mat-icon>
+    </button>
     <button *ngIf="role == 'ADMIN'" [routerLink]="['adminRatingRequests']"  style="float: right" mat-raised-button color="">Rating requests</button>
     <button *ngIf="role == 'OWNER'" [routerLink]="['ownersAccommodations']"  style="float: right" mat-raised-button color="">My Accommodations</button>
     <button *ngIf="role == 'GUEST'" [routerLink]="['guestsReservations']"  style="float: right" mat-raised-button color="">My Reservations</button>
