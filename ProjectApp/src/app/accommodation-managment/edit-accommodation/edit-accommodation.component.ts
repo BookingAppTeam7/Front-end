@@ -35,6 +35,11 @@ import { ReservationStatusEnum } from 'src/app/models/enums/reservationStatusEnu
 import { Router} from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+interface ImageData {
+  name: string;
+  path: string;
+}
+
 @Component({
   selector: 'app-edit-accommodation',
   templateUrl: './edit-accommodation.component.html',
@@ -49,6 +54,9 @@ export class EditAccommodationComponent  implements OnInit{
   accommodationTypeEnum=AccommodationTypeEnum;
   editedItem: PriceCard;
   selectedElement: PriceCard; 
+  selectedFile:string
+  images:string[]=[]
+  imageDataList:ImageData[]=[]
 
   result:boolean=true;
   priceCards: PriceCard[];
@@ -65,6 +73,9 @@ export class EditAccommodationComponent  implements OnInit{
 
   editForm: FormGroup;
 
+  imageDataSource = new MatTableDataSource<ImageData>();
+  imageDisplayedColumns: string[] = ['Name', 'Image', 'Actions'];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(private route: ActivatedRoute,
@@ -75,7 +86,68 @@ export class EditAccommodationComponent  implements OnInit{
       priceEdit: [''],
     });
   }
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+
+    if (selectedFile) {
+      console.log('Selected File:', selectedFile.name);
+      this.selectedFile="../../../assets/images/"+selectedFile.name
+    }
+  }
+  addImage(){
+    if (this.selectedFile) {
+      
+      const imageName = this.selectedFile.split('/').pop();
+      const imageData: ImageData = { name: imageName || '', path: this.selectedFile };
+
+      const imageIndex = this.images.findIndex(image => image === this.selectedFile);
   
+      if (imageIndex !== -1) {
+        this.openSnackBar("That picture already exists!")
+        return;
+      }
+
+      this.images.push(this.selectedFile)
+      this.imageDataList.push(imageData);
+
+
+      this.imageDataSource = new MatTableDataSource<ImageData>(this.imageDataList);
+      this.imageDataSource.paginator=this.paginator;
+      this.imageDataSource.sort=this.sort
+
+      console.log(this.images)
+      console.log(this.accommodationId)
+      console.log(this.selectedFile)
+      this.accommodationService.updateImages(this.accommodationId, this.selectedFile).subscribe(
+        (result) => {
+          console.log('Images updated successfully:', result);
+        },
+        (error) => {
+          console.error('Error updating images:', error);
+        }
+      );
+    }
+  }
+  deleteImage(imageData: ImageData): void {
+    const index = this.imageDataList.findIndex(img => img.path === imageData.path);
+  
+    if (index !== -1) {
+      this.imageDataList.splice(index, 1);
+    }
+  
+    const imageIndex = this.images.findIndex(image => image === imageData.path);
+  
+    if (imageIndex !== -1) {
+      this.images.splice(imageIndex, 1);
+    }
+  
+    // Update the image table data source
+    this.imageDataSource = new MatTableDataSource<ImageData>(this.imageDataList);
+    this.imageDataSource.paginator = this.paginator;
+    this.imageDataSource.sort = this.sort;
+
+    this.openSnackBar("Image deleted")
+  }
   editAccommodationFormGroup=new FormGroup({
     name: new FormControl('',Validators.required),
     description:new FormControl('',Validators.required),
@@ -112,6 +184,8 @@ export class EditAccommodationComponent  implements OnInit{
     .subscribe(
       (response) => {
         this.accommodation = response as Accommodation;
+        this.images=this.accommodation.images;
+        console.log(this.images)
         this.editAccommodationFormGroup.get('name')?.setValue(this.accommodation?.name || '', { emitEvent: false });
         this.editAccommodationFormGroup.get('address')?.setValue(this.accommodation?.location?.address || '');
         this.editAccommodationFormGroup.get('country')?.setValue(this.accommodation?.location?.country || '');
@@ -131,6 +205,16 @@ export class EditAccommodationComponent  implements OnInit{
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
+        for(const image of this.images){
+          const imageName = image.split('/').pop();
+          const imageData: ImageData = { name: imageName || '', path: image };
+          this.imageDataList.push(imageData);
+        }
+        console.log(this.imageDataList)
+        this.imageDataSource = new MatTableDataSource<ImageData>(this.imageDataList);
+        this.imageDataSource.paginator=this.paginator;
+        this.imageDataSource.sort=this.sort
+        //(click)="deleteImage(image)"
 
         this.reservationService.getByAccommodationId(this.accommodationId).subscribe(
           (reservations: Reservation[]|undefined) => {
@@ -492,7 +576,6 @@ updatePriceCard(updatedElement: PriceCard): void {
       }
     }
   });
-
     return true;
   }
 
@@ -525,7 +608,7 @@ updatePriceCard(updatedElement: PriceCard): void {
         reservationConfirmation:this.editAccommodationFormGroup.get('reservationConfirmation')?.value,
         // reservationConfirmation:(this.editAccommodationFormGroup.value.reservationConfirmation !== null && this.editAccommodationFormGroup.value.reservationConfirmation !== undefined) ? this.editAccommodationFormGroup.value.reservationConfirmation as ReservationConfirmationEnum : null,
         cancellationDeadline: this.editAccommodationFormGroup.value.cancellationDeadline,
-        images: []
+        images: this.images
       };
       this.accommodationService.update(updatedAccommodation,this.accommodationId).subscribe({ });
       this.openSnackBar('Sucessfully created request for change!');

@@ -9,9 +9,14 @@
           Add to favourites
       </button>
   </h2>
-    <div *ngIf="accommodation && accommodation.images && accommodation.images.length > 0">
-      <img [src]="accommodation?.images?.[0]" alt="{{ accommodation?.name }} Image">
-    </div>
+  <div *ngIf="accommodation && accommodation.images && accommodation.images.length > 0; else noImages">
+    <img [src]="accommodation.images[0]" alt="{{ accommodation?.name }} Image">
+  </div>
+
+  <ng-template #noImages>
+    <!-- Show a default image if there are no images -->
+    <img src="../../../assets/images/accommodation1.jpg" alt="Default Image">
+  </ng-template>
   </div>
     
     <div class="content">

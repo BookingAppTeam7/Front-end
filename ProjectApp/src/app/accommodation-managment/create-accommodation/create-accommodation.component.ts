@@ -24,6 +24,10 @@ import { MatSort } from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { CommonModule } from '@angular/common';
 import { JwtHelperService } from '@auth0/angular-jwt';
+interface ImageData {
+  name: string;
+  path: string;
+}
 @Component({
   selector: 'app-create-accommodation',
   templateUrl: './create-accommodation.component.html',
@@ -34,8 +38,12 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class CreateAccommodationComponent {
 
   prices:PriceCard[]
-  images:String[]
+  images:string[]=[]
   accommodationTypeEnum = AccommodationTypeEnum;
+
+  imageDataList:ImageData[]=[]
+  imageDataSource = new MatTableDataSource<ImageData>();
+  imageDisplayedColumns: string[] = ['Name', 'Image', 'Actions'];
 
   dataSource = new MatTableDataSource<PriceCard>([]);
   displayedColumns: string[] = ['Id', 'Start Date', 'End Date', 'Price','Type'];
@@ -44,6 +52,7 @@ export class CreateAccommodationComponent {
   helper = new JwtHelperService();
   decodedToken = this.helper.decodeToken(this.accessToken);
   ownerId:string=""
+  selectedFile:string
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -55,6 +64,9 @@ export class CreateAccommodationComponent {
      this.dataSource = new MatTableDataSource<PriceCard>(this.prices);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+    this.imageDataSource=new MatTableDataSource<ImageData>(this.imageDataList);
+    this.imageDataSource.paginator=this.paginator;
+    this.imageDataSource.sort=this.sort;
   }
 
   createAccommodationForm=new FormGroup({
@@ -78,6 +90,58 @@ export class CreateAccommodationComponent {
     image:new FormControl(),
   })
 
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+
+    if (selectedFile) {
+      console.log('Selected File:', selectedFile.name);
+      this.selectedFile="../../../assets/images/"+selectedFile.name
+    }
+  }
+  addImage(){
+    if (this.selectedFile) {
+      
+      const imageName = this.selectedFile.split('/').pop();
+      const imageData: ImageData = { name: imageName || '', path: this.selectedFile };
+
+      const imageIndex = this.images.findIndex(image => image === this.selectedFile);
+  
+      if (imageIndex !== -1) {
+        this.openSnackBar("That picture already exists!")
+        return;
+      }
+      
+      this.images.push(this.selectedFile)
+      this.imageDataList.push(imageData);
+
+
+      this.imageDataSource = new MatTableDataSource<ImageData>(this.imageDataList);
+      this.imageDataSource.paginator=this.paginator;
+      this.imageDataSource.sort=this.sort
+
+      console.log(this.images)
+    }
+  }
+  deleteImage(imageData: ImageData): void {
+    const index = this.imageDataList.findIndex(img => img.path === imageData.path);
+  
+    if (index !== -1) {
+      this.imageDataList.splice(index, 1);
+    }
+  
+    const imageIndex = this.images.findIndex(image => image === imageData.path);
+  
+    if (imageIndex !== -1) {
+      this.images.splice(imageIndex, 1);
+    }
+  
+    // Update the image table data source
+    this.imageDataSource = new MatTableDataSource<ImageData>(this.imageDataList);
+    this.imageDataSource.paginator = this.paginator;
+    this.imageDataSource.sort = this.sort;
+
+    this.openSnackBar("Image deleted")
+  }
   validatePriceCardForm():boolean{
     const startDate: Date = this.createAccommodationForm.value.startDate;
     const endDate: Date = this.createAccommodationForm.value.endDate;
@@ -239,20 +303,12 @@ export class CreateAccommodationComponent {
     return true;
   }
 
-addImage(){
-  let imagePath=this.createAccommodationForm.value.image
-  if(imagePath==null){
-    this.openSnackBar('Image path is empty!');
-    return;
-  }
-  this.images.push(imagePath)
-}
+
 
 
 register(){
 
   if(!this.formValidation()){return;}
-  
     const accommodation: AccommodationPostDTO = {
       name: this.createAccommodationForm.value.name,
       description: this.createAccommodationForm.value.description,

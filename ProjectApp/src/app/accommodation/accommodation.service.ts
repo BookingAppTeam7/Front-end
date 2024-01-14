@@ -58,7 +58,14 @@ export class AccommodationService {
   
   updateStatus(id: number, status: AccommodationStatusEnum): Observable<Accommodation> {
     const params = new HttpParams().set('status', status);
-    const apiUrl = `${environment.apiHost}accommodations/${id}/update-status`;0
+    const apiUrl = `${environment.apiHost}accommodations/${id}/update-status`;
+    return this.httpClient.put<Accommodation>(apiUrl, null, { params });
+  }
+
+  updateImages(accommodationId: number, images: string): Observable<Accommodation> {
+    const params = new HttpParams().set('image', images);
+    const apiUrl = `${environment.apiHost}accommodations/${accommodationId}/update-images`;
+
     return this.httpClient.put<Accommodation>(apiUrl, null, { params });
   }
 
