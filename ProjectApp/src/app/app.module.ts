@@ -46,8 +46,9 @@ import { OwnerReportComponent } from './owner-report/owner-report.component';
   providers: [ {
     provide: HTTP_INTERCEPTORS,
     useClass: Interceptor,
-    multi: true,
+    multi: true
   },],
   bootstrap: [AppComponent]
+
 })
 export class AppModule { }

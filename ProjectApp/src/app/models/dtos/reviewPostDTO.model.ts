@@ -5,7 +5,7 @@ export interface ReviewPostDTO{
     type:ReviewEnum;  //OWNER or ACCOMMODATION
     comment:String;
     accommodationId:number;
-    ownerId:String;
+    ownerId:String |undefined;
     grade:number;
     dateTime:Date;
     deleted:boolean;

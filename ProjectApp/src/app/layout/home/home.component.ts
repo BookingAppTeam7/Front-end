@@ -9,8 +9,6 @@ import { AccommodationService } from 'src/app/accommodation/accommodation.servic
 import { Accommodation } from 'src/app/accommodation/accommodation/model/accommodation.model';
 import { AccommodationDetails } from 'src/app/accommodation/accommodation/model/accommodationDetails.model';
 
-
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -26,6 +24,7 @@ export class HomeComponent {
     private dataService: AccommodationDataService,private router: Router) {
   }
   ngOnInit(): void {
+
     this.service.getAllApproved().subscribe({
        next: (data: Accommodation[]) => {
         this.accommodationList = data

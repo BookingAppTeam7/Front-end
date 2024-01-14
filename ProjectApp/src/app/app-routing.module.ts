@@ -30,6 +30,7 @@ import { GuestsReportingOwnersComponent } from './reports/guests-reporting-owner
 import { UserReportsComponent } from './users/user-reports/user-reports.component';
 import { FavouriteAccommodationsComponent } from './accommodation-managment/favourite-accommodations/favourite-accommodations.component';
 import { OwnerReportComponent } from './owner-report/owner-report.component';
+import { UsersNotificationsComponent } from './users/users-notifications/users-notifications.component';
 const routes: Routes = [
   {component: HomeComponent, path:"home"},
   {component:LoginFormComponent, path:"login"},
@@ -60,7 +61,8 @@ const routes: Routes = [
   {component:GuestsReportingOwnersComponent,path:'userReports'},
   {component:UserReportsComponent,path:'usersReports'},
   {component:FavouriteAccommodationsComponent,path:'favouriteAccommodations'},
-  {component:OwnerReportComponent,path:'ownerReport'}
+  {component:OwnerReportComponent,path:'ownerReport'},
+  {component:UsersNotificationsComponent,path:'myNotifications'}
 ];
 
 @NgModule({

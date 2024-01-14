@@ -1,5 +1,6 @@
 export interface Message {
-    message: string,
-    fromId: string,
-    toId: string,
+    userId: string;
+    type: string;
+    content: string; 
+    dateTime: Date;
 }

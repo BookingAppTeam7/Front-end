@@ -7,6 +7,7 @@ import { UsersViewComponent } from './users-view/users-view.component';
 import { MaterialModule } from '../infrastructure/material/material.module';
 import { UsersReviewsComponent } from './users-reviews/users-reviews.component';
 import { UserReportsComponent } from './user-reports/user-reports.component';
+import { UsersNotificationsComponent } from './users-notifications/users-notifications.component';
 
 
 
@@ -14,7 +15,8 @@ import { UserReportsComponent } from './user-reports/user-reports.component';
   declarations: [
     UsersViewComponent,
     UsersReviewsComponent,
-    UserReportsComponent
+    UserReportsComponent,
+    UsersNotificationsComponent
   ],
   imports: [
     CommonModule,
