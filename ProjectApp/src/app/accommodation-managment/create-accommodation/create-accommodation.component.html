@@ -172,14 +172,42 @@
     </div>
 
     <button mat-button style="background-color: rgb(152, 198, 244);margin-bottom: 2%;" (click)="savePrice()">+ Save Price</button>
+
+
+    <div class="image-table-container">
+      <h2>Accommodation Images</h2>
+      <table mat-table [dataSource]="imageDataSource" matSort>
+    
+        <ng-container matColumnDef="Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+          <td mat-cell *matCellDef="let image"> {{image.name}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="Image">
+          <th mat-header-cell *matHeaderCellDef> Image </th>
+          <td mat-cell *matCellDef="let image"> 
+            <img [src]="image.path" alt="Accommodation Image" style="max-width: 100px; max-height: 100px;">
+          </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="Actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let image">
+            <button mat-icon-button (click)="deleteImage(image)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="imageDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: imageDisplayedColumns;"></tr>
+      </table>
+    </div>
     </div>
     <div class="button-container">
       <div class="buttons">
       </div>
-      <mat-form-field appearance="outline" style="margin-right: 50px;">
-        <mat-label>Image path</mat-label>
-        <input matInput placeholder="Image path" formControlName="image">
-      </mat-form-field>
+      <input type="file" (change)="onFileSelected($event)" accept=".jpg, .jpeg, .png" />
       <button mat-button style="background-color: rgb(163, 161, 161);margin-right: 15px;" (click)="addImage()">+ Add image</button>
       </div>
       <button (click)="register()" mat-button style="background-color: #1e88e5; color: white;margin-top: 4%;">Register accommodation</button>

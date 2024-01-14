@@ -14,5 +14,5 @@ export interface AccommodationPostDTO {
     //prices:PriceCard[];
     ownerId:String;
     cancellationDeadline:number |null|undefined;
-    images:String[];
+    images:string[];
   }
