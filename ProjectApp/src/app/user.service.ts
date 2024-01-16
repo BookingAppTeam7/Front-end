@@ -21,7 +21,7 @@ export class UserService {
     return this.httpClient.get<UserGetDTO[]>(environment.apiHost + 'users')
   }
   activateAccount(token: string): Observable<string> {
-    return this.httpClient.get<string>(environment.apiHost + 'users/activate/' + token);
+    return this.httpClient.put<string>(environment.apiHost + 'users/activate/' + token,{});
   }
 
   create(user: UserPostDTO): Observable<UserPostDTO> {
