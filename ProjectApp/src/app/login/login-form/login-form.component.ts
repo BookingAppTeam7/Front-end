@@ -124,7 +124,6 @@ export class LoginFormComponent {
        //this.socketApiService.setUsername(this.loginForm.value.username)
         this.socketApiService.openSocket(this.loginForm.value.username);
      
-          
           this.router.navigate(['home'])
         },
         error:()=>{

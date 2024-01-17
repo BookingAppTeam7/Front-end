@@ -21,12 +21,6 @@ export class NotificationService {
 
   getByUserId(username:string): Observable<Message[]> {
     return this.httpClient.get<Message[]>(environment.apiHost + 'notifications/user/'+username)
-  }
-
-
-
-
-
-  
+  } 
   
 }

@@ -67,22 +67,6 @@ export class EditAccountComponent implements OnInit {
 //  email = new FormControl('', [Validators.required, Validators.email]);
   
   ngOnInit() {
-    // this.route.params.subscribe(params => {
-    //   const username = params['username'];
-
-    //   this.userService.getById(username).subscribe(
-    //     (user: UserGetDTO) => {
-    //       this.user = user;
-    //       this.editAccountDataForm.get('name')?.setValue(user.firstName);
-    //       this.editAccountDataForm.get('surname')?.setValue(user.lastName);
-    //       this.editAccountDataForm.get('username')?.setValue(user.username);
-    //       // ... dodati za sve ostale labele
-    //     },
-    //     error => {
-    //       console.error('Error fetching user:', error);
-    //     }
-    //   );
-    // });
    
   const accessToken: any = localStorage.getItem('user');
 const helper = new JwtHelperService();
@@ -121,7 +105,7 @@ if (decodedToken) {
 } else {
   console.error('Error decoding JWT token');
 }
-    
+  
   }
 
   setNotificationControls(role: RoleEnum): void {
@@ -146,24 +130,11 @@ if (decodedToken) {
     }
   }
 
-
-
   saveChanges(){
-
   
-        
     const userRoleValue: string | undefined= this.editAccountDataForm.get('role')?.value ?? undefined;
     const userStatusValue: string | undefined= this.editAccountDataForm.get('status')?.value;
     const userGet =this.userService.getById(this.editAccountDataForm.value.username?? '');
-   
-    // userGet.pipe(
-    //   tap((user: UserGetDTO) => {
-    //     // Extract the JWT token from the user and set it in another property
-    //     const jwtToken = user.jwt;
-    //     console.log("U EDIT ACCCOUNT ----> jwt jeee: " ,  user.jwt);
-    //     // Assuming you have a property named jwt in your component, set it like this
-    //     this.jwt = jwtToken;
-    //   }))
 
     if(userRoleValue!==undefined && userStatusValue!==undefined){
 
@@ -234,10 +205,7 @@ if (decodedToken) {
         
           
         }
-      
-        
-       
-       
+     
       )
       
       }
