@@ -257,18 +257,44 @@ export class GuestsReservationsComponent {
                 //ovde treba promeniti status rezervacije i kreirati novi pricecard
                 this.reservationService.cancelReservation(reservation.id).subscribe(
                   () => {
+
+                    this.reservationService.getByGuestId(this.guestId).subscribe(
+                      (reservations: Reservation[]|undefined) => {
+                        if(reservations){
+                        this.reservations = reservations;
+                        this.pendingReservations = this.reservations.filter(r => r.status === 'PENDING');
+                        this.approvedReservations = this.reservations?.filter(r => r.status === 'APPROVED');
+                        this.rejectedReservations = this.reservations?.filter(r => r.status === 'REJECTED');
+                        this.cancelledReservations=this.reservations?.filter(r => r.status === 'CANCELLED');
+                
+                        this.dataSourcePending=new MatTableDataSource<Reservation>(this.pendingReservations);
+                        this.dataSourceApproved=new MatTableDataSource<Reservation>(this.approvedReservations);
+                        this.dataSourceRejected=new MatTableDataSource<Reservation>(this.rejectedReservations);
+                        this.dataSourceCancelled=new MatTableDataSource<Reservation>(this.cancelledReservations);
+                        this.dataSourcePending.paginator=this.paginator;
+                        this.dataSourcePending.sort=this.sort;
+                        
+                        console.log(this.reservations);
+                        }
+                      },
+                      (error) => {
+                        console.error('Error getting reservations for user:', error);
+                      }
+                    );
+                
+                    this.cdr.detectChanges();
                     
                   },
                   (error) => {
                     console.error('ERROR:', error);
                   }
                 );
-                this.approvedReservations = this.approvedReservations.filter(r => r.id !== reservation.id);
-                reservation.status=ReservationStatusEnum.CANCELLED;
-                this.cancelledReservations.push(reservation);
+                // this.approvedReservations = this.approvedReservations.filter(r => r.id !== reservation.id);
+                // reservation.status=ReservationStatusEnum.CANCELLED;
+                // this.cancelledReservations.push(reservation);
   
-                this.dataSourceCancelled.data = this.cancelledReservations;
-                this.dataSourceApproved.data = this.approvedReservations;
+                // this.dataSourceCancelled.data = this.cancelledReservations;
+                // this.dataSourceApproved.data = this.approvedReservations;
   
                 this.openSnackBar("Reservation is successfully CANCELLED!")
             }
@@ -293,7 +319,7 @@ export class GuestsReservationsComponent {
 
   openSnackBar(message: string) {
     this.snackBar.open(message, 'OK', {
-      duration: 4000,
+      duration: 3000,
     });
   }
   rateOwner(accommodationId:number){

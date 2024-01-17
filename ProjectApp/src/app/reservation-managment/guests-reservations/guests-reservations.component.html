@@ -54,7 +54,7 @@
 
   <div class="mat-elevation-z8">
     <h2 style="margin-left: 10px;">Approved reservations</h2>
-    <table mat-table [dataSource]="dataSourceApproved" matSort>
+    <table mat-table [dataSource]="dataSourceApproved" id="approvedReservationsTable" matSort>
       
     
       <ng-container matColumnDef="Id">
@@ -89,7 +89,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element">
-          <button mat-raised-button color="warn"(click)="cancelReservation(element)" style="margin-right: 20px;">
+          <button mat-raised-button color="warn" id="cancelReservationButton" (click)="cancelReservation(element)" style="margin-right: 20px;">
             Cancel 
           </button>
           <button mat-raised-button color="primary" (click)="rateOwner(element.accommodation.id)" style="margin-right: 20px;">
@@ -111,7 +111,7 @@
 
   <div class="mat-elevation-z8">
     <h2 style="margin-left: 10px;">Cancelled Reservations</h2>
-    <table mat-table [dataSource]="dataSourceCancelled" matSort>
+    <table mat-table [dataSource]="dataSourceCancelled" id="cancelledReservationsTable" matSort>
       
     
       <ng-container matColumnDef="Id">
