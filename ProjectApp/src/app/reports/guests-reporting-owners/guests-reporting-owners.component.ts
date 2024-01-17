@@ -99,7 +99,7 @@ export class GuestsReportingOwnersComponent {
         if (data) {
           this.router.navigate(['home']);
         } else {
-          // Ako se vrati null, možete dodati logiku za obaveštenje korisnika ili druge radnje
+          
         }
       },
     });

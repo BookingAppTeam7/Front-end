@@ -19,6 +19,8 @@ import { ReviewEnum } from 'src/app/models/enums/reviewEnum';
 import { FlexAlignStyleBuilder } from '@angular/flex-layout';
 import { ReviewStatusEnum } from 'src/app/models/enums/reviewStatusEnum';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { catchError, throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-owner-rating',
@@ -34,6 +36,7 @@ export class OwnerRatingComponent implements OnInit {
   reservationId: number;
   ownerId:String;
   accommodationId:number;
+
   
 
   constructor(
@@ -42,7 +45,8 @@ export class OwnerRatingComponent implements OnInit {
     private reservationService: ReservationService,
     private accomodationService:AccommodationService,
     private reviewService:ReviewService,
-    private router: Router
+    private router: Router,
+    private snackBar:MatSnackBar
 
   ) { }
   
@@ -104,7 +108,30 @@ export class OwnerRatingComponent implements OnInit {
       status: ReviewStatusEnum.PENDING,
       reservationId:0  
     }
-    this.reviewService.create(review).subscribe(
+    this.reviewService.create(review).pipe(
+      catchError((error) => {
+        console.error('Error, possibly invalid username :', error);
+        
+  
+        // Provera da li je greška tipa Bad Request (HTTP 400)
+        if (error.status === 400) {
+          // Prikazivanje Snackbar-a sa porukom o grešci
+          this.snackBar.open('It is impossible to rate.', 'Close', {
+            duration: 5000, // Trajanje snackbar-a u milisekundama
+          });
+        } else {
+          // Ako greška nije tipa Bad Request, možete dodati drugu logiku ili prikazati drugu poruku
+          // Primer: Ako nije Bad Request, prikaži generičku poruku
+          this.snackBar.open('Došlo je do greške. Molimo pokušajte ponovo.', 'Zatvori', {
+            duration: 5000,
+          });
+          
+        }
+  
+        // Vraćamo observable sa greškom pomoću throwError
+        return throwError(error);
+      })
+    ).subscribe(
       {
         next: (data: ReviewPostDTO) => {
           this.router.navigate(['home'])

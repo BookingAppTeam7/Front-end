@@ -256,7 +256,7 @@ export class EditAccommodationComponent  implements OnInit{
 
   openSnackBar(message: string) {
     this.snackBar.open(message, 'OK', {
-      duration: 3000,
+      duration: 6000,
     });
   }
 
@@ -301,6 +301,8 @@ export class EditAccommodationComponent  implements OnInit{
     newEndDate.setHours(0, 0, 0, 0);
 
     const overlap = this.reservations?.some(existingReservation => {
+      console.log("EXISTING RES START DATE==> ", existingReservation.timeSlot.startDate)
+      console.log("EXISTING RES END DATE==> ", existingReservation.timeSlot.endDate)
       const existingStartDate = new Date(existingReservation.timeSlot.startDate);
       const existingEndDate = new Date(existingReservation.timeSlot.endDate);
   
@@ -346,11 +348,13 @@ export class EditAccommodationComponent  implements OnInit{
             createdPriceCard => {
               this.priceCards.push(createdPriceCard);
               this.dataSource.data=this.priceCards;
+              this.openSnackBar("Price card added!")
               return;
               
             },
             error => {
               console.error('Error during creating new object:', error);
+              this.openSnackBar("Price for this timeslot is already defined and reservations are confirmed!")
             
           })
         } else {
@@ -485,7 +489,7 @@ updatePriceCard(updatedElement: PriceCard): void {
 }
   
   deleteItem(element: any) {
-    //this.priceCardService.delete(element.id).subscribe({});
+    this.priceCardService.delete(element.id).subscribe({});
     console.log('Delete item:', element);
     const index = this.priceCards.indexOf(element);
     if (index !== -1) {
@@ -527,6 +531,26 @@ updatePriceCard(updatedElement: PriceCard): void {
       this.openSnackBar('Adress is required.');
       return false;
     }
+
+    const cancellationDeadlineValue2 = this.editAccommodationFormGroup.get('cancellationDeadline')?.value;
+
+
+
+    if (this.editAccommodationFormGroup.get('cancellationDeadline')?.value ==0) {
+      console.error('Cancellation deadline can not be zero.');
+      this.openSnackBar('Cancellation deadline can not be zero or empty');
+      return false;
+    }
+    const cancellationDeadlineValue1 = this.editAccommodationFormGroup.get('cancellationDeadline')?.value;
+
+if (cancellationDeadlineValue1 !== undefined && cancellationDeadlineValue1 !== null) {
+  if (cancellationDeadlineValue1 < 0) {
+    console.error('Cancellation deadline can not be zero.');
+    this.openSnackBar('Cancellation deadline can not be negative.');
+    return false;
+  }
+}
+
 
     const minGuestsValue = this.editAccommodationFormGroup.get('minGuests')?.value;
     const maxGuestsValue = this.editAccommodationFormGroup.get('maxGuests')?.value;
