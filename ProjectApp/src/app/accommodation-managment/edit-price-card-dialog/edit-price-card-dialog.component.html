@@ -2,11 +2,11 @@
   <form [formGroup]="form" class="form-container">
     
     <div class="data-container">
-        <h2>Edit Dates and Price</h2>
+        <h2 id="h2Edit">Edit Dates and Price</h2>
         <div class="date-picker-container" >
           <mat-form-field>
             <mat-label>Choose a start date</mat-label>
-            <input matInput [matDatepicker]="startPicker" formControlName="startDateEdit">
+            <input matInput id="startDateEdit" [matDatepicker]="startPicker" formControlName="startDateEdit">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
             <mat-datepicker #startPicker></mat-datepicker>
@@ -14,7 +14,7 @@
         
           <mat-form-field>
             <mat-label>Choose an end date</mat-label>
-            <input matInput [matDatepicker]="endPicker" formControlName="endDateEdit">
+            <input matInput id="endDateEdit"  [matDatepicker]="endPicker" formControlName="endDateEdit">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
@@ -22,7 +22,7 @@
         
           <mat-form-field appearance="outline">
             <mat-label>Price</mat-label>
-            <input matInput placeholder="Price for chosen period" formControlName="priceEdit">
+            <input matInput id="priceEdit"  placeholder="Price for chosen period" formControlName="priceEdit">
           </mat-form-field>
         </div>
 
