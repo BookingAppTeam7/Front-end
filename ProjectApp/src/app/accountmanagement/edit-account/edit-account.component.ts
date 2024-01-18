@@ -27,7 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [MatFormFieldModule, MatSelectModule,MatInputModule, MatIconModule,MatButtonModule,
     MatSlideToggleModule,LayoutModule,FormsModule, ReactiveFormsModule,CommonModule],
 })
-export class EditAccountComponent implements OnInit { 
+export class EditAccountComponent implements OnInit {
   user:UserGetDTO;
   color: ThemePalette = 'primary';
   disabled=true;
@@ -265,6 +265,10 @@ if (decodedToken) {
   
     get isFormValid(): boolean {
       return this.editAccountDataForm.valid;
+  }
+
+  getTestableUserService() {
+    return this.userService;
   }
 
 }

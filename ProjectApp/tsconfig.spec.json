@@ -12,6 +12,7 @@
     "src/**/*.d.ts"
   ],
   "files": [
+    "src/test.ts",
     "src/polyfills.ts"
   ]
 
