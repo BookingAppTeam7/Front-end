@@ -4,7 +4,7 @@
 <p>
   
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Name" formControlName="name" name="name" >
+      <input matInput placeholder="Name" formControlName="name" name="name">
       <mat-error *ngIf="editAccountDataForm.get('name')?.hasError('required')">Name is required</mat-error>
       <mat-icon matSuffix>edit_note</mat-icon>
     </mat-form-field>
@@ -28,7 +28,7 @@
     <mat-form-field fxFlex="100%">
         <mat-label>Password</mat-label>
         <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" name="password" required>
-        <mat-error *ngIf="editAccountDataForm.get('password')?.hasError('required')">Password is required</mat-error>
+        <mat-error *ngIf="editAccountDataForm.get('password')?.hasError('required')" id="errorPassword">Password is required</mat-error>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
@@ -38,7 +38,7 @@
     <mat-form-field fxFlex="100%">
         <mat-label>Password confirmation</mat-label>
         <input matInput [type]="hide ? 'password' : 'text'"  formControlName="confirmPassword" name="confirmPassword" required>
-        <mat-error *ngIf="editAccountDataForm.get('confirmPassword')?.hasError('required')">Confirm Password is required</mat-error>
+        <mat-error *ngIf="editAccountDataForm.get('confirmPassword')?.hasError('required')" id=""errorConfirmationPassword>Confirm Password is required</mat-error>
         <mat-error *ngIf="editAccountDataForm?.hasError('passwordMismatch')">Passwords do not match</mat-error>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -132,7 +132,7 @@ Owner Replied To Reservation Request Notification On!
 
 
 <div class="button-container">
-    <button mat-button  (click)="saveChanges()" style="background-color: #1e88e5; color: white; margin-right: 50px;"   [disabled]="!editAccountDataForm.valid">Save changes</button>
+    <button mat-button id="saveButton" (click)="saveChanges()" style="background-color: #1e88e5; color: white; margin-right: 50px;"   [disabled]="!editAccountDataForm.valid">Save changes</button>
     <button mat-fab background-color="red" (click)="delete()" aria-label="Example icon button with a delete icon">
       <mat-icon>delete</mat-icon>
     </button>
