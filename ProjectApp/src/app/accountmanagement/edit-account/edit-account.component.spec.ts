@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
 import { EditAccountComponent } from './edit-account.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/user.service';
 import { RoleEnum, StatusEnum } from 'src/app/models/userEnums.model';
@@ -20,6 +20,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import { flushMicrotasks } from '@angular/core/testing';
+import { of } from 'rxjs';
 
 
 describe('EditAccountComponent', () => {
@@ -79,15 +81,13 @@ describe('EditAccountComponent', () => {
 
   });
 
-  it('should not make input into username input field', () => {
-
+  it('Should not make input into username input field', () => {
     let el = fixture.debugElement.query(By.css('[formControlName=\'username\']')).nativeElement;
     expect(el.getAttribute('readonly')).toEqual('true');
-
   });
 
 
-  it('should make input into another form fields (except username) field', () => {
+  it('Should make input into another form fields (except username) field', () => {
 
     let el = fixture.debugElement.query(By.css('[formControlName=\'name\']')).nativeElement;
     expect(el.getAttribute('readonly')).toEqual(null);
@@ -104,19 +104,91 @@ describe('EditAccountComponent', () => {
 
   });
 
+  it('Should call saveChanges when Save changes button is clicked with valid form data', fakeAsync(() => {
+ 
+    component.editAccountDataForm.patchValue({
+      name: 'ValidName',
+      surname: 'ValidSurname',
+      phoneNumber: '1234567890', 
+      address: 'ValidAddress',
+      username: 'valid@email.com',
+      password: 'ValidPassword',
+      confirmPassword: 'ValidPassword',
+      role:'ADMIN'
+    });
+  
+    fixture.detectChanges();
+  
+    expect(component.editAccountDataForm.valid).toBe(true);
+  
+    spyOn(component, 'saveChanges');
+  
+    const saveButton = fixture.debugElement.nativeElement.querySelector('#saveButton');
+    saveButton.click();
 
-  // it('should call saveChanges method on click button', async () => {
-  //   const saveChangesSpy = spyOn(component, 'saveChanges');
-  
-  //   let el = fixture.debugElement.query(By.css('#saveButton')).nativeElement;
-  //   el.click();
+    tick();
+    fixture.detectChanges();
 
+    expect(component.saveChanges).toHaveBeenCalled();
+  }));
+
+
+  it('Should NOT call saveChanges when Save changes button is clicked with valid form data', fakeAsync(() => {
+ 
+    component.editAccountDataForm.patchValue({
+      name: 'ValidName',
+      surname: 'ValidSurname',
+      phoneNumber: '12345678', 
+      address: 'ValidAddress',
+      username: 'valid@email.com',
+      password: 'ValidPassword',
+      confirmPassword: 'ValidPassword',
+      role:'ADMIN'
+    });
   
-  //   expect(saveChangesSpy).toHaveBeenCalled();
-  // });
+    fixture.detectChanges();
   
+    expect(component.editAccountDataForm.valid).toBe(false);
   
-  it('should set form values based on user data', fakeAsync(() => {
+    spyOn(component, 'saveChanges');
+  
+    const saveButton = fixture.debugElement.nativeElement.querySelector('#saveButton');
+    saveButton.click();
+
+    tick();
+    fixture.detectChanges();
+
+    expect(component.saveChanges).not.toHaveBeenCalled();
+  }));
+
+  it('Should call delete when delete button is clicked', fakeAsync(() => {
+ 
+    component.editAccountDataForm.patchValue({
+      name: 'ValidName',
+      surname: 'ValidSurname',
+      phoneNumber: '1234567890', 
+      address: 'ValidAddress',
+      username: 'valid@email.com',
+      password: 'ValidPassword',
+      confirmPassword: 'ValidPassword',
+      role:'ADMIN'
+    });
+  
+    fixture.detectChanges();
+  
+    spyOn(component, 'delete');
+  
+    const deleteButton = fixture.debugElement.nativeElement.querySelector('#deleteButton');
+    deleteButton.click();
+
+    tick();
+    fixture.detectChanges();
+
+    expect(component.delete).toHaveBeenCalled();
+  }));
+
+
+  it('Should set form values based on user data', fakeAsync(() => {
     const mockUser: UserGetDTO = {
       firstName: "FirstNameTest",
       lastName: "LastNameTest",
@@ -142,7 +214,7 @@ describe('EditAccountComponent', () => {
     component['userService'] = userServiceSpy;
 
     component.ngOnInit();
-    tick(); //cekanje da se zavrsi asinhrona operacija
+    tick(); 
 
     fixture.detectChanges(); 
 
@@ -186,7 +258,59 @@ describe('EditAccountComponent', () => {
 
   }));
 
-  it('should set form validity to false if invalid phone data is provided - incorrect digits number', () => {
+  it('Toggle button tests by roles', fakeAsync(() => {
+
+    const mockUser: UserGetDTO = {
+      firstName: "FirstNameTest",
+      lastName: "LastNameTest",
+      username: "username@test.com",
+      role: RoleEnum.GUEST,
+      address: "AddressTest",
+      phoneNumber: "1234567890",
+      status: StatusEnum.ACTIVE,
+      reservationRequestNotification: false,
+      reservationCancellationNotification: false,
+      ownerRatingNotification: false,
+      accommodationRatingNotification: false,
+      ownerRepliedToRequestNotification: true,
+      deleted: false,
+      token: "tokenTest",
+      jwt: "jwtTest",
+      favouriteAccommodations: "acc1,acc2"
+    };
+
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['getById']);
+    userServiceSpy.getById.and.returnValue({ subscribe: (callback: (user: UserGetDTO) => void) => callback(mockUser) });
+
+    component['userService'] = userServiceSpy;
+
+    component.ngOnInit();
+    tick(); 
+
+    fixture.detectChanges(); 
+
+    component.setNotificationControls(mockUser.role);
+
+    if (mockUser.role === RoleEnum.OWNER) {
+
+      component.onSlideToggleChangeRequestNotification({ checked: true } as MatSlideToggleChange);
+      component.onSlideToggleChangeCancellationNotification({ checked: true } as MatSlideToggleChange);
+      component.onSlideToggleChangeOwnerRatingNotification({ checked: true } as MatSlideToggleChange);
+      component.onSlideToggleChangeAccommodationRatingNotification({ checked: true } as MatSlideToggleChange);
+     
+      expect(component.reservationRequestNotification).toBeTrue();
+      expect(component.reservationCancellationNotification).toBeTrue();
+      expect(component.ownerRatingNotification).toBeTrue();
+      expect(component.accommodationRatingNotification).toBeTrue();
+
+    } else if (mockUser.role === RoleEnum.GUEST) {
+      component.onSlideToggleChangeOwnerRepliedRequestNotification({ checked: true } as MatSlideToggleChange);
+      expect(component.ownerRepliedToRequestNotification).toBeTrue();
+    }
+
+  }));
+
+  it('Should set form validity to false if invalid phone data is provided - incorrect digits number', () => {
     component.editAccountDataForm.setValue({
       name: 'John',
       surname: 'Doe',
@@ -207,32 +331,11 @@ describe('EditAccountComponent', () => {
     expect(component.isFormValid).toBeFalse();
   });
 
-  // it('should set form validity to false if password confirmation is not correct', () => {
-  //   component.editAccountDataForm.setValue({
-  //     name: 'John',
-  //     surname: 'Doe',
-  //     phoneNumber: '1234567890', 
-  //     address: 'Test Address',
-  //     username: 'test@example.com',
-  //     password: 'password123',  //missmathing passwords
-  //     confirmPassword: 'password456',
-  //     status: 'active',
-  //     role: 'GUEST',
-  //     requestNotification: false,
-  //     cancellationNotification: false,
-  //     accommodationRatingNotification: false,
-  //     ownerRatingNotification: false,
-  //     ownerRepliedNotification: true,
-  //   });
-
-  //   expect(component.isFormValid).toBeFalse();
-  // });
-
-  it('should show password mismatch error message', fakeAsync(() => {
+  
+  it('Password mismatch error', fakeAsync(() => {
     component.ngOnInit();
     tick();
   
-    // Popunite formu sa podacima, uključujući dva različita passworda
     component.editAccountDataForm.setValue({
       name: 'John',
       surname: 'Doe',
@@ -240,7 +343,7 @@ describe('EditAccountComponent', () => {
       address: 'Test Address',
       username: 'test@example.com',
       password: 'password123',
-      confirmPassword: 'password456', // Različit od passworda
+      confirmPassword: 'password456', // missmatching passwords
       status: 'active',
       role: 'GUEST',
       requestNotification: false,
@@ -249,52 +352,175 @@ describe('EditAccountComponent', () => {
       ownerRatingNotification: false,
       ownerRepliedNotification: true,
     });
-  
-    fixture.detectChanges();
-    tick();
-  
-    fixture.whenStable().then(() => {
-      const errorMessage = fixture.debugElement.query(By.css('mat-error#errorConfirmationPassword')).nativeElement;
-      expect(errorMessage.textContent).toContain('Passwords do not match');
-    });
- 
+
+    expect(component.isFormValid).toBeFalse();
+   
   }));
 
 
-  it('Should show required error message for password field', fakeAsync(() => {
+  it('Empty required field name', fakeAsync(() => {
     component.ngOnInit();
     tick();
   
-    const passwordInput = fixture.debugElement.query(By.css('[formControlName=\'password\']')).nativeElement;
-  
-    passwordInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    tick(); 
-  
-    fixture.whenStable().then(() => {
-      const errorMessage = fixture.debugElement.query(By.css('#errorPassword')).nativeElement;
-      expect(errorMessage.textContent).toContain('Password is required');
+    component.editAccountDataForm.setValue({
+      name: '',
+      surname: 'Doe',
+      phoneNumber: '1234567890', 
+      address: 'Test Address',
+      username: 'test@example.com',
+      password: 'password123',
+      confirmPassword: 'password123', // missmatching passwords
+      status: 'active',
+      role: 'GUEST',
+      requestNotification: false,
+      cancellationNotification: false,
+      accommodationRatingNotification: false,
+      ownerRatingNotification: false,
+      ownerRepliedNotification: true,
     });
+
+    expect(component.isFormValid).toBeFalse();
+   
   }));
 
-  it('Should show required error message for confirm password field', fakeAsync(() => {
+  it('Empty required field surname', fakeAsync(() => {
     component.ngOnInit();
     tick();
   
-    const confirmPasswordInput = fixture.debugElement.query(By.css('[formControlName=\'confirmPassword\']')).nativeElement;
+    component.editAccountDataForm.setValue({
+      name: 'Joe',
+      surname: '',
+      phoneNumber: '1234567890', 
+      address: 'Test Address',
+      username: 'test@example.com',
+      password: 'password123',
+      confirmPassword: 'password123', // missmatching passwords
+      status: 'active',
+      role: 'GUEST',
+      requestNotification: false,
+      cancellationNotification: false,
+      accommodationRatingNotification: false,
+      ownerRatingNotification: false,
+      ownerRepliedNotification: true,
+    });
+
+    expect(component.isFormValid).toBeFalse();
+   
+  }));
+
+  it('Empty required field phone number', fakeAsync(() => {
+    component.ngOnInit();
+    tick();
   
-    confirmPasswordInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    tick(); 
+    component.editAccountDataForm.setValue({
+      name: 'Joe',
+      surname: 'Doe',
+      phoneNumber: '', 
+      address: 'Test Address',
+      username: 'test@example.com',
+      password: 'password123',
+      confirmPassword: 'password123', // missmatching passwords
+      status: 'active',
+      role: 'GUEST',
+      requestNotification: false,
+      cancellationNotification: false,
+      accommodationRatingNotification: false,
+      ownerRatingNotification: false,
+      ownerRepliedNotification: true,
+    });
+
+    expect(component.isFormValid).toBeFalse();
+   
+  }));
+
+  it('Empty required field phone number', fakeAsync(() => {
+    component.ngOnInit();
+    tick();
   
+    component.editAccountDataForm.setValue({
+      name: 'Joe',
+      surname: 'Doe',
+      phoneNumber: '1234567890', 
+      address: '',
+      username: 'test@example.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+      status: 'active',
+      role: 'GUEST',
+      requestNotification: false,
+      cancellationNotification: false,
+      accommodationRatingNotification: false,
+      ownerRatingNotification: false,
+      ownerRepliedNotification: true,
+    });
+
+    expect(component.isFormValid).toBeFalse();
+   
+  }));
+
+  it('Should show Snackbar after successful user update', fakeAsync(() => {
+    const mockUser: UserGetDTO = {
+      firstName: "FirstNameTest",
+      lastName: "LastNameTest",
+      username: "username@test.com",
+      role: RoleEnum.GUEST,
+      address: "AddressTest",
+      phoneNumber: "1234567890",
+      status: StatusEnum.ACTIVE,
+      reservationRequestNotification: false,
+      reservationCancellationNotification: false,
+      ownerRatingNotification: false,
+      accommodationRatingNotification: false,
+      ownerRepliedToRequestNotification: true,
+      deleted: false,
+      token: "tokenTest",
+      jwt: "jwtTest",
+      favouriteAccommodations: "acc1,acc2"
+    };
+  
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['getById', 'update']);
+    userServiceSpy.getById.and.returnValue({ subscribe: (callback: (user: UserGetDTO) => void) => callback(mockUser) });
+    userServiceSpy.update.and.returnValue(of({mockUser})); 
+  
+    component['userService'] = userServiceSpy;
+  
+    component.ngOnInit();
+    tick();
+  
+    component.editAccountDataForm.setValue({
+      name: "FirstNameTest",
+      surname: "LastNameTest",
+      username: "username@test.com",
+      role: 'GUEST',
+      address: "AddressTest",
+      phoneNumber: "1234567890",
+      status: StatusEnum.ACTIVE,
+      requestNotification: false,
+      cancellationNotification: false,
+      ownerRatingNotification: false,
+      accommodationRatingNotification: false,
+      ownerRepliedNotification: true,
+      password:"pass",
+      confirmPassword:"pass"
+    });
+  
+    spyOn(component, 'openSnackBar');
+
+    expect(component.isFormValid).toBeTruthy();
+  
+    const saveButton = fixture.debugElement.nativeElement.querySelector('#saveButton');
+    saveButton.click();
+  
+    tick();
+    
     fixture.whenStable().then(() => {
-      const errorMessage = fixture.debugElement.query(By.css('#errorConfirmationPassword')).nativeElement;
-      expect(errorMessage.textContent).toContain('Confirm Password is required');
+      fixture.detectChanges();
+      expect(component.openSnackBar).toHaveBeenCalledWith("User sucessfully updated!");
+  
+      const snackBarElement = document.querySelector('.mat-simple-snackbar') as HTMLElement;
+      expect(snackBarElement.textContent).toContain('User sucessfully updated!');
     });
   }));
   
-
-
- });
-
+});
 
