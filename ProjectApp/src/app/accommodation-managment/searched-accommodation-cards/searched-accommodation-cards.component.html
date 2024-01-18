@@ -43,7 +43,7 @@
     </div>
       <mat-form-field appearance="outline">
         <mat-label>Minimum price</mat-label>
-        <input matInput placeholder="Minimum price" formControlName="minPrice" type="number">
+        <input id="minPriceInput" matInput placeholder="Minimum price" formControlName="minPrice" type="number">
         <mat-error *ngIf="filterAccommodationForm.get('minPrice')?.hasError('pattern')">Enter a valid number</mat-error>
       </mat-form-field>
 
