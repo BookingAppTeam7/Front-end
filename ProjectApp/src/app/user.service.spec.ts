@@ -6,6 +6,7 @@ import { UserPutDTO } from './models/userPutDTO.model';
 import { environment } from 'src/env/env';
 import { UserServiceMock } from './mocks/user.mock.service';
 import { User } from './models/user.model';
+import { UserPostDTO } from './models/userPostDTO.model';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -43,7 +44,7 @@ describe('UserService', () => {
         passwordConfirmation: 'UpdatedPassword',
         address: 'UpdatedAddress',
         phoneNumber: 'UpdatedPhoneNumber',
-        status: StatusEnum.DEACTIVE, // Postavite odgovarajuću vrednost za status (StatusEnum)
+        status: StatusEnum.ACTIVE, 
         reservationRequestNotification: true,
         reservationCancellationNotification: false,
         ownerRatingNotification: true,
@@ -62,7 +63,7 @@ describe('UserService', () => {
         role: RoleEnum.ADMIN,
         address: 'UpdatedAddress',
         phoneNumber: 'UpdatedPhoneNumber',
-        status: StatusEnum.DEACTIVEACTIVE,
+        status: StatusEnum.ACTIVE,
         reservationRequestNotification: true,
         reservationCancellationNotification: false,
         ownerRatingNotification: true,
@@ -75,7 +76,6 @@ describe('UserService', () => {
       };
       
 
-    // Promenite liniju ispod
     spyOn(userServiceMock, 'getUsers').and.returnValue([mockUpdatedUser]);
 
     userService.update(userPutDTO, username).subscribe(updatedUser => {
@@ -98,5 +98,48 @@ describe('UserService', () => {
     const req = httpTestingController.expectOne(`${environment.apiHost}users/username/${username}`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockUser);
+  });
+
+  // it('should activate account', () => {
+  //   const token = 'testToken';
+
+  //   userService.activateAccount(token).subscribe(response => {
+  //     expect(response).toEqual('success'); // Assuming your server returns 'success' upon activation
+  //   });
+
+  //   const req = httpTestingController.expectOne(`${environment.apiHost}users/activate/${token}`);
+  //   expect(req.request.method).toEqual('PUT');
+  //   req.flush('success');
+  // });
+
+  it('should create user', () => {
+    const newUserPost: UserPostDTO = {
+      firstName: 'FirstName',
+      lastName: 'LastName',
+      username: 'Username',
+      password: 'Password',
+      role: RoleEnum.OWNER,
+      address: 'Address',
+      phoneNumber: 'PhoneNumber',
+      reservationRequestNotification: true,
+      reservationCancellationNotification: false,
+      ownerRatingNotification: true,
+      accommodationRatingNotification: false,
+      ownerRepliedToRequestNotification: true,
+      deleted: false,
+      passwordConfirmation: 'Password'
+    };
+  
+    const createdUserPost: UserPostDTO = {
+      ...newUserPost,
+    };
+  
+    userService.create(newUserPost).subscribe(createdUser => {
+      expect(createdUser).toEqual(createdUserPost);
+    });
+  
+    const req = httpTestingController.expectOne(`${environment.apiHost}users`);
+    expect(req.request.method).toEqual('POST');
+    req.flush(createdUserPost);
   });
 });
