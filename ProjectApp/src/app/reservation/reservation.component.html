@@ -6,7 +6,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Number of guests</mat-label>
         <input matInput placeholder="How many guests:" formControlName="guests">
-        <mat-error *ngIf="reservationForm.get('guests')?.hasError('required')">This field is required</mat-error>
+        <mat-error *ngIf="reservationForm.get('guests')?.hasError('required')" id="errorGuests">This field is required</mat-error>
       </mat-form-field>
   
       <div class="date-picker-container">

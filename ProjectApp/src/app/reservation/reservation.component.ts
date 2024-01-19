@@ -85,7 +85,7 @@ export class ReservationComponent {
       }
      // this.cdr.detectChanges();
     })
-
+    if(this.route.paramMap)
     this.route.paramMap.subscribe((params: ParamMap) => {
       const accommodationId = +params.get('id')!;
       this.accommodationService.getById(accommodationId).subscribe(
@@ -249,5 +249,16 @@ export class ReservationComponent {
     }
 
     return !(arrivalTime < timeSlotStart || checkoutTime > timeSlotEnd);
+  }
+  get isFormValid(): boolean{
+    return this.reservationForm.valid;
+  }
+  getTestableReservationService(){
+    return this.reservationService;
+  }
+  goodDates(): boolean{
+    const date1=this.reservationForm.get('startDate')?.value;
+    const date2=this.reservationForm.get('endDate')?.value;
+    return date1<date2;
   }
 }
