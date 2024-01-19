@@ -28,6 +28,7 @@ export class RegisterFormComponent {
   color: ThemePalette = 'primary';
   disabled = false;
   checked = false;
+  button_enabled=false;
   reservationRequestNotification: boolean = false;
   reservationCancellationNotification: boolean = false;
   ownerRatingNotification: boolean = false;
@@ -61,11 +62,16 @@ export class RegisterFormComponent {
     this.createRegisterForm.get('ownerRepliedNotification')?.disable();
   }
 
+  ngOnInit(){
+
+  }
+
   navigateToHome() {
     this.router.navigate(['home']);
   }
 
   register() {
+    this.button_enabled=true;
 
     const userRoleValue: string | undefined = this.createRegisterForm.get('role')?.value ?? undefined;
     console.log(userRoleValue);
