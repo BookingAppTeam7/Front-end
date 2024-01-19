@@ -6,14 +6,14 @@
     <mat-form-field class="other-fields">
         <mat-label>Enter your name</mat-label>
         <input matInput name="name" placeholder="First Name" formControlName="name"   required>
-        <mat-error *ngIf="createRegisterForm.get('name')?.hasError('required')">Name is required</mat-error>
+        <!-- <mat-error *ngIf="createRegisterForm.get('name')?.hasError('required')">Name is required</mat-error> -->
         
       </mat-form-field>
 
       <mat-form-field class="other-fields">
         <mat-label>Enter your surname</mat-label>
         <input matInput name="surname" placeholder="Last Name"  formControlName="surname" required>
-        <mat-error *ngIf="createRegisterForm.get('surname')?.hasError('required')">Surname is required</mat-error>
+        <!-- <mat-error *ngIf="createRegisterForm.get('surname')?.hasError('required')">Surname is required</mat-error> -->
       </mat-form-field>
 
       <mat-form-field  >
@@ -28,15 +28,15 @@
         
       <mat-form-field aclass="other-fields">
         <input matInput placeholder="Username (Email)"  name="username" formControlName="username" required>
-        <mat-error *ngIf="createRegisterForm.get('username')?.hasError('required')">Email is required</mat-error>
-        <mat-error *ngIf="createRegisterForm.get('username')?.hasError('pattern')">Invalid email format</mat-error>
+        <!-- <mat-error *ngIf="createRegisterForm.get('username')?.hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="createRegisterForm.get('username')?.hasError('pattern')">Invalid email format</mat-error> -->
         <mat-icon matSuffix>edit_note</mat-icon>
       </mat-form-field>
 
     <mat-form-field class="other-fields">
         <mat-label>Enter your password</mat-label>
         <input matInput name="password" [type]="hide ? 'password' : 'text'" formControlName="password" required>
-        <mat-error *ngIf="createRegisterForm.get('password')?.hasError('required')">Password is required</mat-error>
+        <!-- <mat-error *ngIf="createRegisterForm.get('password')?.hasError('required')"  id="errorPassword">Password is required</mat-error> -->
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
@@ -45,9 +45,9 @@
       <mat-form-field class="other-fields">
         <mat-label>Confirm your password</mat-label>
         <input matInput [type]="hide ? 'password' : 'text'" formControlName="confirmPassword" name="confirmPassword" required>
-        <mat-error *ngIf="createRegisterForm.get('confirmPassword')?.hasError('required')">Confirm Password is required</mat-error>
-        <mat-error *ngIf="createRegisterForm?.hasError('passwordMismatch')">Passwords do not match</mat-error>
-        
+        <!-- <mat-error data-error-type="password-error"  id="errorPassword" *ngIf="createRegisterForm.get('confirmPassword')?.hasError('required')">Confirm Password is required</mat-error>
+        <mat-error *ngIf="createRegisterForm?.hasError('passwordMismatch')" #errorConfirmationPassword>Passwords do not match</mat-error>
+         -->
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide.toString()">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
@@ -55,10 +55,10 @@
 
       <mat-form-field class="other-fields">
         <mat-label>Role</mat-label>
-        <mat-select name="role" formControlName="role" (selectionChange)="onRoleSelectionChange($event)">
-          <mat-option value="ADMIN">Admin</mat-option>
-          <mat-option value="OWNER">Owner</mat-option>
-          <mat-option value="GUEST">Guest</mat-option>
+        <mat-select id="role" name="role" formControlName="role" (selectionChange)="onRoleSelectionChange($event)">
+          <mat-option id="admin" class="admin" value="ADMIN">Admin</mat-option>
+          <mat-option id="owner" class="owner" value="OWNER">Owner</mat-option>
+          <mat-option id="guest" class="guest" value="GUEST">Guest</mat-option>
         </mat-select>
       </mat-form-field>
 <div class="slide-toggle-container ">
@@ -113,7 +113,7 @@
     </form>
 
       <div class="example-button-row">
-        <button (click)="register()" mat-raised-button color="primary" [disabled]="!createRegisterForm.valid">
+        <button (click)="register()" id="button" mat-raised-button color="primary" [disabled]="!createRegisterForm.valid">
           Register
           <mat-icon class="icon">how_to_reg</mat-icon>
         </button>
