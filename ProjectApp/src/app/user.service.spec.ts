@@ -100,17 +100,6 @@ describe('UserService', () => {
     req.flush(mockUser);
   });
 
-  // it('should activate account', () => {
-  //   const token = 'testToken';
-
-  //   userService.activateAccount(token).subscribe(response => {
-  //     expect(response).toEqual('success'); // Assuming your server returns 'success' upon activation
-  //   });
-
-  //   const req = httpTestingController.expectOne(`${environment.apiHost}users/activate/${token}`);
-  //   expect(req.request.method).toEqual('PUT');
-  //   req.flush('success');
-  // });
 
   it('should create user', () => {
     const newUserPost: UserPostDTO = {
@@ -142,4 +131,20 @@ describe('UserService', () => {
     expect(req.request.method).toEqual('POST');
     req.flush(createdUserPost);
   });
+
+  it('should delete user', () => {
+    const username = 'testuser';
+  
+    userService.deleteUser(username).subscribe(() => {
+      
+    });
+  
+    const req = httpTestingController.expectOne(`${environment.apiHost}users/${username}`);
+    expect(req.request.method).toEqual('DELETE');
+    req.flush(null);
+  });
+
+  
 });
+
+
