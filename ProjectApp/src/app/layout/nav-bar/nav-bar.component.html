@@ -1,0 +1,26 @@
+<mat-toolbar>
+  <div>
+    <button *ngIf="isLoggedIn()" [routerLink]="['myNotifications']" style="float: right" mat-raised-button color="">
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <button *ngIf="role == 'ADMIN'" [routerLink]="['adminRatingRequests']"  style="float: right" mat-raised-button color="">Rating requests</button>
+    <button *ngIf="role == 'OWNER'" [routerLink]="['ownersAccommodations']"  style="float: right" mat-raised-button color="">My Accommodations</button>
+    <button *ngIf="role == 'GUEST'" [routerLink]="['guestsReservations']"  style="float: right" mat-raised-button color="">My Reservations</button>
+    <button  *ngIf="role == 'ADMIN'" [routerLink]="['accommodationsRequests']"  style="float: right" mat-raised-button color="">Accommodation requests</button>
+    <!--<button *ngIf="role == 'GUEST'" [routerLink]="['editReservation']"  style="float: right" mat-raised-button color="">Edit reservation</button> -->
+    <!--<button *ngIf="role == 'GUEST'"   [routerLink]="['createReservation']"  style="float: right" mat-raised-button color="">Create reservation</button> -->
+    <!-- <button *ngIf="role == 'OWNER'" [routerLink]="['editAccommodation']"  style="float: right" mat-raised-button color="">Edit Accommodation</button> -->
+    <button *ngIf="role == 'OWNER'" [routerLink]="['createAccommodation']"  style="float: right" mat-raised-button color="">Create Accommodation</button>
+    <button *ngIf="role == 'ADMIN'" [routerLink]="['users-view']"  style="float: right" mat-raised-button color="">View users</button>
+    <button *ngIf="isLoggedIn()" [routerLink]="['editAccount']"  style="float: right" mat-raised-button color="">Edit Account</button>
+    <button *ngIf="!isLoggedIn()" [routerLink]="['register']" style="float: right" mat-raised-button color="">Register</button>
+    <button *ngIf="!isLoggedIn()" [routerLink]="['login']" style="float: right" mat-raised-button color="">Log in</button>
+    <button [routerLink]="['home']"  style="float: right" mat-raised-button color="">Home</button>
+    <button  *ngIf="isLoggedIn()" [routerLink]="['home']" (click)="logout()" style="float: right" mat-raised-button color="">Log out</button>
+    <button  *ngIf="role == 'OWNER'"  [routerLink]="['ownerRatings']" style="float: right" mat-raised-button color="">My reviews</button>
+    <button  *ngIf="role == 'OWNER'"  [routerLink]="['userReports']" style="float: right" mat-raised-button color="">Report guest</button>
+    <button  *ngIf="role == 'GUEST'"  [routerLink]="['userReports']" style="float: right" mat-raised-button color="">Report owner</button>
+    <button *ngIf="role=='GUEST'" [routerLink]="['favouriteAccommodations']" style="float: right" mat-raised-button color="">Favourite accommodations</button>
+    <button *ngIf="role=='OWNER'" [routerLink]="['ownerReport']" style="float: right;" mat-raised-button color="">Owner reports</button>
+  </div>
+</mat-toolbar>
