@@ -172,7 +172,7 @@ describe('EditAccountComponent', () => {
       password: 'ValidPassword',
       confirmPassword: 'ValidPassword',
       role:'ADMIN'
-    });
+    });//NOT PERFECT BUT ALWAYS BY MYSELF- QUOTE OF THE YEAR
   
     fixture.detectChanges();
   
